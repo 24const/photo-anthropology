@@ -3,28 +3,25 @@ package com.nsu.PhotoAnthropology.Servlets;
 import com.nsu.PhotoAnthropology.DBClasses.DBConnector;
 import org.hsqldb.cmdline.SqlFile;
 import org.hsqldb.cmdline.SqlToolError;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MyServletContextListener implements ServletContextListener {
+class StartServlet extends HttpServlet {
 
-    @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
-
+    public void init() throws ServletException {
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
-
         try {
-            SqlFile sf = new SqlFile(new File("C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\java\\com\\nsu\\PhotoAnthropology\\Servlets\\init.sql"));
+            SqlFile sf = new SqlFile(new File("C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\webapp\\WEB-INF\\sql-scripts\\init.sql"));
             sf.setConnection(connection);
             sf.execute();
         } catch (SQLException | IOException | SqlToolError e) {
             e.printStackTrace();
-
         } finally {
             try {
                 dbConnector.closeConnection();
@@ -35,9 +32,7 @@ public class MyServletContextListener implements ServletContextListener {
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
 
     }
-
-
 }

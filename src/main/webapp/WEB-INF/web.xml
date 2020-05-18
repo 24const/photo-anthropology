@@ -10,10 +10,14 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <listener>
-        <listener-class>
-            com.nsu.PhotoAnthropology.Servlets.MyServletContextListener
-        </listener-class>
-    </listener>
+    <servlet>
+        <servlet-name>startServlet</servlet-name>
+        <servlet-class>com.nsu.PhotoAnthropology.Servlets.StartServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>startServlet</servlet-name>
+        <url-pattern>/startServlet</url-pattern>
+    </servlet-mapping>
 
 </web-app>

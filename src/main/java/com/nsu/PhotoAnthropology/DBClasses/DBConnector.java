@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnector {
 
-    private static String DB_URL = "jdbc:postgresql://192.168.1.42:5432/photo_anthropology";
+    private static String DB_URL = "jdbc:postgresql://192.168.1.43:5432/photo_anthropology";
     private static String USER = "ksu";
     private static String PASS = "ksu";
     private Connection connection;
