@@ -11,13 +11,13 @@ public class ImageDao implements Dao<Image>{
 
     @Override
     public void save(Image image){
-        String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES(?, ?, ?, ?);";
+        String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES((SELECT id FROM files WHERE file_name = ?), ?, ?);";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, image.getFileId());
+            stm.setString(1, image.getFileName());
             stm.setString(2, image.getImagePath());
-            stm.setString(3, image.getOtherInformation());
+            stm.setObject(3, image.getOtherInformation());
             stm.execute();
         } catch (SQLException e) {
             e.printStackTrace();

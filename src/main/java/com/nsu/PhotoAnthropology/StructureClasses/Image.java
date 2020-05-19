@@ -1,21 +1,23 @@
 package com.nsu.PhotoAnthropology.StructureClasses;
 
+import org.json.simple.JSONArray;
+
 public class Image {
 
     private int id;
     private String imagePath;
-    private int fileId;
-    private String otherInformation;
+    private String fileName;
+    private JSONArray otherInformation;
 
-    public Image(int id, int fileId, String imagePath, String otherInformation) {
+    public Image(int id, String fileName, String imagePath, JSONArray otherInformation) {
         this.id = id;
-        this.fileId = fileId;
+        this.fileName = fileName;
         this.imagePath = imagePath;
         this.otherInformation = otherInformation;
     }
 
-    public Image(int fileId, String imagePath, String otherInformation) {
-        this.fileId = fileId;
+    public Image(String fileName, String imagePath, JSONArray otherInformation) {
+        this.fileName = fileName;
         this.imagePath = imagePath;
         this.otherInformation = otherInformation;
     }
@@ -28,11 +30,11 @@ public class Image {
         return imagePath;
     }
 
-    public String getOtherInformation() {
+    public JSONArray getOtherInformation() {
         return otherInformation;
     }
 
-    public int getFileId() {
-        return fileId;
+    public String getFileName() {
+        return fileName;
     }
 }

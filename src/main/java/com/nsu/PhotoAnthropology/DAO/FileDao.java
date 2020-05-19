@@ -16,7 +16,7 @@ public class FileDao implements Dao<File>{
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, file.getFile_name());
-            stm.setString(2, file.getColumnNames());
+            stm.setObject(2, file.getColumnNames());
             stm.execute();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -13,7 +13,8 @@ import java.sql.SQLException;
 
 class StartServlet extends HttpServlet {
 
-    public void init() throws ServletException {
+    public void init(ServletConfig servletConfig) throws ServletException {
+        super.init();
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
         try {

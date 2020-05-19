@@ -2,46 +2,20 @@ package com.nsu.PhotoAnthropology;
 
 import com.nsu.PhotoAnthropology.DAO.Dao;
 import com.nsu.PhotoAnthropology.DAO.FileDao;
-import com.nsu.PhotoAnthropology.DAO.GroupDao;
-import com.nsu.PhotoAnthropology.DAO.TagDao;
-import com.nsu.PhotoAnthropology.DBClasses.DBConnector;
-import com.nsu.PhotoAnthropology.StructureClasses.Group;
-import com.nsu.PhotoAnthropology.StructureClasses.Tag;
-import org.hsqldb.cmdline.SqlFile;
-import org.hsqldb.cmdline.SqlToolError;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.nsu.PhotoAnthropology.FileWorkers.FileParser;
+import com.nsu.PhotoAnthropology.FileWorkers.FileReadingWorker;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        String filePath = "C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\java\\com\\nsu\\PhotoAnthropology\\vk_photo_people_HM.xlsx";
+        FileParser fileParser = new FileParser(filePath);
+        FileReadingWorker fileReadingWorker = new FileReadingWorker(filePath, fileParser.getData());
+        fileReadingWorker.getColumnNames();
+        fileReadingWorker.getImages();
 
-        DBConnector dbConnector = new DBConnector();
-        Connection connection = dbConnector.getConnection();
-        try {
-            SqlFile sf = new SqlFile(new File("C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\webapp\\WEB-INF\\sql-scripts\\init.sql"));
-            sf.setConnection(connection);
-            sf.execute();
-        } catch (SQLException | IOException | SqlToolError e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                dbConnector.closeConnection();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-//        Dao groupDao = new GroupDao();
-//        groupDao.save(new Group("season", "What's the season?"));
+//        Dao groupDao = new FileDao();
+//        groupDao.save(new com.nsu.PhotoAnthropology.StructureClasses.File(filePath, fileReadingWorker.getColumnNames()));
 
-//        Dao groupDao = new TagDao();
-//        groupDao.save(new Tag("spring", 1));
-
-        Dao groupDao = new FileDao();
-        groupDao.save(new com.nsu.PhotoAnthropology.StructureClasses.File("index.txt", ""));
     }
-
 }
