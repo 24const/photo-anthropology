@@ -23,7 +23,5 @@ public class KsuTest {
         for(Image image: fileReadingWorker.getImages()){
             imageDao.save(image);
         }
-        tagDao.;
-
     }
 }
