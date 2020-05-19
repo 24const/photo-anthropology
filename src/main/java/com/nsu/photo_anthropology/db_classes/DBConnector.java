@@ -1,4 +1,4 @@
-package com.nsu.PhotoAnthropology.DBClasses;
+package com.nsu.photo_anthropology.db_classes;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

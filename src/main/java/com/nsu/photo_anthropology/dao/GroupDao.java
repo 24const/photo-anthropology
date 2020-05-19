@@ -1,7 +1,7 @@
-package com.nsu.PhotoAnthropology.DAO;
+package com.nsu.photo_anthropology.dao;
 
-import com.nsu.PhotoAnthropology.DBClasses.DBConnector;
-import com.nsu.PhotoAnthropology.StructureClasses.Group;
+import com.nsu.photo_anthropology.db_classes.DBConnector;
+import com.nsu.photo_anthropology.structure_classes.Group;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,12 +1,12 @@
-package com.nsu.PhotoAnthropology.FileWorkers;
+package com.nsu.photo_anthropology.file_workers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +16,12 @@ public class FileParser {
 
     private String path;
     private Map<Integer, List<String>> data = new HashMap<>();
+    private String filePath;
 
     public FileParser(String path) {
         this.path = path;
         this.readFile();
+        this.filePath = this.setPath(path);
     }
 
     private void readFile(){
@@ -55,9 +57,12 @@ public class FileParser {
             e.printStackTrace();
         }
     }
-
+    private String setPath(String path){
+        Path filePath = Paths.get(path).getFileName();
+        return filePath.toString();
+    }
     public String getPath() {
-        return path;
+        return filePath;
     }
 
     public Map<Integer, List<String>> getData() {

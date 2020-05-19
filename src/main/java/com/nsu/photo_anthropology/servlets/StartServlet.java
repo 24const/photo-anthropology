@@ -1,6 +1,6 @@
-package com.nsu.PhotoAnthropology.Servlets;
+package com.nsu.photo_anthropology.servlets;
 
-import com.nsu.PhotoAnthropology.DBClasses.DBConnector;
+import com.nsu.photo_anthropology.db_classes.DBConnector;
 import org.hsqldb.cmdline.SqlFile;
 import org.hsqldb.cmdline.SqlToolError;
 
@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-class StartServlet extends HttpServlet {
+public class StartServlet extends HttpServlet {
 
-    public void init(ServletConfig servletConfig) throws ServletException {
-        super.init();
+    public void init() throws ServletException {
+        //super.init();
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
         try {

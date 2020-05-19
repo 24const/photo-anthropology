@@ -1,6 +1,4 @@
-package com.nsu.PhotoAnthropology.DAO;
-
-import java.sql.SQLException;
+package com.nsu.photo_anthropology.dao;
 
 public interface Dao<T> {
 

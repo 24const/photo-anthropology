@@ -1,7 +1,8 @@
-package com.nsu.PhotoAnthropology.StructureClasses;
+package com.nsu.photo_anthropology.structure_classes;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
+import java.nio.file.Path;
 
 public class File {
 
@@ -20,7 +21,7 @@ public class File {
         this.columnNames = columnNames;
     }
 
-    public String getFile_name() {
+    public String getFileName() {
         return fileName;
     }
 

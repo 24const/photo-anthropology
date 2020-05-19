@@ -1,10 +1,10 @@
-package com.nsu.PhotoAnthropology.FileWorkers;
+package com.nsu.photo_anthropology.file_workers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.nsu.PhotoAnthropology.StructureClasses.Image;
+import com.nsu.photo_anthropology.structure_classes.Image;
 import org.json.simple.JSONArray;
 
 public class FileReadingWorker {
@@ -34,7 +34,6 @@ public class FileReadingWorker {
                 }
                 columnInfo.add(cell);
             }
-            System.out.println(imagePath);
             this.images.add(new Image(this.path, imagePath, columnInfo));
         }
 
@@ -43,7 +42,6 @@ public class FileReadingWorker {
     private void setColumnNames(){
         for(String element:this.data.remove(0))
         this.columnNames.add(element);
-        System.out.print(this.columnNames);
     }
 
     public String getPath() {

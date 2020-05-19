@@ -1,4 +1,4 @@
-package com.nsu.PhotoAnthropology.StructureClasses;
+package com.nsu.photo_anthropology.structure_classes;
 
 public class Tag {
     private int id;

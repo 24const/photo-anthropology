@@ -1,22 +1,23 @@
-package com.nsu.PhotoAnthropology.DAO;
+package com.nsu.photo_anthropology.dao;
 
-import com.nsu.PhotoAnthropology.DBClasses.DBConnector;
-import com.nsu.PhotoAnthropology.StructureClasses.Tag;
+import com.nsu.photo_anthropology.db_classes.DBConnector;
+import com.nsu.photo_anthropology.structure_classes.Image;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class TagDao implements Dao<Tag>{
+public class ImageDao implements Dao<Image>{
 
     @Override
-    public void save(Tag tag){
-        String sql = "INSERT INTO tags(group_id, tag_name) VALUES(?, ?);";
+    public void save(Image image){
+        String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES((SELECT id FROM files WHERE file_name = ?), ?, ?::JSON);";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, tag.getGroup_id());
-            stm.setString(2, tag.getTag_name());
+            stm.setString(1, image.getFileName());
+            stm.setString(2, image.getImagePath());
+            stm.setObject(3, image.getOtherInformation().toJSONString());
             stm.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,12 +31,12 @@ public class TagDao implements Dao<Tag>{
     }
 
     @Override
-    public void delete(Tag tag){
-        String sql = "DELETE FROM tags WHERE id = ?;";
+    public void delete(Image image){
+        String sql = "DELETE FROM images WHERE id = ?;";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, tag.getId());
+            stm.setInt(1, image.getId());
             stm.execute();
         } catch (SQLException e) {
             e.printStackTrace();

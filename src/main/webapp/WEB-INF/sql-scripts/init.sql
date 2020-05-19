@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS groups (
 
 CREATE TABLE IF NOT EXISTS files (
 	id SERIAL PRIMARY KEY,
-	file_name VARCHAR(50) NOT NULL,
+	file_name VARCHAR(255) NOT NULL,
     column_names json,
     date_created TIMESTAMP
 );
