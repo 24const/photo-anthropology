@@ -19,4 +19,13 @@
         <servlet-name>HelloWorld</servlet-name>
         <url-pattern>/welcome</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UploadFile</servlet-name>
+        <servlet-class>com.nsu.photo_anthropology.servlets.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadFile</servlet-name>
+        <url-pattern>/UploadFile</url-pattern>
+    </servlet-mapping>
 </web-app>
