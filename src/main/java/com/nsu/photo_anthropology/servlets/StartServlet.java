@@ -18,6 +18,7 @@ public class StartServlet extends HttpServlet {
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
         try {
+            //FIXME: а где проверка что схема уже инициализированна? Скрипт должен запускаться единожды, дабы не испортить схему
             SqlFile sf = new SqlFile(new File("C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\webapp\\WEB-INF\\sql-scripts\\init.sql"));
             sf.setConnection(connection);
             sf.execute();

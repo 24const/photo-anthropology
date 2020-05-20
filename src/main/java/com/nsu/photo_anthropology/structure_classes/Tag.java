@@ -1,3 +1,4 @@
+//FIXME: слово classes не подходящее, если это сущности для БД, то лучше назвать entities
 package com.nsu.photo_anthropology.structure_classes;
 
 public class Tag {

@@ -19,11 +19,14 @@ public class GroupDao implements Dao<Group>{
             stm.setString(2, group.getGroupQuestion());
             stm.execute();
         } catch (SQLException e) {
+            //FIXME: смотри FileDao
             e.printStackTrace();
         } finally {
             try {
+                //FIXME: смотри FileDao
                 dbConnector.closeConnection();
             } catch (SQLException e) {
+                //FIXME: смотри FileDao
                 e.printStackTrace();
             }
         }
@@ -31,6 +34,7 @@ public class GroupDao implements Dao<Group>{
 
     @Override
     public void delete(Group group){
+        //FIXME: смотри FileDao
         String sql = "DELETE FROM groups WHERE id = ?;";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();

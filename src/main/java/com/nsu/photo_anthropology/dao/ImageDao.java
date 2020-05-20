@@ -20,11 +20,14 @@ public class ImageDao implements Dao<Image>{
             stm.setObject(3, image.getOtherInformation().toJSONString());
             stm.execute();
         } catch (SQLException e) {
+            //FIXME: смотри FileDao
             e.printStackTrace();
         } finally {
             try {
+                //FIXME: смотри FileDao
                 dbConnector.closeConnection();
             } catch (SQLException e) {
+                //FIXME: смотри FileDao
                 e.printStackTrace();
             }
         }
@@ -32,6 +35,7 @@ public class ImageDao implements Dao<Image>{
 
     @Override
     public void delete(Image image){
+        //FIXME: смотри FileDao
         String sql = "DELETE FROM images WHERE id = ?;";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();

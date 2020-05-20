@@ -19,11 +19,14 @@ public class TagDao implements Dao<Tag>{
             stm.setString(2, tag.getTag_name());
             stm.execute();
         } catch (SQLException e) {
+            //FIXME: смотри FileDao
             e.printStackTrace();
         } finally {
             try {
+                //FIXME: смотри FileDao
                 dbConnector.closeConnection();
             } catch (SQLException e) {
+                //FIXME: смотри FileDao
                 e.printStackTrace();
             }
         }
@@ -31,6 +34,7 @@ public class TagDao implements Dao<Tag>{
 
     @Override
     public void delete(Tag tag){
+        //FIXME: смотри FileDao
         String sql = "DELETE FROM tags WHERE id = ?;";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();
@@ -41,8 +45,10 @@ public class TagDao implements Dao<Tag>{
             e.printStackTrace();
         } finally {
             try {
+                //FIXME: смотри FileDao
                 dbConnector.closeConnection();
             } catch (SQLException e) {
+                //FIXME: смотри FileDao
                 e.printStackTrace();
             }
         }

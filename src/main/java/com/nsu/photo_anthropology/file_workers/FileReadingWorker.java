@@ -40,6 +40,7 @@ public class FileReadingWorker {
     }
 
     private void setColumnNames(){
+        //TODO: используй фигурные скобочки в for, if, switch выраженях {}. Иначе не читаемо
         for(String element:this.data.remove(0))
         this.columnNames.add(element);
     }

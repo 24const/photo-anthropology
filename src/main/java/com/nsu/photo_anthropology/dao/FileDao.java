@@ -19,11 +19,16 @@ public class FileDao implements Dao<File>{
             stm.setObject(2, file.getColumnNames().toJSONString());
             stm.execute();
         } catch (SQLException e) {
+            //FIXME: плохой паттерн отлавливать ошибки и ничего с ними не делать
+            //FIXME: лучше обернуть ошибку в RunntimeException и пробросить дальше throw new RuntimeException(e)
             e.printStackTrace();
         } finally {
             try {
+                //FIXME: тут закрывать коннекшен не требуется, т.к. в try уже используешь try with resources
+                //FIXME: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
                 dbConnector.closeConnection();
             } catch (SQLException e) {
+                //FIXME: аналогично, см выше
                 e.printStackTrace();
             }
         }
@@ -31,6 +36,7 @@ public class FileDao implements Dao<File>{
 
     @Override
     public void delete(File file){
+        //FIXME: можно перенести в общий класс, т.к. удаление по id одинаково для всех сущностей
         String sql = "DELETE FROM files WHERE file_id = ?";
         DBConnector dbConnector = new DBConnector();
         Connection connection = dbConnector.getConnection();

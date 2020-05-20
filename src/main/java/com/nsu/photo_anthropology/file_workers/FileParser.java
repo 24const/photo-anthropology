@@ -14,12 +14,17 @@ import java.util.Map;
 
 public class FileParser {
 
+    //FIXME: чем path отличается от filePath. Названия переменных должны быть понятными
     private String path;
     private Map<Integer, List<String>> data = new HashMap<>();
     private String filePath;
 
     public FileParser(String path) {
         this.path = path;
+        //FIXME: плохая практика в конструкторе запускать какую либо логику.
+        //FIXME: Лучше использовать отдельные функции.
+        //FIXME: В случае утилитных функций можно использовать статические функции
+        //FIXME: например public static Map<Integer, List<String>> readXLSXFile(String filePath)
         this.readFile();
         this.filePath = this.setPath(path);
     }
@@ -36,6 +41,7 @@ public class FileParser {
                 for (Cell cell : row) {
                     switch (cell.getCellType()) {
                         case STRING:
+                            //FIXME: используй фигурные скобочки в case выражениях {}
                             this.data.get(i).add(cell.getRichStringCellValue().getString());
                             break;
                         case NUMERIC:
@@ -54,6 +60,7 @@ public class FileParser {
                 i++;
             }
         } catch (Exception e) {
+            //FIXME: смотри FileDao
             e.printStackTrace();
         }
     }
