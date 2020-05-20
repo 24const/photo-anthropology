@@ -7,8 +7,7 @@ public class KsuTest {
     @Test
     public void myTest() {
 //        String filePath = "C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\java\\com\\nsu\\photo_anthropology\\vk_photo_people_HM.xlsx";
-        String filePath ="C:\\Users\\Эльдорадо\\Desktop\\photo-anthropology\\src\\main\\java\\com\\nsu\\photo_anthropology\\Instagram_Марьино.xlsx";
+        String filePath ="src/test/Instagram_Марьино.xlsx";
         FileSavingToDBWorker.saveFileInfo(filePath);
-
     }
 }

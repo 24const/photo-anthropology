@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.nsu.photo_anthropology.structure_classes.Image;
+import com.nsu.photo_anthropology.structure_entities.Image;
 import org.json.simple.JSONArray;
 
 public class FileReadingWorker {
@@ -40,8 +40,7 @@ public class FileReadingWorker {
     }
 
     private void setColumnNames(){
-        for(String element:this.data.remove(0))
-        this.columnNames.add(element);
+        this.columnNames.addAll(this.data.remove(0));
     }
 
     public String getPath() {
