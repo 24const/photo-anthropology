@@ -1,7 +1,6 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
-import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Image;
 
 import java.sql.Connection;
@@ -10,7 +9,7 @@ import java.sql.SQLException;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
 
-    public final static String TABLE_NAME = "images";
+    public final static String SQL_REQUEST = "DELETE FROM images WHERE id = ?";
 
     @Override
     public void save(Image image){
@@ -28,8 +27,8 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
     }
 
     @Override
-    public String getTableName() {
-        return TABLE_NAME;
+    public String getSqlRequest() {
+        return SQL_REQUEST;
     }
 
     @Override

@@ -28,4 +28,32 @@
         <servlet-name>UploadFile</servlet-name>
         <url-pattern>/UploadFile</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GroupsTools</servlet-name>
+        <servlet-class>com.nsu.photo_anthropology.servlets.GroupToolsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GroupsTools</servlet-name>
+        <url-pattern>/GroupsTools</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteGroup</servlet-name>
+        <servlet-class>com.nsu.photo_anthropology.servlets.DeleteGroupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteGroup</servlet-name>
+        <url-pattern>/DeleteGroup</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddGroup</servlet-name>
+        <servlet-class>com.nsu.photo_anthropology.servlets.NewGroupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddGroup</servlet-name>
+        <url-pattern>/AddGroup</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -1,0 +1,32 @@
+.container{
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.group_table{
+    width: 100%;
+    border-style: solid;
+    border-color: lightgray;
+    background: whitesmoke;
+}
+.group_table th{
+    background: gainsboro;
+}
+.group_table#group_name{
+    width: 20%;
+}
+.group_table#group_question{
+    width: 40%
+}
+.group_table#changing #delete{
+    width: 20%;
+}
+.new_group_form{
+    width: 35%;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: solid;
+    border-color: lightgray;
+    background: whitesmoke;
+}

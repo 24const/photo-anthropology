@@ -13,7 +13,6 @@ public class Group {
     }
 
     public Group(String groupName, String groupQuestion) {
-        this.id = id;
         this.groupName = groupName;
         this.groupQuestion = groupQuestion;
     }
@@ -28,5 +27,13 @@ public class Group {
 
     public String getGroupQuestion() {
         return groupQuestion;
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "groupName='" + groupName + '\'' +
+                ", groupQuestion='" + groupQuestion + '\'' +
+                '}';
     }
 }

@@ -3,28 +3,36 @@ package com.nsu.photo_anthropology.structure_entities;
 public class Tag {
     private int id;
     private String tag_name;
-    private int group_id;
+    private String groupName;
 
-    public Tag(int id, String tag_name, int group_id) {
+    public Tag(int id, String tag_name, String groupName) {
         this.id = id;
         this.tag_name = tag_name;
-        this.group_id = group_id;
+        this.groupName = groupName;
     }
 
-    public Tag(String tag_name, int group_id) {
+    public Tag(String tag_name, String groupName) {
         this.tag_name = tag_name;
-        this.group_id = group_id;
+        this.groupName = groupName;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getTag_name() {
+    public String getTagName() {
         return tag_name;
     }
 
-    public int getGroup_id() {
-        return group_id;
+    public String getGroupName() {
+        return groupName;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "tag_name='" + tag_name + '\'' +
+                ", groupName=" + groupName +
+                '}';
     }
 }
