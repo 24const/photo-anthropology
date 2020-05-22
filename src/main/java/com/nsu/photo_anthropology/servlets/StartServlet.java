@@ -27,7 +27,7 @@ public class StartServlet extends HttpServlet {
                     sf.setConnection(connection);
                     sf.execute();
                 } catch (SQLException | IOException | SqlToolError e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         } catch (SQLException e) {

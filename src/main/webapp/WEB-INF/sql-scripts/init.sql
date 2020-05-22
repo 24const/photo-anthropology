@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS groups (
 CREATE TABLE IF NOT EXISTS files (
 	id SERIAL PRIMARY KEY,
 	file_name VARCHAR(255) NOT NULL,
--- FIXME: выровнять строки
     column_names json,
     date_created TIMESTAMP
 );
@@ -34,3 +33,9 @@ CREATE TABLE IF NOT EXISTS tagged_images (
 	FOREIGN KEY (tag_id) REFERENCES tags
 );
 
+CREATE TABLE IF NOT EXISTS groups_in_file (
+	file_id integer,
+	group_id integer,
+	FOREIGN KEY (file_id) REFERENCES files,
+	FOREIGN KEY (group_id) REFERENCES groups
+);

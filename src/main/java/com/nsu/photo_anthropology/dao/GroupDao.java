@@ -10,6 +10,8 @@ import java.sql.SQLException;
 
 public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
 
+    public final static String TABLE_NAME = "groups";
+
     @Override
     public void save(Group group){
         String sql = "INSERT INTO groups (group_name, group_question) VALUES(?, ?);";
@@ -23,4 +25,15 @@ public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public int getId(Group group) {
+        return group.getId();
+    }
+
 }
