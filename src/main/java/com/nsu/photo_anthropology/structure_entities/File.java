@@ -1,8 +1,6 @@
-package com.nsu.photo_anthropology.structure_classes;
+package com.nsu.photo_anthropology.structure_entities;
 
 import org.json.simple.JSONArray;
-
-import java.nio.file.Path;
 
 public class File {
 

@@ -1,9 +1,8 @@
 package com.nsu.photo_anthropology.dao;
 
-public interface Dao<T> {
+public interface Dao<Entity> {
 
-//FIXME: что такое t? лучше использовать понятные названия, например entity
-    void save(T t);
-    void delete(T t);
+    void save(Entity entity);
+    void delete(Entity entity);
 
 }
