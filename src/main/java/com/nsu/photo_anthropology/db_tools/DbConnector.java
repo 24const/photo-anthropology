@@ -37,10 +37,6 @@ public class DbConnector {
         String user = properties.getUser();
         String password = properties.getPassword();
 
-//        String db_url = "jdbc:postgresql://192.168.1.43:5432/photo_anthropology";
-//        String user = "ksu";
-//        String password = "ksu";
-
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {

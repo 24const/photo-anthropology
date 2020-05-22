@@ -2,6 +2,7 @@ package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.structure_entities.File;
+import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Tag;
 
 import java.sql.Connection;
@@ -9,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
+
+    public final static String TABLE_NAME = "tags";
 
     @Override
     public void save(Tag tag){
@@ -23,4 +26,15 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public int getId(Tag tag) {
+        return tag.getId();
+    }
+
 }

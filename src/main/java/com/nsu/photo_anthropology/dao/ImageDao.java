@@ -1,6 +1,7 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Image;
 
 import java.sql.Connection;
@@ -8,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
+
+    public final static String TABLE_NAME = "images";
 
     @Override
     public void save(Image image){
@@ -23,4 +26,15 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public int getId(Image image) {
+        return image.getId();
+    }
+
 }

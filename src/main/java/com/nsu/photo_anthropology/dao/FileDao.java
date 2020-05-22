@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class FileDao extends DaoFactory<File> implements Dao<File>{
+public class FileDao extends DaoFactory<File>{
+
+    public final static String TABLE_NAME = "files";
 
     @Override
     public void save(File file){
@@ -21,5 +23,15 @@ public class FileDao extends DaoFactory<File> implements Dao<File>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public int getId(File file) {
+        return file.getId();
     }
 }
