@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
 
-    public final static String SQL_REQUEST = "DELETE FROM images WHERE id = ?";
+    public final static String SQL_DELETE_REQUEST = "DELETE FROM images WHERE id = ?";
 
     @Override
     public void save(Image image){
@@ -28,7 +28,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
 
     @Override
     public String getSqlRequest() {
-        return SQL_REQUEST;
+        return SQL_DELETE_REQUEST;
     }
 
     @Override

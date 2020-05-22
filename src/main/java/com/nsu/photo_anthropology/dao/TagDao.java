@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
 
-    public final static String SQL_REQUEST = "DELETE FROM tags WHERE id = ?";
+    public final static String SQL_DELETE_TAG_REQUEST = "DELETE FROM tags WHERE id = ?";
 
     @Override
     public void save(Tag tag){
@@ -31,7 +31,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
 
     @Override
     public String getSqlRequest() {
-        return SQL_REQUEST;
+        return SQL_DELETE_TAG_REQUEST;
     }
 
     @Override
@@ -64,4 +64,17 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
         return listOfTags;
     }
 
+    public void deleteAllTagsInGroup(int id){
+        String sql = "DELETE FROM tags WHERE group_id = ?";
+
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            stm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

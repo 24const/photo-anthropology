@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class FileDao extends DaoFactory<File> implements Dao<File>{
 
-    public final static String SQL_REQUEST = "DELETE FROM files WHERE id = ?";
+    public final static String SQL_DELETE_REQUEST = "DELETE FROM files WHERE id = ?";
 
     @Override
     public void save(File file){
@@ -27,7 +27,7 @@ public class FileDao extends DaoFactory<File> implements Dao<File>{
 
     @Override
     public String getSqlRequest() {
-        return SQL_REQUEST;
+        return SQL_DELETE_REQUEST;
     }
 
     @Override

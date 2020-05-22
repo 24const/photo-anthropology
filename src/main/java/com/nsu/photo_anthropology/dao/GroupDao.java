@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
 
-    public final static String SQL_REQUEST = "DELETE FROM groups WHERE id = ?";
+    public final static String SQL_DELETE_REQUEST = "DELETE FROM groups WHERE id = ?";
 
     @Override
     public void save(Group group){
@@ -30,7 +30,7 @@ public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
 
     @Override
     public String getSqlRequest() {
-        return SQL_REQUEST;
+        return SQL_DELETE_REQUEST;
     }
 
     @Override

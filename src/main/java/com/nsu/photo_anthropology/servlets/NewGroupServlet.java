@@ -36,7 +36,9 @@ public class NewGroupServlet extends HttpServlet {
                 String[] tagsInGroup = groupTags.split(",");
                 Dao tagDao = new TagDao();
                 for (String tag : tagsInGroup) {
-                    tag = tag.replace(" ", "");
+                    if(tag.indexOf(" ") == 0){
+                        tag = tag.replaceFirst(" ", "");
+                    }
                     tagDao.save(new Tag(tag, newGroup.getGroupName()));
                 }
             }

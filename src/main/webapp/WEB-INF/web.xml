@@ -56,4 +56,13 @@
         <url-pattern>/AddGroup</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ChangeGroup</servlet-name>
+        <servlet-class>com.nsu.photo_anthropology.servlets.ChangeGroupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChangeGroup</servlet-name>
+        <url-pattern>/ChangeGroup</url-pattern>
+    </servlet-mapping>
+
 </web-app>

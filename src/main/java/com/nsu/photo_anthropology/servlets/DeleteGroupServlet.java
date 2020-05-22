@@ -1,6 +1,7 @@
 package com.nsu.photo_anthropology.servlets;
 
 import com.nsu.photo_anthropology.dao.GroupDao;
+import com.nsu.photo_anthropology.dao.TagDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,12 +21,12 @@ public class DeleteGroupServlet extends HttpServlet {
         int isRemoved = groupDao.deleteById(id);
 
         if(isRemoved==0){
-            req.setAttribute("deletingMes","Нельзя удалить группу, содержащую теги!");
+            TagDao tagDao = new TagDao();
+            tagDao.deleteAllTagsInGroup(id);
+            groupDao.deleteById(id);
         }
 
         String nextJSP = "GroupsTools";
-        RequestDispatcher dispatcher = req.getRequestDispatcher(nextJSP);
-        dispatcher.forward(req, resp);
-
+        resp.sendRedirect(nextJSP);
     }
 }
