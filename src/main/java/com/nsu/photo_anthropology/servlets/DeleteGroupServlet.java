@@ -22,6 +22,9 @@ public class DeleteGroupServlet extends HttpServlet {
 
         if(isRemoved==0){
             TagDao tagDao = new TagDao();
+            //TODO: 1. удаление группы предпологает удаление всех связных тэгов.
+            //TODO: Т.е. логика удаления групп с тэгами должна быть в GroupDao в методе delete(id)
+            //TODO: 2. Удаление\изменение связных сущностей из БД должно быть выполненно в транзакции https://proselyte.net/tutorials/jdbc/transactions/
             tagDao.deleteAllTagsInGroup(id);
             groupDao.deleteById(id);
         }

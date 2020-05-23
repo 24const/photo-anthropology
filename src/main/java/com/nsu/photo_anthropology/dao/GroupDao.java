@@ -28,6 +28,7 @@ public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
         }
     }
 
+    //Название метода не соответствует смыслу, лучше - getDeleteSqlRequest
     @Override
     public String getSqlRequest() {
         return SQL_DELETE_REQUEST;

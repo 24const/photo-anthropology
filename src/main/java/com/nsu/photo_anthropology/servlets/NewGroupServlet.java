@@ -18,6 +18,8 @@ public class NewGroupServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
+        //TODO: в коде очень желательно избегать дублицирования,
+        // TODO: а данный класс очень похож на ChangeGroupServlet
         InfoValidation infoValidation = new InfoValidation(req);
         infoValidation.isValidGroup();
 

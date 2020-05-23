@@ -34,8 +34,10 @@ public class GetPropertyValues {
             db_url = prop.getProperty("db_url");
 
         } catch (Exception e) {
+            //TODO: не стоит перехватывать исключения без обработки
             System.out.println("Exception: " + e);
         } finally {
+            //TODO: лучше использовать try-with-resrouces
             inputStream.close();
         }
     }

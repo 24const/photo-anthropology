@@ -13,6 +13,7 @@ public abstract class DaoFactory<Entity> implements Dao<Entity> {
     public int deleteById(int id) {
 
         String sql = getSqlRequest();
+        //TODO: почему не тип bool isSuccessfulRemove?
         int isSuccessfulRemove = 1;
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
