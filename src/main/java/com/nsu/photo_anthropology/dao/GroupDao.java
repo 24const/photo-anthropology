@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
+public class GroupDao extends DaoFactory<Group>{
 
     public final static String SQL_DELETE_REQUEST = "DELETE FROM groups WHERE id = ?";
 
@@ -28,9 +28,8 @@ public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
         }
     }
 
-    //Название метода не соответствует смыслу, лучше - getDeleteSqlRequest
     @Override
-    public String getSqlRequest() {
+    public String getDeleteSqlRequest() {
         return SQL_DELETE_REQUEST;
     }
 
@@ -97,5 +96,11 @@ public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void deleteRelatedEntities(int id){
+        TagDao tagDao = new TagDao();
+        tagDao.deleteAllTagsInGroup(id);
     }
 }

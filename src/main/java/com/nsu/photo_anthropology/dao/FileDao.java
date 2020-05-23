@@ -26,7 +26,7 @@ public class FileDao extends DaoFactory<File> implements Dao<File>{
     }
 
     @Override
-    public String getSqlRequest() {
+    public String getDeleteSqlRequest() {
         return SQL_DELETE_REQUEST;
     }
 
@@ -34,4 +34,7 @@ public class FileDao extends DaoFactory<File> implements Dao<File>{
     public int getId(File file) {
         return file.getId();
     }
+
+    @Override
+    public void deleteRelatedEntities(int id){}
 }

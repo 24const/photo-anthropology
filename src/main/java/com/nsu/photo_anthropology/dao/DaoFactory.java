@@ -1,29 +1,31 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
-import org.postgresql.util.PSQLException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 
 public abstract class DaoFactory<Entity> implements Dao<Entity> {
 
     @Override
-    public int deleteById(int id) {
+    public void deleteById(int id) throws SQLException {
 
-        String sql = getSqlRequest();
-        //TODO: почему не тип bool isSuccessfulRemove?
-        int isSuccessfulRemove = 1;
+        String sql = getDeleteSqlRequest();
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        connection.setAutoCommit(false);
+        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
+        try {
+            deleteRelatedEntities(id);
+            PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, id);
-            stm.execute();
+            stm.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
-            isSuccessfulRemove = 0;
+            connection.rollback(savepointOne);
+            throw new RuntimeException(e);
         }
-        return isSuccessfulRemove;
     }
 }

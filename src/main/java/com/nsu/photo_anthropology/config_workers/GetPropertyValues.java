@@ -11,15 +11,13 @@ public class GetPropertyValues {
     String user;
     String password;
     String db_url;
-    InputStream inputStream;
 
     public void getPropValues() throws IOException {
 
-        try {
-            Properties prop = new Properties();
-            String propFileName = "config.properties";
+        Properties prop = new Properties();
+        String propFileName = "config.properties";
 
-            inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);){
 
             if (inputStream != null) {
                 prop.load(inputStream);
@@ -34,11 +32,7 @@ public class GetPropertyValues {
             db_url = prop.getProperty("db_url");
 
         } catch (Exception e) {
-            //TODO: не стоит перехватывать исключения без обработки
-            System.out.println("Exception: " + e);
-        } finally {
-            //TODO: лучше использовать try-with-resrouces
-            inputStream.close();
+            throw new RuntimeException(e);
         }
     }
 

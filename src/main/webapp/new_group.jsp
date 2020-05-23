@@ -19,7 +19,7 @@ if(request.getAttribute("groupId")==null){
     System.out.println(action);
 } else{
     int groupId = (int) request.getAttribute("groupId");
-    action = "ChangeGroup?groupId="+groupId;
+    action = "AddGroup?groupId="+groupId;
 }
 %>
 <body>

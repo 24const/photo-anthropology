@@ -18,8 +18,6 @@ public class NewGroupServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-        //TODO: в коде очень желательно избегать дублицирования,
-        // TODO: а данный класс очень похож на ChangeGroupServlet
         InfoValidation infoValidation = new InfoValidation(req);
         infoValidation.isValidGroup();
 
@@ -29,18 +27,28 @@ public class NewGroupServlet extends HttpServlet {
 
         if(infoValidation.getExceptionCounter() == 0) {
 
+            TagDao tagDao = new TagDao();
             GroupDao groupDao = new GroupDao();
-            Group newGroup = new Group(groupName, groupQuestion);
-            groupDao.save(newGroup);
+            Group group;
+
+
+            if(req.getParameter("groupId")==null){
+                group = new Group(groupName, groupQuestion);
+                groupDao.save(group);
+            } else {
+                int groupId = Integer.parseInt(req.getParameter("groupId"));
+                group = new Group(groupId, groupName, groupQuestion);
+                groupDao.update(group);
+                tagDao.deleteAllTagsInGroup(groupId);
+            }
 
             if(!groupTags.equalsIgnoreCase("")) {
                 String[] tagsInGroup = groupTags.split(",");
-                Dao tagDao = new TagDao();
                 for (String tag : tagsInGroup) {
                     if(tag.indexOf(" ") == 0){
                         tag = tag.replaceFirst(" ", "");
                     }
-                    tagDao.save(new Tag(tag, newGroup.getGroupName()));
+                    tagDao.save(new Tag(tag, group.getGroupName()));
                 }
             }
             String nextJSP = "GroupsTools";

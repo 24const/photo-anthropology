@@ -27,7 +27,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
     }
 
     @Override
-    public String getSqlRequest() {
+    public String getDeleteSqlRequest() {
         return SQL_DELETE_REQUEST;
     }
 
@@ -36,4 +36,6 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
         return image.getId();
     }
 
+    @Override
+    public void deleteRelatedEntities(int id){}
 }

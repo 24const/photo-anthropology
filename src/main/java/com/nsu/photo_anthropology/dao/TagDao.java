@@ -30,7 +30,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
     }
 
     @Override
-    public String getSqlRequest() {
+    public String getDeleteSqlRequest() {
         return SQL_DELETE_TAG_REQUEST;
     }
 
@@ -76,5 +76,8 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public void deleteRelatedEntities(int id) throws SQLException {
     }
 }

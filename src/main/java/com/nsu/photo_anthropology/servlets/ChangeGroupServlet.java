@@ -42,43 +42,4 @@ public class ChangeGroupServlet extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher(nextJSP);
         dispatcher.forward(req, resp);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
-        InfoValidation infoValidation = new InfoValidation(req);
-        infoValidation.isValidGroup();
-
-        String groupName = infoValidation.getGroupName();
-        String groupQuestion = infoValidation.getGroupQuestion();
-        String groupTags = infoValidation.getTags();
-
-        if(infoValidation.getExceptionCounter() == 0) {
-
-            TagDao tagDao = new TagDao();
-            GroupDao groupDao = new GroupDao();
-
-            int groupId = Integer.parseInt(req.getParameter("groupId"));
-            Group changedGroup = new Group(groupId, groupName, groupQuestion);
-            groupDao.update(changedGroup);
-            tagDao.deleteAllTagsInGroup(groupId);
-
-            if(!groupTags.equalsIgnoreCase("")) {
-                String[] tagsInGroup = groupTags.split(",");
-
-                for (String tag : tagsInGroup) {
-                    if(tag.indexOf(" ") == 0){
-                        tag = tag.replaceFirst(" ", "");
-                    }
-                    tagDao.save(new Tag(tag, changedGroup.getGroupName()));
-                }
-            }
-            String nextJSP = "GroupsTools";
-            resp.sendRedirect(nextJSP);
-        } else {
-            String nextJSP = "new_group.jsp";
-            RequestDispatcher dispatcher = req.getRequestDispatcher(nextJSP);
-            dispatcher.forward(req, resp);
-        }
-    }
 }
