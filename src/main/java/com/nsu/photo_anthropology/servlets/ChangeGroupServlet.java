@@ -1,6 +1,6 @@
 package com.nsu.photo_anthropology.servlets;
 
-import com.nsu.photo_anthropology.dao.Dao;
+import com.nsu.photo_anthropology.dao.FileDao;
 import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.structure_entities.Group;
@@ -12,8 +12,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-public class NewGroupServlet extends HttpServlet {
+public class ChangeGroupServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+        int id = Integer.parseInt(req.getParameter("groupId"));
+        GroupDao groupDao = new GroupDao();
+        Group group = groupDao.getById(id);
+        TagDao tagDao = new TagDao();
+        List<Tag> tagsInGroup = tagDao.getAllTagsInGroup(group);
+
+        String tags = "";
+        for(Tag tag:tagsInGroup){
+            tags += tag.getTagName() + ", ";
+        }
+        if(tags.lastIndexOf(",")!=-1){
+            tags = tags.substring(0,tags.lastIndexOf(","));
+        }
+
+        req.setAttribute("prevGroupName", group.getGroupName());
+        req.setAttribute("prevGroupQuestion", group.getGroupQuestion());
+        req.setAttribute("prevGroupTags", tags);
+        req.setAttribute("groupId", group.getId());
+
+        String nextJSP = "new_group.jsp";
+        RequestDispatcher dispatcher = req.getRequestDispatcher(nextJSP);
+        dispatcher.forward(req, resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -27,18 +55,22 @@ public class NewGroupServlet extends HttpServlet {
 
         if(infoValidation.getExceptionCounter() == 0) {
 
+            TagDao tagDao = new TagDao();
             GroupDao groupDao = new GroupDao();
-            Group newGroup = new Group(groupName, groupQuestion);
-            groupDao.save(newGroup);
+
+            int groupId = Integer.parseInt(req.getParameter("groupId"));
+            Group changedGroup = new Group(groupId, groupName, groupQuestion);
+            groupDao.update(changedGroup);
+            tagDao.deleteAllTagsInGroup(groupId);
 
             if(!groupTags.equalsIgnoreCase("")) {
                 String[] tagsInGroup = groupTags.split(",");
-                Dao tagDao = new TagDao();
+
                 for (String tag : tagsInGroup) {
                     if(tag.indexOf(" ") == 0){
                         tag = tag.replaceFirst(" ", "");
                     }
-                    tagDao.save(new Tag(tag, newGroup.getGroupName()));
+                    tagDao.save(new Tag(tag, changedGroup.getGroupName()));
                 }
             }
             String nextJSP = "GroupsTools";

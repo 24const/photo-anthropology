@@ -36,14 +36,14 @@ public class InfoValidation {
             request.setAttribute("groupName", groupName);
         } else {
             request.setAttribute("groupNameMes", "Укажите название группы.");
-            exceptionCounter++;
+            this.exceptionCounter++;
         }
         if (!request.getParameter("groupQuestion").equalsIgnoreCase("")) {
             groupQuestion = request.getParameter("groupQuestion");
             request.setAttribute("groupQuestion", groupQuestion);
         } else {
             request.setAttribute("groupQuestionMes", "Укажите вопрос, на который отвечают теги данной группы.");
-            exceptionCounter++;
+            this.exceptionCounter++;
         }
         if (!request.getParameter("groupTags").equalsIgnoreCase("")) {
             groupTags = request.getParameter("groupTags");

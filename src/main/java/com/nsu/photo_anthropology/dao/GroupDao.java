@@ -62,4 +62,39 @@ public class GroupDao extends DaoFactory<Group> implements Dao<Group>{
         return listOfGroups;
     }
 
+    public Group getById(int id){
+
+        String sql = "SELECT * FROM groups where id = ?";
+        Group group;
+
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            ResultSet resultSet = stm.executeQuery();
+            resultSet.next();
+            String groupName = resultSet.getString("group_name");
+            String groupQuestion = resultSet.getString("group_question");
+            group = new Group(id, groupName, groupQuestion);
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return group;
+    }
+
+    public void update(Group group) {
+        String sql = "UPDATE groups SET group_name = ?, group_question = ? where id = ?";
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, group.getGroupName());
+            stm.setString(2, group.getGroupQuestion());
+            stm.setInt(3, group.getId());
+            stm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
