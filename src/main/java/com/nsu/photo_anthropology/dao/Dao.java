@@ -2,11 +2,15 @@ package com.nsu.photo_anthropology.dao;
 
 import java.sql.SQLException;
 
-public interface Dao<Entity> {
+public interface Dao<E> {
 
-    void save(Entity entity);
+    void save(E entity);
+
     void deleteById(int id) throws SQLException;
+
     String getDeleteSqlRequest();
-    int getId(Entity entity);
+
+    int getId(E entity);
+
     void deleteRelatedEntities(int id) throws SQLException;
 }

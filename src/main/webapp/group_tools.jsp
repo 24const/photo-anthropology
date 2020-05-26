@@ -7,7 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
 <head>
     <title>Group Tools</title>
     <link rel="StyleSheet" href="css/index.css" type="text/css" media="screen"/>
@@ -24,13 +24,15 @@
         </tr>
 
         <%
-        for(Group group:(List<Group>)request.getAttribute("allGroups")) { %>
+            for (Group group : (List<Group>) request.getAttribute("allGroups")) { %>
         <tr>
-            <td><%=group.getGroupName()%></td>
-            <td><%=group.getGroupQuestion()%></td>
+            <td><%=group.getGroupName()%>
+            </td>
+            <td><%=group.getGroupQuestion()%>
+            </td>
             <td><a href="ChangeGroup?groupId=<%=group.getId()%>">Изменить</a></td>
             <td><a href="DeleteGroup?id=<%=group.getId()%>">Удалить</a></td>
-        <%}%>
+                <%}%>
     </table>
     <p class="message">${deletingMes}</p>
 </div>

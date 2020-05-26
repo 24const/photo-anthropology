@@ -1,38 +1,36 @@
 package com.nsu.photo_anthropology.config_workers;
 
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Properties;
 
 public class GetPropertyValues {
 
     String user;
     String password;
-    String db_url;
+    String dbUrlAddress;
 
     public void getPropValues() throws IOException {
 
         Properties prop = new Properties();
         String propFileName = "config.properties";
 
-        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);){
-
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName)) {
             if (inputStream != null) {
                 prop.load(inputStream);
             } else {
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
 
-            Date time = new Date(System.currentTimeMillis());
-
             user = prop.getProperty("user");
             password = prop.getProperty("password");
-            db_url = prop.getProperty("db_url");
+            dbUrlAddress = prop.getProperty("db_url");
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные конфигурации для получения доступа к БД.");
         }
     }
 
@@ -44,7 +42,7 @@ public class GetPropertyValues {
         return password;
     }
 
-    public String getDb_url() {
-        return db_url;
+    public String getDbUrlAddress() {
+        return dbUrlAddress;
     }
 }

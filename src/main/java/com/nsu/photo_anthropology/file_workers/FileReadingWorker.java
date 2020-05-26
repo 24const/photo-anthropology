@@ -1,15 +1,14 @@
 package com.nsu.photo_anthropology.file_workers;
 
+import com.nsu.photo_anthropology.structure_entities.Image;
+import org.json.simple.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.nsu.photo_anthropology.structure_entities.Image;
-import org.json.simple.JSONArray;
-
 public class FileReadingWorker {
 
-    private static String[] FILE_FORMATS = {".jpeg", ".jpg", ".png"};
     private String path;
     private JSONArray columnNames = new JSONArray();
     private Map<Integer, List<String>> data;
@@ -22,13 +21,13 @@ public class FileReadingWorker {
         this.setImages();
     }
 
-    private void setImages(){
+    private void setImages() {
         int dataSize = this.data.keySet().size();
-        for(int imageRow = 1; imageRow <= dataSize; imageRow++){
+        for (int imageRow = 1; imageRow <= dataSize; imageRow++) {
             String imagePath = "";
             JSONArray columnInfo = new JSONArray();
-            for(Object cell:data.get(imageRow)){
-                if(String.valueOf(cell).contains(".jpg")){
+            for (Object cell : data.get(imageRow)) {
+                if (String.valueOf(cell).contains(".jpg")) {
                     imagePath = String.valueOf(cell);
 
                 }
@@ -39,7 +38,7 @@ public class FileReadingWorker {
 
     }
 
-    private void setColumnNames(){
+    private void setColumnNames() {
         this.columnNames.addAll(this.data.remove(0));
     }
 

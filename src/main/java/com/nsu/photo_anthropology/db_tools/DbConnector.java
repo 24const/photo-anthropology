@@ -1,5 +1,6 @@
 package com.nsu.photo_anthropology.db_tools;
 
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.config_workers.GetPropertyValues;
 
 import java.io.IOException;
@@ -12,8 +13,9 @@ public class DbConnector {
     private static DbConnector instance;
     private Connection connection;
 
-    public static synchronized DbConnector getInstance(){
-        if(instance==null){
+    public static synchronized DbConnector getInstance() {
+
+        if (instance == null) {
             instance = new DbConnector();
         }
         return instance;
@@ -23,37 +25,33 @@ public class DbConnector {
         connection = setConnection();
     }
 
-    private Connection setConnection(){
+    private Connection setConnection() {
 
         GetPropertyValues properties = new GetPropertyValues();
 
         try {
             properties.getPropValues();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при считывании данных для подключения к БД.");
         }
 
-        String db_url = properties.getDb_url();
+        String dbUrlAddress = properties.getDbUrlAddress();
         String user = properties.getUser();
         String password = properties.getPassword();
 
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC Driver is not found. Include it in your library path ");
             throw new RuntimeException(e);
         }
 
         try {
-            Connection connection = DriverManager.getConnection(db_url, user, password);
-            return connection;
+            return DriverManager.getConnection(dbUrlAddress, user, password);
         } catch (SQLException e) {
-            System.out.println("Connection Failed");
-            throw new RuntimeException(e);
+            throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при подключении к БД.");
         }
     }
-
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 }

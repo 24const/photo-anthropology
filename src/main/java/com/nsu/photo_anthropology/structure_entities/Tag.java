@@ -2,17 +2,17 @@ package com.nsu.photo_anthropology.structure_entities;
 
 public class Tag {
     private int id;
-    private String tag_name;
+    private String tagName;
     private String groupName;
 
-    public Tag(int id, String tag_name, String groupName) {
+    public Tag(int id, String tagName, String groupName) {
         this.id = id;
-        this.tag_name = tag_name;
+        this.tagName = tagName;
         this.groupName = groupName;
     }
 
-    public Tag(String tag_name, String groupName) {
-        this.tag_name = tag_name;
+    public Tag(String tagName, String groupName) {
+        this.tagName = tagName;
         this.groupName = groupName;
     }
 
@@ -21,7 +21,7 @@ public class Tag {
     }
 
     public String getTagName() {
-        return tag_name;
+        return tagName;
     }
 
     public String getGroupName() {
@@ -31,7 +31,7 @@ public class Tag {
     @Override
     public String toString() {
         return "Tag{" +
-                "tag_name='" + tag_name + '\'' +
+                "tag_name='" + tagName + '\'' +
                 ", groupName=" + groupName +
                 '}';
     }

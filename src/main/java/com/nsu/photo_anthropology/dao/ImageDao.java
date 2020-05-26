@@ -1,5 +1,6 @@
 package com.nsu.photo_anthropology.dao;
 
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.structure_entities.Image;
 
@@ -7,12 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
+public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
 
-    public final static String SQL_DELETE_REQUEST = "DELETE FROM images WHERE id = ?";
+    public static final String SQLDELETEREQUEST = "DELETE FROM images WHERE id = ?";
 
     @Override
-    public void save(Image image){
+    public void save(Image image) {
         String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES((SELECT id FROM files WHERE file_name = ?), ?, ?::JSON);";
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
@@ -22,13 +23,13 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
             stm.setObject(3, image.getOtherInformation().toJSONString());
             stm.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image).");
         }
     }
 
     @Override
     public String getDeleteSqlRequest() {
-        return SQL_DELETE_REQUEST;
+        return SQLDELETEREQUEST;
     }
 
     @Override
@@ -36,6 +37,10 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image>{
         return image.getId();
     }
 
+
     @Override
-    public void deleteRelatedEntities(int id){}
+    public void deleteRelatedEntities(int id) {
+        // На данной стадии не реализовано удаления изображений,
+        // а следовательно, и удаление связанной информации
+    }
 }

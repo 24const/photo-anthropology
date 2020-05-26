@@ -1,6 +1,6 @@
 package com.nsu.photo_anthropology.servlets;
 
-import com.nsu.photo_anthropology.dao.FileDao;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.structure_entities.Group;
@@ -17,20 +17,28 @@ import java.util.List;
 public class ChangeGroupServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
-        int id = Integer.parseInt(req.getParameter("groupId"));
+        int id;
+        try {
+            id = Integer.parseInt(req.getParameter("groupId"));
+        } catch (NumberFormatException e) {
+            throw new PhotoAnthropologyRuntimeException("ChangeGroupServlet: ошибка при получении информации об удаляемой группе.");
+        }
+
         GroupDao groupDao = new GroupDao();
         Group group = groupDao.getById(id);
         TagDao tagDao = new TagDao();
         List<Tag> tagsInGroup = tagDao.getAllTagsInGroup(group);
 
-        String tags = "";
-        for(Tag tag:tagsInGroup){
-            tags += tag.getTagName() + ", ";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Tag tag : tagsInGroup) {
+            stringBuilder.append(tag.getTagName());
+            stringBuilder.append(", ");
         }
-        if(tags.lastIndexOf(",")!=-1){
-            tags = tags.substring(0,tags.lastIndexOf(","));
+        String tags = stringBuilder.toString();
+        if (tags.lastIndexOf(',') != -1) {
+            tags = tags.substring(0, tags.lastIndexOf(','));
         }
 
         req.setAttribute("prevGroupName", group.getGroupName());
@@ -40,6 +48,10 @@ public class ChangeGroupServlet extends HttpServlet {
 
         String nextJSP = "new_group.jsp";
         RequestDispatcher dispatcher = req.getRequestDispatcher(nextJSP);
-        dispatcher.forward(req, resp);
+        try {
+            dispatcher.forward(req, resp);
+        } catch (IOException | ServletException e) {
+            throw new PhotoAnthropologyRuntimeException("ChangeGroupServlet: ошибка при попытке перехода на страницу new_group.jsp.");
+        }
     }
 }

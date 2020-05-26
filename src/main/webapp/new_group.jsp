@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
 <head>
     <title>Adding Group</title>
     <link rel="StyleSheet" href="css/index.css" type="text/css" media="screen"/>
@@ -14,13 +14,13 @@
 
 <%
     String action;
-if(request.getAttribute("groupId")==null){
-    action = "AddGroup";
-    System.out.println(action);
-} else{
-    int groupId = (int) request.getAttribute("groupId");
-    action = "AddGroup?groupId="+groupId;
-}
+    if (request.getAttribute("groupId") == null) {
+        action = "AddGroup";
+        System.out.println(action);
+    } else {
+        int groupId = (int) request.getAttribute("groupId");
+        action = "AddGroup?groupId=" + groupId;
+    }
 %>
 <body>
 <div class="new_group_form">
@@ -34,7 +34,7 @@ if(request.getAttribute("groupId")==null){
         </label>
         <p class="message">${groupQuestionMes}</p>
         <label>Теги:<br><br>
-            <input type ="textarea" name="groupTags" placeholder="Укажите теги через запятую" value="${prevGroupTags}">
+            <input type="textarea" name="groupTags" placeholder="Укажите теги через запятую" value="${prevGroupTags}">
         </label>
         <p class="message">${groupTagsMes}</p>
         <input type="submit" value="Сохранить" class="btn-sign">
