@@ -1,10 +1,13 @@
 package com.nsu.photo_anthropology.dao;
 
-import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,18 +48,18 @@ public class GroupDao extends DaoFactory<Group> {
         Connection connection = dbConnector.getConnection();
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            ResultSet resultSet = stm.executeQuery();
+            try (ResultSet resultSet = stm.executeQuery()) {
 
-            while(resultSet.next()){
-                int id = resultSet.getInt("id");
-                String groupName = resultSet.getString("group_name");
-                String groupQuestion = resultSet.getString("group_question");
-                listOfGroups.add(new Group(id, groupName, groupQuestion));
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String groupName = resultSet.getString("group_name");
+                    String groupQuestion = resultSet.getString("group_question");
+                    listOfGroups.add(new Group(id, groupName, groupQuestion));
+                }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-//            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе GroupDao.getAll()");
+            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе GroupDao.getAll()");
         }
         return listOfGroups;
     }

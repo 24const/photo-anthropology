@@ -32,25 +32,17 @@ public class FileParser {
                     data.put(i, new ArrayList<String>());
                     for (Cell cell : row) {
                         switch (cell.getCellType()) {
-                            case STRING: {
-                                data.get(i).add(cell.getRichStringCellValue().getString());
+                            case STRING:
+                                evaluateSTRING(data, cell, i);
                                 break;
-                            }
-                            case NUMERIC: {
-                                if (DateUtil.isCellDateFormatted(cell)) {
-                                    data.get(i).add(cell.getDateCellValue() + "");
-                                } else {
-                                    data.get(i).add(cell.getNumericCellValue() + "");
-                                }
+                            case NUMERIC:
+                                evaluateNumeric(data, cell, i);
                                 break;
-                            }
-                            case BOOLEAN: {
-                                data.get(i).add(cell.getBooleanCellValue() + "");
+                            case BOOLEAN:
+                                evaluateBoolean(data, cell, i);
                                 break;
-                            }
-                            default: {
-                                data.get(i).add(" ");
-                            }
+                            default:
+                                evaluateDefault(data, i);
                         }
                     }
                     i++;
@@ -65,5 +57,25 @@ public class FileParser {
     public static String getFileName(String sourceFilePath) {
         Path fileName = Paths.get(sourceFilePath).getFileName();
         return fileName.toString();
+    }
+
+    private static void evaluateSTRING(Map<Integer, List<String>> data, Cell cell, int i) {
+        data.get(i).add(cell.getRichStringCellValue().getString());
+    }
+
+    private static void evaluateNumeric(Map<Integer, List<String>> data, Cell cell, int i) {
+        if (DateUtil.isCellDateFormatted(cell)) {
+            data.get(i).add(cell.getDateCellValue() + "");
+        } else {
+            data.get(i).add(cell.getNumericCellValue() + "");
+        }
+    }
+
+    private static void evaluateBoolean(Map<Integer, List<String>> data, Cell cell, int i) {
+        data.get(i).add(cell.getBooleanCellValue() + "");
+    }
+
+    private static void evaluateDefault(Map<Integer, List<String>> data, int i) {
+        data.get(i).add(" ");
     }
 }

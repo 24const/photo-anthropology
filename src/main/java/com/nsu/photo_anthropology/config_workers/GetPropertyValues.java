@@ -12,6 +12,7 @@ public class GetPropertyValues {
     String user;
     String password;
     String dbUrlAddress;
+    String uploadedFilesDirectory;
 
     public void getPropValues() throws IOException {
 
@@ -28,6 +29,8 @@ public class GetPropertyValues {
             user = prop.getProperty("user");
             password = prop.getProperty("password");
             dbUrlAddress = prop.getProperty("db_url");
+            uploadedFilesDirectory = prop.getProperty("uploaded_files_directory");
+
 
         } catch (Exception e) {
             throw new PhotoAnthropologyRuntimeException("Невозможно считать данные конфигурации для получения доступа к БД.");
@@ -44,5 +47,9 @@ public class GetPropertyValues {
 
     public String getDbUrlAddress() {
         return dbUrlAddress;
+    }
+
+    public String getUploadedFilesDirectory() {
+        return uploadedFilesDirectory;
     }
 }

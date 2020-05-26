@@ -7,6 +7,5 @@ public class KsuTest {
     @Test
     public void myTest() {
         TagDao tagDao = new TagDao();
-
     }
 }

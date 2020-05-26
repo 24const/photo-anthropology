@@ -1,6 +1,5 @@
 package com.nsu.photo_anthropology.servlets;
 
-import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.structure_entities.Group;
@@ -13,17 +12,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ChangeGroupServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        int id;
+        int id = 0;
         try {
             id = Integer.parseInt(req.getParameter("groupId"));
         } catch (NumberFormatException e) {
-            throw new PhotoAnthropologyRuntimeException("ChangeGroupServlet: ошибка при получении информации об удаляемой группе.");
+            Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
+            logger.info(e.getMessage());
+
         }
 
         GroupDao groupDao = new GroupDao();
@@ -51,7 +53,8 @@ public class ChangeGroupServlet extends HttpServlet {
         try {
             dispatcher.forward(req, resp);
         } catch (IOException | ServletException e) {
-            throw new PhotoAnthropologyRuntimeException("ChangeGroupServlet: ошибка при попытке перехода на страницу new_group.jsp.");
+            Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
+            logger.info(e.getMessage());
         }
     }
 }

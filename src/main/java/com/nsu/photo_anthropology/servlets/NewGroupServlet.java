@@ -10,11 +10,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public class NewGroupServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         InfoValidation infoValidation = new InfoValidation(req);
         infoValidation.isValidGroup();
@@ -27,7 +29,8 @@ public class NewGroupServlet extends HttpServlet {
             try {
                 resp.sendRedirect(nextJSP);
             } catch (Exception e) {
-                throw new PhotoAnthropologyRuntimeException("NewGroupServlet: Ошибка при переходе на страницу GroupsTools.");
+                Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
+                logger.info(e.getMessage());
             }
 
         } else {
@@ -36,12 +39,13 @@ public class NewGroupServlet extends HttpServlet {
             try {
                 dispatcher.forward(req, resp);
             } catch (Exception e) {
-                throw new PhotoAnthropologyRuntimeException("NewGroupServlet: Ошибка при переходе на страницу new_group.jsp.");
+                Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
+                logger.info(e.getMessage());
             }
         }
     }
 
-    private void saveNewGroup(HttpServletRequest req, InfoValidation infoValidation){
+    private void saveNewGroup(HttpServletRequest req, InfoValidation infoValidation) {
 
         String groupName = infoValidation.getGroupName();
         String groupQuestion = infoValidation.getGroupQuestion();

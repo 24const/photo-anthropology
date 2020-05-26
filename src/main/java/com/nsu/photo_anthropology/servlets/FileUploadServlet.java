@@ -1,6 +1,6 @@
 package com.nsu.photo_anthropology.servlets;
 
-import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
+import com.nsu.photo_anthropology.config_workers.GetPropertyValues;
 import com.nsu.photo_anthropology.file_workers.FileSavingToDBWorker;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -11,15 +11,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class FileUploadServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+
+
+        GetPropertyValues properties = new GetPropertyValues();
+        try {
+            properties.getPropValues();
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
+            logger.info(e.getMessage());
+
+        }
+
+        String uploadedFilesDirectory = properties.getUploadedFilesDirectory();
 
         File uploadedFile;
         String filePath = "";
@@ -34,24 +48,23 @@ public class FileUploadServlet extends HttpServlet {
                     FileItem item = (FileItem) iterator.next();
                     if (!item.isFormField()) {
                         String fileName = item.getName();
-                        String root = getServletContext().getRealPath("/");
-                        String rootPath = root + "/uploads";
-                        File path = new File(rootPath);
-                        String uploadedFilePath = path + "/" + fileName;
+                        String uploadedFilePath = uploadedFilesDirectory + fileName;
                         uploadedFile = new File(uploadedFilePath);
                         item.write(uploadedFile);
-                        filePath = path + "/" + fileName;
+                        filePath = uploadedFilesDirectory + fileName;
                     }
                 }
             } catch (Exception e) {
-                throw new PhotoAnthropologyRuntimeException("FileUploadServlet: ошибка призагрузке файла на сервер.");
+                Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
+                logger.info(e.getMessage());
             }
 
             FileSavingToDBWorker.saveFileInfo(filePath);
             try {
                 resp.sendRedirect("index.jsp");
             } catch (Exception e) {
-                throw new PhotoAnthropologyRuntimeException("FileUploadServlet: ошибка при переходе на страницу index.jsp.");
+                Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
+                logger.info(e.getMessage());
             }
         }
     }

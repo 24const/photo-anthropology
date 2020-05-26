@@ -1,7 +1,7 @@
 package com.nsu.photo_anthropology.dao;
 
-import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,11 +23,10 @@ public abstract class DaoFactory<E> implements Dao<E> {
             stm.setInt(1, id);
             stm.executeUpdate();
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Ошивка в ходе выполнения транзакции.");
-        } finally {
-            connection.close();
         }
     }
 }
