@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
 
     public static final String SQLDELETEREQUEST = "DELETE FROM images WHERE id = ?";
-    private int uploadFileId;
+    protected int uploadFileId;
 
     @Override
     public void save(Image image) {
@@ -34,17 +34,15 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     }
 
     @Override
-    public int getId(Image image) {
-        return image.getId();
-    }
-
-    @Override
     public void deleteRelatedEntities(int id) {
         // На данной стадии не реализовано удаления изображений,
         // а следовательно, и удаление связанной информации
     }
-
     public void setUploadFileId(int uploadFileId) {
         this.uploadFileId = uploadFileId;
+    }
+
+    public int getUploadFileId() {
+        return this.uploadFileId;
     }
 }

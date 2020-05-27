@@ -30,4 +30,12 @@ public class File {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "File{" +
+                "fileName='" + fileName + '\'' +
+                ", columnNames=" + columnNames +
+                '}';
+    }
 }

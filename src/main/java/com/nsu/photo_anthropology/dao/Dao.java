@@ -10,7 +10,5 @@ public interface Dao<E> {
 
     String getDeleteSqlRequest();
 
-    int getId(E entity);
-
     void deleteRelatedEntities(int id) throws SQLException;
 }

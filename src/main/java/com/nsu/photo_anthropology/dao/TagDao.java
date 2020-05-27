@@ -35,11 +35,6 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         return SQLDELETETAGREQUEST;
     }
 
-    @Override
-    public int getId(Tag tag) {
-        return tag.getId();
-    }
-
     public List<Tag> getAllTagsInGroup(Group group) {
 
         List<Tag> listOfTags = new ArrayList<>();

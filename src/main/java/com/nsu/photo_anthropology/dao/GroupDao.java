@@ -34,11 +34,6 @@ public class GroupDao extends DaoFactory<Group> {
         return SQLDELETEREQUEST;
     }
 
-    @Override
-    public int getId(Group group) {
-        return group.getId();
-    }
-
     public List<Group> getAll() {
 
         List<Group> listOfGroups = new ArrayList<>();

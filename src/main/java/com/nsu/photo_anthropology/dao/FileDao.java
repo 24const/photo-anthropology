@@ -37,11 +37,6 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
     }
 
     @Override
-    public int getId(File file) {
-        return file.getId();
-    }
-
-    @Override
     public void deleteRelatedEntities(int id) {
         // На данной стадии не реализовано удаление файлов,
         // а следовательно, и удаление связанной информации
