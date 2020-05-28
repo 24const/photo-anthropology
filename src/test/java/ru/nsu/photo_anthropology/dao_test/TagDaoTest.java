@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagDaoTest {
-    private static TagDao tagDao;
     static Tag tag;
     static int savedTagId;
     static Group group;
     static int savedGroupId;
+    private static TagDao tagDao;
 
     @BeforeClass
     public static void setup() {
@@ -55,13 +54,13 @@ public class TagDaoTest {
     }
 
     @Test
-    public void getDeleteSqlRequestTest(){
+    public void getDeleteSqlRequestTest() {
         String deleteRequest = tagDao.getDeleteSqlRequest();
         Assert.assertEquals("DELETE FROM tags WHERE id = ?", deleteRequest);
     }
 
     @Test
-    public void getAllTagsInGroupTest(){
+    public void getAllTagsInGroupTest() {
         List<Tag> expectedListOfTags = new ArrayList<>();
         expectedListOfTags.add(tag);
         Group group = new Group(savedGroupId, "Тестовая группа для тега", "Успешное прохождение теста??");
@@ -69,7 +68,7 @@ public class TagDaoTest {
     }
 
     @Test
-    public void deleteAllTagsInGroupTest(){
+    public void deleteAllTagsInGroupTest() {
         tagDao.deleteAllTagsInGroup(savedGroupId);
         int resultCnt;
         String sql = "SELECT count(*) as cnt FROM tags WHERE group_id = ?";

@@ -65,14 +65,14 @@ public class FileParser {
 
     private static void evaluateNumeric(Map<Integer, List<String>> data, Cell cell, int i) {
         if (DateUtil.isCellDateFormatted(cell)) {
-            data.get(i).add(cell.getDateCellValue() + "");
+            data.get(i).add(String.valueOf(cell.getDateCellValue()));
         } else {
-            data.get(i).add(cell.getNumericCellValue() + "");
+            data.get(i).add(String.valueOf(cell.getNumericCellValue()));
         }
     }
 
     private static void evaluateBoolean(Map<Integer, List<String>> data, Cell cell, int i) {
-        data.get(i).add(cell.getBooleanCellValue() + "");
+        data.get(i).add(String.valueOf(cell.getBooleanCellValue()));
     }
 
     private static void evaluateDefault(Map<Integer, List<String>> data, int i) {

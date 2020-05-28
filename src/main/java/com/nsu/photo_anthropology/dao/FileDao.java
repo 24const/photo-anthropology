@@ -13,7 +13,7 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
 
     @Override
     public void save(File file) throws SQLException {
-        String sql = "INSERT INTO files(file_name, column_names) VALUES(?, ?::JSON)";
+        String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
         connection.setAutoCommit(false);

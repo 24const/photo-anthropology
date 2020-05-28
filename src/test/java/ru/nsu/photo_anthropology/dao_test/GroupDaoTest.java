@@ -14,13 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertThat;
-
 public class GroupDaoTest {
 
-    private static GroupDao groupDao;
     static Group group;
     static int savedGroupId;
+    private static GroupDao groupDao;
 
     @BeforeClass
     public static void setup() throws IOException {
@@ -54,13 +52,13 @@ public class GroupDaoTest {
     }
 
     @Test
-    public void getDeleteSqlRequestTest(){
+    public void getDeleteSqlRequestTest() {
         String deleteRequest = groupDao.getDeleteSqlRequest();
         Assert.assertEquals("DELETE FROM groups WHERE id = ?", deleteRequest);
     }
 
     @Test
-    public void updateGroupTest(){
+    public void updateGroupTest() {
         Group changedGroup = new Group(savedGroupId, "Тестовая группа2", "Успешное ли?");
         Assert.assertEquals(changedGroup, groupDao.getById(group.getId()));
     }

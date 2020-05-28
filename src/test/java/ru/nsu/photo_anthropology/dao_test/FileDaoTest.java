@@ -1,9 +1,9 @@
 package ru.nsu.photo_anthropology.dao_test;
 
+import com.nsu.photo_anthropology.dao.FileDao;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.File;
-import com.nsu.photo_anthropology.dao.FileDao;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 
 
 public class FileDaoTest {
@@ -39,7 +38,7 @@ public class FileDaoTest {
     public void saveFileTest() throws SQLException {
 
         fileDao.save(file);
-        File savedFile=null;
+        File savedFile = null;
 
         String sql = "SELECT * FROM files where id = (SELECT MAX(id) FROM files)";
 
@@ -59,12 +58,12 @@ public class FileDaoTest {
     }
 
     @Test
-    public void getIdOfSavedFileTest(){
+    public void getIdOfSavedFileTest() {
         Assert.assertNotNull(fileDao.getIdOfSavedFile());
     }
 
     @Test
-    public void getDeleteSqlRequestTest(){
+    public void getDeleteSqlRequestTest() {
         String deleteRequest = fileDao.getDeleteSqlRequest();
         Assert.assertEquals("DELETE FROM files WHERE id = ?", deleteRequest);
     }
@@ -90,5 +89,4 @@ public class FileDaoTest {
         }
         Assert.assertEquals(0, resultCnt);
     }
-
 }

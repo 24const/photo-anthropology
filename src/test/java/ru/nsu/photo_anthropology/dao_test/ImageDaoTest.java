@@ -1,12 +1,8 @@
 package ru.nsu.photo_anthropology.dao_test;
 
-import com.nsu.photo_anthropology.dao.FileDao;
-import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.ImageDao;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
-import com.nsu.photo_anthropology.structure_entities.File;
-import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -62,13 +58,13 @@ public class ImageDaoTest {
     }
 
     @Test
-    public void getDeleteSqlRequestTest(){
+    public void getDeleteSqlRequestTest() {
         String deleteRequest = imageDao.getDeleteSqlRequest();
         Assert.assertEquals("DELETE FROM images WHERE id = ?", deleteRequest);
     }
 
     @Test
-    public void setAndGetUploadFileIdTest(){
+    public void setAndGetUploadFileIdTest() {
         imageDao.setUploadFileId(13);
         Assert.assertEquals(13, imageDao.getUploadFileId());
     }
@@ -87,7 +83,7 @@ public class ImageDaoTest {
             try (ResultSet resultSet = stm.executeQuery()) {
                 resultSet.next();
                 resultCnt = resultSet.getInt("cnt");
-                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
