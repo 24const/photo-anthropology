@@ -11,6 +11,11 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
     public static final String SQLDELETEREQUEST = "DELETE FROM files WHERE id = ?";
     private int idOfSavedFile;
 
+    /**
+     * Процедура сохранения данных о файле в таблице files БД
+     *
+     * @param file - файл, данные о котором сохраняем {@link File}
+     */
     @Override
     public void save(File file) throws SQLException {
         String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
@@ -31,17 +36,30 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
         }
     }
 
+    /**
+     * Функция получения значения поля {@link FileDao#SQLDELETEREQUEST}
+     *
+     * @return возвращает SQL-запрос для удаления записи о файле из таблицы files БД по id
+     */
     @Override
     public String getDeleteSqlRequest() {
         return SQLDELETEREQUEST;
     }
 
+    /**
+     * Процедура удаления записей из таблицы images по внешнему ключу
+     *
+     * @param id - родительский ключ
+     */
     @Override
     public void deleteRelatedEntities(int id) {
         // На данной стадии не реализовано удаление файлов,
         // а следовательно, и удаление связанной информации
     }
 
+    /**
+     * Процедура определения id охраненногоо файла {@link FileDao#save(File)}
+     */
     private void setIdOfSavedFile() {
         String sql = "SELECT MAX(id) as last_file_id FROM files";
 
@@ -58,6 +76,11 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
         }
     }
 
+    /**
+     * Функция получения значения поля {@link FileDao#idOfSavedFile}
+     *
+     * @return возвращает id загруженного файла
+     */
     public int getIdOfSavedFile() {
         return this.idOfSavedFile;
     }

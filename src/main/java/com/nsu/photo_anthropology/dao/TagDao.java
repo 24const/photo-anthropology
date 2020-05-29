@@ -14,8 +14,13 @@ import java.util.List;
 
 public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
 
-    public static final String SQLDELETETAGREQUEST = "DELETE FROM tags WHERE id = ?";
+    public static final String SQLDELETEREQUEST = "DELETE FROM tags WHERE id = ?";
 
+    /**
+     * Процедура сохранения данных об теге в таблице tags БД
+     *
+     * @param tag - тег, данные о котором сохраняем {@link Tag}
+     */
     @Override
     public void save(Tag tag) {
         String sql = "INSERT INTO tags(group_id, tag_name) VALUES((SELECT id from groups where group_name = ?), ?);";
@@ -30,11 +35,22 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         }
     }
 
+    /**
+     * Функция получения значения поля {@link TagDao#SQLDELETEREQUEST}
+     *
+     * @return возвращает SQL-запрос для удаления записи о теге из таблицы tags БД по id
+     */
     @Override
     public String getDeleteSqlRequest() {
-        return SQLDELETETAGREQUEST;
+        return SQLDELETEREQUEST;
     }
 
+    /**
+     * Функция получения данных из БД обо всех тегах группы
+     *
+     * @param group - группа, теги, которой узнаем
+     * @return список всех тегов, содержащихся в группе
+     */
     public List<Tag> getAllTagsInGroup(Group group) {
 
         List<Tag> listOfTags = new ArrayList<>();
@@ -61,6 +77,11 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         return listOfTags;
     }
 
+    /**
+     * Процедура удаления из БД записей о тегах по id группы
+     *
+     * @param id - id группы
+     */
     public void deleteAllTagsInGroup(int id) {
         String sql = "DELETE FROM tags WHERE group_id = ?";
 
@@ -75,6 +96,11 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         }
     }
 
+    /**
+     * Процедура удаления записей из таблицы tagged_images по внешнему ключу
+     *
+     * @param id - родительский ключ
+     */
     @Override
     public void deleteRelatedEntities(int id) throws SQLException {
         // На данной стадии не реализовано удаления тегов,

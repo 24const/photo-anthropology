@@ -19,6 +19,13 @@ public class FileParser {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     * Функция считывания строк, содержащихся в файле
+     *
+     * @param sourceFilePath - путь файла
+     * @return Возвращает Map<Integer, List<String>>, где ключ - номер строки,
+     * значение - список значенй, содержащихся в ячейках данной строки
+     */
     public static Map<Integer, List<String>> readXLSXFile(String sourceFilePath) {
 
         Map<Integer, List<String>> data = new HashMap<>();
@@ -54,6 +61,12 @@ public class FileParser {
         return data;
     }
 
+    /**
+     * Функция получения имени файла из его абсолютного пути
+     *
+     * @param sourceFilePath - абсолютный путь к файлу
+     * @return Возвращает имя файла
+     */
     public static String getFileName(String sourceFilePath) {
         Path fileName = Paths.get(sourceFilePath).getFileName();
         return fileName.toString();

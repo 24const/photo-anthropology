@@ -16,6 +16,11 @@ public class FileSavingToDBWorker {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     * Функция запускающая сохранение данных исходного файла в БД
+     *
+     * @param sourcePath - абсолютный путь к загруженному файлу
+     */
     public static void saveFileInfo(String sourcePath) {
 
         Map<Integer, List<String>> data = FileParser.readXLSXFile(sourcePath);

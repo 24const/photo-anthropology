@@ -14,6 +14,11 @@ public class GetPropertyValues {
     String dbUrlAddress;
     String uploadedFilesDirectory;
 
+    /**
+     * Функция считывания из "config.properties" данных
+     * для подключения к БД, а так же пути папки для
+     * сохранения загружаемых на сервер файлов
+     */
     public void getPropValues() throws IOException {
 
         Properties prop = new Properties();
@@ -37,18 +42,38 @@ public class GetPropertyValues {
         }
     }
 
+    /**
+     * Функция получения значения поля {@link GetPropertyValues#user}
+     *
+     * @return Возвращает имя пользователя БД
+     */
     public String getUser() {
         return user;
     }
 
+    /**
+     * Функция получения значения поля {@link GetPropertyValues#password}
+     *
+     * @return Возвращает пароль пользователя БД
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Функция получения значения поля {@link GetPropertyValues#dbUrlAddress}
+     *
+     * @return Возвращает адрес БД
+     */
     public String getDbUrlAddress() {
         return dbUrlAddress;
     }
 
+    /**
+     * Функция получения значения поля {@link GetPropertyValues#uploadedFilesDirectory}
+     *
+     * @return Возвращает путь папки для сохранения загружаемых файлов
+     */
     public String getUploadedFilesDirectory() {
         return uploadedFilesDirectory;
     }

@@ -13,6 +13,11 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     public static final String SQLDELETEREQUEST = "DELETE FROM images WHERE id = ?";
     protected int uploadFileId;
 
+    /**
+     * Процедура сохранения данных об изображении в таблице images БД
+     *
+     * @param image - изображение, данные о котором сохраняем {@link Image}
+     */
     @Override
     public void save(Image image) {
         String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES(?, ?, ?::JSON)";
@@ -28,21 +33,42 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         }
     }
 
+    /**
+     * Функция получения значения поля {@link ImageDao#SQLDELETEREQUEST}
+     *
+     * @return возвращает SQL-запрос для удаления записи об изображении из таблицы images БД по id
+     */
     @Override
     public String getDeleteSqlRequest() {
         return SQLDELETEREQUEST;
     }
 
+    /**
+     * Процедура удаления записей из таблицы tagged_images по внешнему ключу
+     *
+     * @param id - родительский ключ
+     */
     @Override
     public void deleteRelatedEntities(int id) {
         // На данной стадии не реализовано удаления изображений,
         // а следовательно, и удаление связанной информации
     }
-    public void setUploadFileId(int uploadFileId) {
-        this.uploadFileId = uploadFileId;
-    }
 
+    /**
+     * Функция получения значения поля {@link ImageDao#uploadFileId}
+     *
+     * @return возвращает id файла, в котором содержится данное изображение
+     */
     public int getUploadFileId() {
         return this.uploadFileId;
+    }
+
+    /**
+     * Процедура определения  {@link ImageDao#uploadFileId}
+     *
+     * @param uploadFileId - id файла, в котором содержится данное изображение
+     */
+    public void setUploadFileId(int uploadFileId) {
+        this.uploadFileId = uploadFileId;
     }
 }

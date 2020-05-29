@@ -10,18 +10,31 @@ import java.util.Map;
 public class FileReadingWorker {
 
     private String path;
-    private JSONArray columnNames = new JSONArray();
+    private JSONArray columnNames;
     private Map<Integer, List<String>> data;
-    private List<Image> images = new ArrayList<>();
+    private List<Image> images;
 
+    /**
+     * Конструктор - создание нового объекта с определенными значениями
+     *
+     * @param path - имя файла
+     * @param data - информыция о данных, содержащихся в файле: ключ - номер строки,
+     *             значение - список значенй, содержащихся в ячейках данной строки
+     */
     public FileReadingWorker(String path, Map<Integer, List<String>> data) {
         this.path = path;
         this.data = data;
-        this.setColumnNames();
-        this.setImages();
+        this.columnNames = this.setColumnNames();
+        this.images = this.setImages();
     }
 
-    private void setImages() {
+    /**
+     * Функция получения информации об изображениях в файле
+     *
+     * @return Возвращает список изображений {@link Image}
+     */
+    private List<Image> setImages() {
+        List<Image> newImages = new ArrayList<>();
         int dataSize = this.data.keySet().size();
         for (int imageRow = 1; imageRow <= dataSize; imageRow++) {
             String imagePath = "";
@@ -29,28 +42,49 @@ public class FileReadingWorker {
             for (Object cell : data.get(imageRow)) {
                 if (String.valueOf(cell).contains(".jpg")) {
                     imagePath = String.valueOf(cell);
-
                 }
                 columnInfo.add(cell);
             }
-            this.images.add(new Image(this.path, imagePath, columnInfo));
+            newImages.add(new Image(this.path, imagePath, columnInfo));
         }
-
+        return newImages;
     }
 
-    private void setColumnNames() {
-        this.columnNames.addAll(this.data.remove(0));
+    /**
+     * Функция получения информации о содержащихся в файле полях
+     *
+     * @return Возвращает список полей в виде JSONArray
+     */
+    private JSONArray setColumnNames() {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.addAll(this.data.remove(0));
+        return jsonArray;
     }
 
+    /**
+     * Функция получения значения поля {@link FileReadingWorker#path}
+     *
+     * @return Возвращает имя файла
+     */
     public String getPath() {
-        return path;
+        return this.path;
     }
 
+    /**
+     * Функция получения значения поля {@link FileReadingWorker#columnNames}
+     *
+     * @return Возвращает список полей в виде JSONArray
+     */
     public JSONArray getColumnNames() {
-        return columnNames;
+        return this.columnNames;
     }
 
+    /**
+     * Функция получения значения поля {@link FileReadingWorker#images}
+     *
+     * @return Возвращает список изображений {@link Image}
+     */
     public List<Image> getImages() {
-        return images;
+        return this.images;
     }
 }

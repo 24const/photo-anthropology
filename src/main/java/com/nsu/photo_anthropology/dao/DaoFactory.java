@@ -10,6 +10,11 @@ import java.sql.Savepoint;
 
 public abstract class DaoFactory<E> implements Dao<E> {
 
+    /**
+     * Процедура удаления записи о соответствующей сущности из БД
+     *
+     * @param id - id удаляемой сущности
+     */
     @Override
     public void deleteById(int id) throws SQLException {
 

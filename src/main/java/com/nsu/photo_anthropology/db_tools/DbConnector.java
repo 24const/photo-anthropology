@@ -17,6 +17,9 @@ public class DbConnector {
         connection = setConnection();
     }
 
+    /**
+     * Процедура установки соединения с БД
+     */
     public static synchronized DbConnector getInstance() {
 
         if (instance == null) {
@@ -25,6 +28,11 @@ public class DbConnector {
         return instance;
     }
 
+    /**
+     * Функция получения значения поля {@link DbConnector#connection}
+     *
+     * @return Возвращает соединение с БД
+     */
     private Connection setConnection() {
 
         GetPropertyValues properties = new GetPropertyValues();
@@ -46,6 +54,11 @@ public class DbConnector {
         }
     }
 
+    /**
+     * Функция получения значения поля {@link DbConnector#connection}
+     *
+     * @return Возвращает соединение с БД
+     */
     public Connection getConnection() {
         return connection;
     }
