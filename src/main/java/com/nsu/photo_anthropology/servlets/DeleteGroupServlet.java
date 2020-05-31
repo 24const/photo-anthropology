@@ -20,6 +20,8 @@ public class DeleteGroupServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
             logger.info(e.getMessage());
+            //TODO: имеет ли дальнейший смысл выполнения программы если id не задан?
+            //TODO: показать страницу с ошибкой ErrorServlet
         }
         GroupDao groupDao = new GroupDao();
         try {
@@ -27,6 +29,7 @@ public class DeleteGroupServlet extends HttpServlet {
         } catch (Exception e) {
             Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
             logger.info(e.getMessage());
+            //TODO: показать страницу с ошибкой ErrorServlet
         }
         String nextJSP = "GroupsTools";
         try {
@@ -34,6 +37,7 @@ public class DeleteGroupServlet extends HttpServlet {
         } catch (Exception e) {
             Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
             logger.info(e.getMessage());
+            //TODO: показать страницу с ошибкой ErrorServlet
         }
     }
 }

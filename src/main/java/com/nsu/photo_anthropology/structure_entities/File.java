@@ -2,6 +2,7 @@ package com.nsu.photo_anthropology.structure_entities;
 
 import org.json.simple.JSONArray;
 
+//TODO: не рекомендуется использовать имена классов из стандартной библиотеки SDK. Лучше UploadedFile
 public class File {
 
     private int id;

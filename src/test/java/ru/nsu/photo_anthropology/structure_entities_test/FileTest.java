@@ -22,14 +22,17 @@ public class FileTest {
     }
 
     @Test
+    //TODO: названия методов пишутся с маленькой буквы
     public void FileWithoutIdTest() {
         File newFile = new File("Test.txt", expectedColumns);
+        //TODO: что здесь тестируется? оператор new в java :)
         Assert.assertNotNull(newFile);
     }
 
     @Test
     public void FileWithIdTest() {
         File newFile = new File(7, "Test.txt", expectedColumns);
+        //TODO: что здесь тестируется?
         Assert.assertNotNull(newFile);
     }
 

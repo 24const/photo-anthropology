@@ -55,6 +55,7 @@ public class ChangeGroupServlet extends HttpServlet {
         } catch (IOException | ServletException e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
+            //TODO: как насчет показать пользователю страничку ошибки "Ooops! Что-то пошло не так :)"
         }
     }
 }

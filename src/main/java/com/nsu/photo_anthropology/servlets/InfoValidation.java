@@ -2,8 +2,10 @@ package com.nsu.photo_anthropology.servlets;
 
 import javax.servlet.http.HttpServletRequest;
 
+//TODO: перенести класс в другой пакет, например validation
 public class InfoValidation {
 
+    //TODO: используй underscore стиль для создания констант, например GROUP_NAME_PARAMETER
     private static final String GROUPNAMEPARAMETER = "groupName";
     private static final String GROUPQUESTIONPARAMETER = "groupQuestion";
     private static final String GROUPTAGSPARAMETER = "groupTags";
@@ -34,6 +36,7 @@ public class InfoValidation {
         return exceptionCounter;
     }
 
+    //TODO: внутри метода происходит изменение переменной request. По названию метода так не скажешь - опасный стиль именования
     public void isValidGroup() {
 
         if (!request.getParameter(GROUPNAMEPARAMETER).equalsIgnoreCase("")) {

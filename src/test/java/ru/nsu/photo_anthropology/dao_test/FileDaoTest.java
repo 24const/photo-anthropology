@@ -40,6 +40,7 @@ public class FileDaoTest {
         fileDao.save(file);
         File savedFile = null;
 
+        //TODO: тестировать СУБД не требуется, нужно тестировать DAO, т.е. если метод save сохраняет данные, то метод getById их получает.
         String sql = "SELECT * FROM files where id = (SELECT MAX(id) FROM files)";
 
         DbConnector dbConnector = DbConnector.getInstance();
@@ -64,12 +65,14 @@ public class FileDaoTest {
 
     @Test
     public void getDeleteSqlRequestTest() {
+        //TODO: зачем тестировать строковую константу?
         String deleteRequest = fileDao.getDeleteSqlRequest();
         Assert.assertEquals("DELETE FROM files WHERE id = ?", deleteRequest);
     }
 
     @Test
     public void deleteFileTest() throws SQLException {
+        //TODO: аналогично пункту выше, БД мы не тестируем, а тестируем только DAO
         fileDao.deleteById(savedFileId);
         int resultCnt;
         String sql = "SELECT count(*) as cnt FROM files WHERE id = ?";

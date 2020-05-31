@@ -24,6 +24,10 @@ public abstract class DaoFactory<E> implements Dao<E> {
         connection.setAutoCommit(false);
         Savepoint savepointOne = connection.setSavepoint("SavepointOne");
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            //TODO: в целом транзация реализованно верно, для элементарного случая. Но, что
+            //TODO: если у тебя в deleteRelatedEntities() будет строчка кода connection.setAutoCommit(true)
+            //TODO: Чтобы избежать ошибки, нужно сделать обертку для транзакции, т.е. вынести в потоко-безопастный singlton
+            //TODO: 1. Сперва напиши тест, который ломает данный метод 2. Затем сделай рефакторинг, вынеся транзакцию в Singltlton
             deleteRelatedEntities(id);
             stm.setInt(1, id);
             stm.executeUpdate();

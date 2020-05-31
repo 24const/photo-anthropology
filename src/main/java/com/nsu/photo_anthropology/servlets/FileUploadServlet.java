@@ -57,6 +57,7 @@ public class FileUploadServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
                 logger.info(e.getMessage());
+                //TODO: если выскочило исключение, то, наверное, следует остановить программу?
             }
 
             FileSavingToDBWorker.saveFileInfo(filePath);
@@ -65,6 +66,7 @@ public class FileUploadServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
                 logger.info(e.getMessage());
+                //TODO: показать страницу с ошибкой ErrorServlet
             }
         }
     }

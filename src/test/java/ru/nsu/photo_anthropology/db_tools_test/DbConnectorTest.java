@@ -28,4 +28,6 @@ public class DbConnectorTest {
         Assert.assertNotNull(connection);
     }
 
+    //TODO: не хватает теста, где соединение не было установлено, и как ведет себя DbConnector в этом случае?
+
 }

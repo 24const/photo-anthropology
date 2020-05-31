@@ -10,7 +10,9 @@ import java.sql.SQLException;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
 
+    //TODO: переменная точно должна быть public?
     public static final String SQLDELETEREQUEST = "DELETE FROM images WHERE id = ?";
+    //TODO: почему не private?
     protected int uploadFileId;
 
     /**

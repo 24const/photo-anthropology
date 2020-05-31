@@ -23,12 +23,14 @@ public class ImageTest {
 
     @Test
     public void ImageWithoutIdTest() {
+        //TODO: что тестируется?
         Image newImage = new Image("Test.txt", "test_image.jpg", expectedColumns);
         Assert.assertNotNull(newImage);
     }
 
     @Test
     public void ImageWithIdTest() {
+        //TODO: что тестируется?
         Image newImage = new Image(7, "Test.txt", "test_image.jpg", expectedColumns);
         Assert.assertNotNull(newImage);
     }

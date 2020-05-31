@@ -9,6 +9,7 @@ import java.util.Properties;
 
 public class GetPropertyValues {
 
+    //TODO: в 99% случаев правильно использовать private модификатор доступа
     String user;
     String password;
     String dbUrlAddress;
@@ -31,6 +32,8 @@ public class GetPropertyValues {
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
 
+            //TODO: магические строки вроде user или db_url следует выносить в именованые final переменны
+            //например private final static String DB_USER_NAME_PROP = "user";
             user = prop.getProperty("user");
             password = prop.getProperty("password");
             dbUrlAddress = prop.getProperty("db_url");

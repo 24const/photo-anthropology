@@ -12,6 +12,7 @@ public class ErrorServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
+            //TODO: некрасивый способ рисовать html текст внутри java программы. Используй jsp
             response.setContentType("text/html");
             PrintWriter writer = response.getWriter();
 

@@ -17,11 +17,13 @@ public class StartServlet extends HttpServlet {
 
     @Override
     public void init() {
+        //TODO: в сервлетах напрямую рабоют с визуализацией данных. Сервлет про БД ничего не знает, для него есть только абстрация хранилища данных ввдие DAO слоя
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
         try (Statement stmt = connection.createStatement()) {
             try (ResultSet rs = stmt.executeQuery("SELECT count(table_name) as cnt FROM information_schema.tables WHERE table_schema NOT IN ('information_schema', 'pg_catalog') AND table_schema IN('public');")) {
                 rs.next();
+                //TODO: а если в БД будут 6 таблиц сторонних созданых вручную? Приложение должно убедиться что схема БД чиста и невинна, прежде чем создавать в ней свою структуру?
                 if (rs.getInt("cnt") < 5) {
                     createDbSchema(connection);
                 }
@@ -33,6 +35,7 @@ public class StartServlet extends HttpServlet {
 
     private void createDbSchema(Connection connection) {
         try {
+            //TODO: про работу с БД знает только DAO
             SqlFile sf = new SqlFile(new File("init.sql"));
             sf.setConnection(connection);
             sf.execute();

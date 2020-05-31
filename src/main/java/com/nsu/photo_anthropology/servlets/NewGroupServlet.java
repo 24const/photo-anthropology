@@ -31,6 +31,7 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
                 logger.info(e.getMessage());
+                //TODO: показать страницу с ошибкой ErrorServlet
             }
 
         } else {
@@ -41,6 +42,7 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
                 logger.info(e.getMessage());
+                //TODO: показать страницу с ошибкой ErrorServlet
             }
         }
     }
@@ -70,6 +72,7 @@ public class NewGroupServlet extends HttpServlet {
             tagDao.deleteAllTagsInGroup(groupId);
         }
 
+        //TODO: сохраение связных сущностей должно быть в транзакции. Хоть одна не сохранилась - то вся операция отменяется. Иначе - не косистентность данных
         if (!groupTags.equalsIgnoreCase("")) {
             String[] tagsInGroup = groupTags.split(",");
             for (String tag : tagsInGroup) {

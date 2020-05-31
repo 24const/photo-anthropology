@@ -57,6 +57,7 @@ public class GroupDao extends DaoFactory<Group> {
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
 
+        //TODO: код по наполнению сущности из БД очень похоже с методом getById(), предлагаю объеденить общую часть в один private метод
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = stm.executeQuery()) {
 
