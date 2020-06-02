@@ -4,13 +4,14 @@ import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
-import com.nsu.photo_anthropology.structure_entities.Tag;
+import com.nsu.photo_anthropology.validation.InfoValidation;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class NewGroupServlet extends HttpServlet {
@@ -19,11 +20,15 @@ public class NewGroupServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         InfoValidation infoValidation = new InfoValidation(req);
-        infoValidation.isValidGroup();
+        infoValidation.setRequestAttributesIfGroupNotValidGroup();
 
         if (infoValidation.getExceptionCounter() == 0) {
 
-            this.saveNewGroup(req, infoValidation);
+            try {
+                this.saveNewGroup(req, infoValidation);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             String nextJSP = "GroupsTools";
             try {
@@ -31,7 +36,7 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
                 logger.info(e.getMessage());
-                //TODO: показать страницу с ошибкой ErrorServlet
+                resp.sendRedirect("error_page.jsp");
             }
 
         } else {
@@ -42,12 +47,12 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
                 logger.info(e.getMessage());
-                //TODO: показать страницу с ошибкой ErrorServlet
+                resp.sendRedirect("error_page.jsp");
             }
         }
     }
 
-    private void saveNewGroup(HttpServletRequest req, InfoValidation infoValidation) {
+    private void saveNewGroup(HttpServletRequest req, InfoValidation infoValidation) throws SQLException {
 
         String groupName = infoValidation.getGroupName();
         String groupQuestion = infoValidation.getGroupQuestion();
@@ -58,7 +63,7 @@ public class NewGroupServlet extends HttpServlet {
         Group group;
 
         if (req.getParameter("groupId") == null) {
-            group = new Group(groupName, groupQuestion);
+            group = new Group(groupName, groupQuestion, groupTags);
             groupDao.save(group);
         } else {
             int groupId;
@@ -67,21 +72,11 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 throw new PhotoAnthropologyRuntimeException("NewGroupServlet: Ошибка приполучении данных о создаваемой группе.");
             }
-            group = new Group(groupId, groupName, groupQuestion);
+            group = new Group(groupId, groupName, groupQuestion, groupTags);
             groupDao.update(group);
-            tagDao.deleteAllTagsInGroup(groupId);
+
         }
 
-        //TODO: сохраение связных сущностей должно быть в транзакции. Хоть одна не сохранилась - то вся операция отменяется. Иначе - не косистентность данных
-        if (!groupTags.equalsIgnoreCase("")) {
-            String[] tagsInGroup = groupTags.split(",");
-            for (String tag : tagsInGroup) {
-                if (tag.indexOf(' ') == 0) {
-                    tag = tag.replaceFirst(" ", "");
-                }
-                tagDao.save(new Tag(tag, group.getGroupName()));
-            }
-        }
     }
 
 }

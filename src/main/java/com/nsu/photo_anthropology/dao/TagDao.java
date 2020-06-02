@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
 
-    public static final String SQLDELETEREQUEST = "DELETE FROM tags WHERE id = ?";
+    public static final String SQL_DELETE_REQUEST = "DELETE FROM tags WHERE id = ?";
 
     /**
      * Процедура сохранения данных об теге в таблице tags БД
@@ -29,33 +29,35 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, tag.getGroupName());
             stm.setString(2, tag.getTagName());
-            stm.execute();
+            stm.executeUpdate();
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в TagDao.save(Tag tag)");
         }
     }
 
     /**
-     * Функция получения значения поля {@link TagDao#SQLDELETEREQUEST}
+     * Функция получения значения поля {@link TagDao#SQL_DELETE_REQUEST}
      *
      * @return возвращает SQL-запрос для удаления записи о теге из таблицы tags БД по id
      */
     @Override
     public String getDeleteSqlRequest() {
-        return SQLDELETEREQUEST;
+        return SQL_DELETE_REQUEST;
     }
 
     /**
      * Функция получения данных из БД обо всех тегах группы
      *
-     * @param group - группа, теги, которой узнаем
+     * @param groupId - id группы, теги, которой узнаем
      * @return список всех тегов, содержащихся в группе
      */
-    public List<Tag> getAllTagsInGroup(Group group) {
+    public List<Tag> getAllTagsInGroupByGroupId(int groupId) {
 
         List<Tag> listOfTags = new ArrayList<>();
         String sql = "SELECT id, tag_name FROM tags WHERE group_id = ?";
-        int groupId = group.getId();
+
+        GroupDao groupDao = new GroupDao();
+        Group group = groupDao.getById(groupId);
 
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
@@ -80,30 +82,12 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
     /**
      * Процедура удаления из БД записей о тегах по id группы
      *
-     * @param id - id группы
+     * @param groupId - id группы, теги которой удаляем
      */
-    public void deleteAllTagsInGroup(int id) {
-        String sql = "DELETE FROM tags WHERE group_id = ?";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, id);
-            stm.execute();
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Ошибка при удалении информации из БД в TagDao.deleteAllTagsInGroup(int id).");
+    public void deleteAllTagsByGroupId(int groupId) throws SQLException {
+        List<Tag> tagsInGroup = this.getAllTagsInGroupByGroupId(groupId);
+        for (Tag tag : tagsInGroup) {
+            deleteById(tag.getId());
         }
-    }
-
-    /**
-     * Процедура удаления записей из таблицы tagged_images по внешнему ключу
-     *
-     * @param id - родительский ключ
-     */
-    @Override
-    public void deleteRelatedEntities(int id) throws SQLException {
-        // На данной стадии не реализовано удаления тегов,
-        // а следовательно, и удаление связанной информации
     }
 }

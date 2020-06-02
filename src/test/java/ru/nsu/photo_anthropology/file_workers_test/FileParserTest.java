@@ -11,8 +11,7 @@ import java.util.Map;
 
 public class FileParserTest {
 
-    //TODO: на другом компьютере путь будет другой и тест сломается. Нужно использовать относительный
-    public static String sourcePath = "C:\\Users\\Ksenia\\Desktop\\photo-anthropology\\src\\test\\java\\ru\\nsu\\photo_anthropology\\file_workers\\Ksu_test_file.xlsx";
+    public static String sourcePath = "Ksu_test_file.xlsx";
 
     @Test
     public void readXLSXFileTest() {

@@ -3,8 +3,8 @@ package com.nsu.photo_anthropology.file_workers;
 import com.nsu.photo_anthropology.dao.FileDao;
 import com.nsu.photo_anthropology.dao.ImageDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
-import com.nsu.photo_anthropology.structure_entities.File;
 import com.nsu.photo_anthropology.structure_entities.Image;
+import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +28,7 @@ public class FileSavingToDBWorker {
         FileReadingWorker fileReadingWorker = new FileReadingWorker(fileName, data);
         FileDao fileDao = new FileDao();
         try {
-            fileDao.save(new File(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames()));
+            fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames()));
             ImageDao imageDao = new ImageDao();
             imageDao.setUploadFileId(fileDao.getIdOfSavedFile());
             for (Image image : fileReadingWorker.getImages()) {

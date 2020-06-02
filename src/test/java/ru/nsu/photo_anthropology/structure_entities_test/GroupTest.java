@@ -15,16 +15,14 @@ public class GroupTest {
     }
 
     @Test
-    //TODO: названия методов пишутся с маленькой буквы
-    public void GroupWithoutIdTest() {
+    public void groupWithoutIdTest() {
         Group newGroup = new Group("test_group", "Successful?");
         //TODO: что тестируется?
         Assert.assertNotNull(newGroup);
     }
 
     @Test
-    //TODO: названия методов пишутся с маленькой буквы
-    public void GroupWithIdTest() {
+    public void groupWithIdTest() {
         Group newGroup = new Group(7, "test_group", "Successful?");
         //TODO: что тестируется?
         Assert.assertNotNull(newGroup);

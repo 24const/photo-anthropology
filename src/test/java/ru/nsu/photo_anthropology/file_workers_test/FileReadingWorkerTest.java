@@ -12,8 +12,7 @@ import java.util.Map;
 
 public class FileReadingWorkerTest {
 
-    //TODO: на другом компьютере путь будет другой и тест сломается. Нужно использовать относительный
-    static String sourcePath = "C:\\Users\\Ksenia\\Desktop\\photo-anthropology\\src\\test\\java\\ru\\nsu\\photo_anthropology\\file_workers\\Ksu_test_file.xlsx";
+    static String sourcePath = "Ksu_test_file.xlsx";
     static FileReadingWorker fileReadingWorker;
     static Map<Integer, List<String>> data = FileParser.readXLSXFile(sourcePath);
     static String fileName = FileParser.getFileName(sourcePath);

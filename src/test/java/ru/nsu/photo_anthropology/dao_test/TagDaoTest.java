@@ -25,7 +25,7 @@ public class TagDaoTest {
     private static TagDao tagDao;
 
     @BeforeClass
-    public static void setup() {
+    public static void setup() throws SQLException {
         group = new Group("Тестовая группа для тега", "Успешное прохождение теста??");
         GroupDao groupDao = new GroupDao();
         groupDao.save(group);
@@ -64,12 +64,12 @@ public class TagDaoTest {
         List<Tag> expectedListOfTags = new ArrayList<>();
         expectedListOfTags.add(tag);
         Group group = new Group(savedGroupId, "Тестовая группа для тега", "Успешное прохождение теста??");
-        Assert.assertEquals(expectedListOfTags, tagDao.getAllTagsInGroup(group));
+        Assert.assertEquals(expectedListOfTags, tagDao.getAllTagsInGroupByGroupId(group.getId()));
     }
 
     @Test
-    public void deleteAllTagsInGroupTest() {
-        tagDao.deleteAllTagsInGroup(savedGroupId);
+    public void deleteAllTagsInGroupTest() throws SQLException {
+        tagDao.deleteAllTagsByGroupId(savedGroupId);
         int resultCnt;
         String sql = "SELECT count(*) as cnt FROM tags WHERE group_id = ?";
 

@@ -10,10 +10,8 @@ import java.sql.SQLException;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
 
-    //TODO: переменная точно должна быть public?
-    public static final String SQLDELETEREQUEST = "DELETE FROM images WHERE id = ?";
-    //TODO: почему не private?
-    protected int uploadFileId;
+    private static final String SQL_DELETE_REQUEST = "DELETE FROM images WHERE id = ?";
+    private int uploadFileId;
 
     /**
      * Процедура сохранения данных об изображении в таблице images БД
@@ -36,13 +34,13 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     }
 
     /**
-     * Функция получения значения поля {@link ImageDao#SQLDELETEREQUEST}
+     * Функция получения значения поля {@link ImageDao#SQL_DELETE_REQUEST}
      *
      * @return возвращает SQL-запрос для удаления записи об изображении из таблицы images БД по id
      */
     @Override
     public String getDeleteSqlRequest() {
-        return SQLDELETEREQUEST;
+        return SQL_DELETE_REQUEST;
     }
 
     /**
@@ -50,7 +48,6 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      *
      * @param id - родительский ключ
      */
-    @Override
     public void deleteRelatedEntities(int id) {
         // На данной стадии не реализовано удаления изображений,
         // а следовательно, и удаление связанной информации

@@ -17,27 +17,15 @@ public class DeleteGroupServlet extends HttpServlet {
         int id = 0;
         try {
             id = Integer.parseInt(req.getParameter("groupId"));
-        } catch (NumberFormatException e) {
-            Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
-            logger.info(e.getMessage());
-            //TODO: имеет ли дальнейший смысл выполнения программы если id не задан?
-            //TODO: показать страницу с ошибкой ErrorServlet
-        }
-        GroupDao groupDao = new GroupDao();
-        try {
-            groupDao.deleteById(id);
-        } catch (Exception e) {
-            Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
-            logger.info(e.getMessage());
-            //TODO: показать страницу с ошибкой ErrorServlet
-        }
-        String nextJSP = "GroupsTools";
-        try {
+            GroupDao groupDao = new GroupDao();
+            String nextJSP = "GroupsTools";
+            groupDao.deleteGroupById(id);
             resp.sendRedirect(nextJSP);
         } catch (Exception e) {
+            e.printStackTrace();
             Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
             logger.info(e.getMessage());
-            //TODO: показать страницу с ошибкой ErrorServlet
+            resp.sendRedirect("error_page.jsp");
         }
     }
 }

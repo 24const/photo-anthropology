@@ -14,13 +14,13 @@ public class TagTest {
     }
 
     @Test
-    public void TagWithoutIdTest() {
+    public void tagWithoutIdTest() {
         Tag newTag = new Tag("test_tag", "test_group");
         Assert.assertNotNull(newTag);
     }
 
     @Test
-    public void TagWithIdTest() {
+    public void tagWithIdTest() {
         Tag newTag = new Tag(7, "test_tag", "test_group");
         Assert.assertNotNull(newTag);
     }

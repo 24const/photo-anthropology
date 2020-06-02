@@ -39,9 +39,8 @@ public class GetPropertyValuesTest {
 
     @Test
     public void getUploadedFilesDirectoryTest() {
-        //TODO: на другой машине тест никогда не пройдет, т.к. путь директории будет отличаться.
         //TODO: создай копию config.properties где-нибудь в test директории и пропиши в тесте относительный путь
         String uploadedFilesDirectory = this.getPropertyValues.getUploadedFilesDirectory();
-        Assert.assertEquals("C://Users//Ksenia//Desktop//photo-anthropology//target//photo-anthropology//uploads//", uploadedFilesDirectory);
+        Assert.assertEquals("target/photo-anthropology/uploads", uploadedFilesDirectory);
     }
 }

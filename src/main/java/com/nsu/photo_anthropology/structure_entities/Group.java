@@ -5,6 +5,7 @@ public class Group {
     private int id;
     private String groupName;
     private String groupQuestion;
+    private String tagsInGroup;
 
     /**
      * Конструктор - создание нового объекта
@@ -18,6 +19,36 @@ public class Group {
         this.id = id;
         this.groupName = groupName;
         this.groupQuestion = groupQuestion;
+    }
+
+    /**
+     * Конструктор - создание нового объекта
+     *
+     * @param id            - id группы в таблиице groups БД
+     * @param groupName     - название группы
+     * @param groupQuestion - вопрос к группе
+     * @param tagsInGroup   - теги, сохраняемые в группе
+     * @see Group#Group(String, String)
+     */
+    public Group(int id, String groupName, String groupQuestion, String tagsInGroup) {
+        this.id = id;
+        this.groupName = groupName;
+        this.groupQuestion = groupQuestion;
+        this.tagsInGroup = tagsInGroup;
+    }
+
+    /**
+     * Конструктор - создание нового объекта
+     *
+     * @param groupName     - название группы
+     * @param groupQuestion - вопрос к группе
+     * @param tagsInGroup   - теги, сохраняемые в группе
+     * @see Group#Group(int, String, String)
+     */
+    public Group(String groupName, String groupQuestion, String tagsInGroup) {
+        this.groupName = groupName;
+        this.groupQuestion = groupQuestion;
+        this.tagsInGroup = tagsInGroup;
     }
 
     /**
@@ -38,7 +69,7 @@ public class Group {
      * @return Возвращает id группы из таблицы groups БД
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -47,7 +78,7 @@ public class Group {
      * @return Возвращает имя группы
      */
     public String getGroupName() {
-        return groupName;
+        return this.groupName;
     }
 
     /**
@@ -56,14 +87,24 @@ public class Group {
      * @return Возвращает вопрос относящийся к группе
      */
     public String getGroupQuestion() {
-        return groupQuestion;
+        return this.groupQuestion;
+    }
+
+    /**
+     * Функция получения значения поля {@link Group#tagsInGroup}
+     *
+     * @return Возвращает существующие в группе теги
+     */
+    public String getTagsInGroup() {
+        return this.tagsInGroup;
     }
 
     @Override
     public String toString() {
         return "Group{" +
-                "groupName='" + groupName + '\'' +
-                ", groupQuestion='" + groupQuestion + '\'' +
+                "groupName='" + this.groupName + '\'' +
+                ", groupQuestion='" + this.groupQuestion + '\'' +
                 '}';
     }
+
 }

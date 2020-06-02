@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +20,7 @@ public class GroupDaoTest {
     private static GroupDao groupDao;
 
     @BeforeClass
-    public static void setup() throws IOException {
+    public static void setup() {
         group = new Group("Тестовая группа", "Успешное прохождение теста??");
         groupDao = new GroupDao();
     }

@@ -2,8 +2,7 @@ package com.nsu.photo_anthropology.structure_entities;
 
 import org.json.simple.JSONArray;
 
-//TODO: не рекомендуется использовать имена классов из стандартной библиотеки SDK. Лучше UploadedFile
-public class File {
+public class UploadedFile {
 
     private int id;
     private String fileName;
@@ -15,9 +14,9 @@ public class File {
      * @param id          - id файла в таблице files БД
      * @param fileName    - имя файла
      * @param columnNames - поля, содержащиеся в файле
-     * @see File#File(String, JSONArray)
+     * @see UploadedFile#UploadedFile(String, JSONArray)
      */
-    public File(int id, String fileName, JSONArray columnNames) {
+    public UploadedFile(int id, String fileName, JSONArray columnNames) {
         this.id = id;
         this.fileName = fileName;
         this.columnNames = columnNames;
@@ -28,15 +27,15 @@ public class File {
      *
      * @param fileName    - имя файла
      * @param columnNames - поля, содержащиеся в файле
-     * @see File#File(int, String, JSONArray)
+     * @see UploadedFile#UploadedFile(int, String, JSONArray)
      */
-    public File(String fileName, JSONArray columnNames) {
+    public UploadedFile(String fileName, JSONArray columnNames) {
         this.fileName = fileName;
         this.columnNames = columnNames;
     }
 
     /**
-     * Функция получения значения поля {@link File#fileName}
+     * Функция получения значения поля {@link UploadedFile#fileName}
      *
      * @return Возвращает имя файла
      */
@@ -45,7 +44,7 @@ public class File {
     }
 
     /**
-     * Функция получения значения поля {@link File#columnNames}
+     * Функция получения значения поля {@link UploadedFile#columnNames}
      *
      * @return Возвращает поля, содержащиеся в файле
      */
@@ -54,7 +53,7 @@ public class File {
     }
 
     /**
-     * Функция получения значения поля {@link File#id}
+     * Функция получения значения поля {@link UploadedFile#id}
      *
      * @return Возвращает id файла из таблицы files БД
      */

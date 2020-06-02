@@ -65,16 +65,6 @@
         <url-pattern>/ChangeGroup</url-pattern>
     </servlet-mapping>
 
-
-    <servlet>
-        <servlet-name>Error</servlet-name>
-        <servlet-class>com.nsu.photo_anthropology.servlets.ErrorServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Error</servlet-name>
-        <url-pattern>/Error</url-pattern>
-    </servlet-mapping>
-
     <error-page>
         <error-code>500</error-code>
         <location>/Error</location>

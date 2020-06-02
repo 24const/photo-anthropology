@@ -25,13 +25,13 @@ public class ChangeGroupServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
-
+            resp.sendRedirect("error_page.jsp");
         }
 
         GroupDao groupDao = new GroupDao();
         Group group = groupDao.getById(id);
         TagDao tagDao = new TagDao();
-        List<Tag> tagsInGroup = tagDao.getAllTagsInGroup(group);
+        List<Tag> tagsInGroup = tagDao.getAllTagsInGroupByGroupId(id);
 
         StringBuilder stringBuilder = new StringBuilder();
         for (Tag tag : tagsInGroup) {
@@ -55,7 +55,7 @@ public class ChangeGroupServlet extends HttpServlet {
         } catch (IOException | ServletException e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
-            //TODO: как насчет показать пользователю страничку ошибки "Ooops! Что-то пошло не так :)"
+            resp.sendRedirect("error_page.jsp");
         }
     }
 }

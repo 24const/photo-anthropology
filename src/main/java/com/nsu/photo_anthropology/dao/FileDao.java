@@ -2,22 +2,22 @@ package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
-import com.nsu.photo_anthropology.structure_entities.File;
+import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 
 import java.sql.*;
 
-public class FileDao extends DaoFactory<File> implements Dao<File> {
+public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFile> {
 
-    public static final String SQLDELETEREQUEST = "DELETE FROM files WHERE id = ?";
+    public static final String SQL_DELETE_REQUEST = "DELETE FROM files WHERE id = ?";
     private int idOfSavedFile;
 
     /**
      * Процедура сохранения данных о файле в таблице files БД
      *
-     * @param file - файл, данные о котором сохраняем {@link File}
+     * @param file - файл, данные о котором сохраняем {@link UploadedFile}
      */
     @Override
-    public void save(File file) throws SQLException {
+    public void save(UploadedFile file) throws SQLException {
         String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
@@ -37,28 +37,17 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
     }
 
     /**
-     * Функция получения значения поля {@link FileDao#SQLDELETEREQUEST}
+     * Функция получения значения поля {@link FileDao#SQL_DELETE_REQUEST}
      *
      * @return возвращает SQL-запрос для удаления записи о файле из таблицы files БД по id
      */
     @Override
     public String getDeleteSqlRequest() {
-        return SQLDELETEREQUEST;
+        return SQL_DELETE_REQUEST;
     }
 
     /**
-     * Процедура удаления записей из таблицы images по внешнему ключу
-     *
-     * @param id - родительский ключ
-     */
-    @Override
-    public void deleteRelatedEntities(int id) {
-        // На данной стадии не реализовано удаление файлов,
-        // а следовательно, и удаление связанной информации
-    }
-
-    /**
-     * Процедура определения id охраненногоо файла {@link FileDao#save(File)}
+     * Процедура определения id охраненногоо файла {@link FileDao#save(UploadedFile)}
      */
     private void setIdOfSavedFile() {
         String sql = "SELECT MAX(id) as last_file_id FROM files";
@@ -72,7 +61,7 @@ public class FileDao extends DaoFactory<File> implements Dao<File> {
                 this.idOfSavedFile = resultSet.getInt("last_file_id");
             }
         } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД в GroupDao.getById(int id).");
+            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
         }
     }
 

@@ -23,14 +23,13 @@ public class FileUploadServlet extends HttpServlet {
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
 
-
         GetPropertyValues properties = new GetPropertyValues();
         try {
             properties.getPropValues();
         } catch (Exception e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
-
+            resp.sendRedirect("error_page.jsp");
         }
 
         String uploadedFilesDirectory = properties.getUploadedFilesDirectory();
@@ -57,7 +56,7 @@ public class FileUploadServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
                 logger.info(e.getMessage());
-                //TODO: если выскочило исключение, то, наверное, следует остановить программу?
+                resp.sendRedirect("error_page.jsp");
             }
 
             FileSavingToDBWorker.saveFileInfo(filePath);
@@ -66,7 +65,7 @@ public class FileUploadServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
                 logger.info(e.getMessage());
-                //TODO: показать страницу с ошибкой ErrorServlet
+                resp.sendRedirect("error_page.jsp");
             }
         }
     }

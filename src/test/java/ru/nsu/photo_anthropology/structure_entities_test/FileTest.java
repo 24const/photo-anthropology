@@ -1,6 +1,6 @@
 package ru.nsu.photo_anthropology.structure_entities_test;
 
-import com.nsu.photo_anthropology.structure_entities.File;
+import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 import org.json.simple.JSONArray;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -9,7 +9,7 @@ import org.junit.Test;
 public class FileTest {
 
     static JSONArray expectedColumns;
-    static File file;
+    static UploadedFile file;
 
     @BeforeClass
     public static void setup() {
@@ -18,20 +18,19 @@ public class FileTest {
         expectedColumns.add("image_name");
         expectedColumns.add("owner");
         expectedColumns.add("date");
-        file = new File(13, "Test.txt", expectedColumns);
+        file = new UploadedFile(13, "Test.txt", expectedColumns);
     }
 
     @Test
-    //TODO: названия методов пишутся с маленькой буквы
-    public void FileWithoutIdTest() {
-        File newFile = new File("Test.txt", expectedColumns);
+    public void fileWithoutIdTest() {
+        UploadedFile newFile = new UploadedFile("Test.txt", expectedColumns);
         //TODO: что здесь тестируется? оператор new в java :)
         Assert.assertNotNull(newFile);
     }
 
     @Test
-    public void FileWithIdTest() {
-        File newFile = new File(7, "Test.txt", expectedColumns);
+    public void fileWithIdTest() {
+        UploadedFile newFile = new UploadedFile(7, "Test.txt", expectedColumns);
         //TODO: что здесь тестируется?
         Assert.assertNotNull(newFile);
     }

@@ -31,7 +31,7 @@
             <td><%=group.getGroupQuestion()%>
             </td>
             <td><a href="ChangeGroup?groupId=<%=group.getId()%>">Изменить</a></td>
-            <td><a href="DeleteGroup?id=<%=group.getId()%>">Удалить</a></td>
+            <td><a href="DeleteGroup?groupId=<%=group.getId()%>">Удалить</a></td>
                 <%}%>
     </table>
     <p class="message">${deletingMes}</p>

@@ -27,7 +27,7 @@ public class GroupToolsServlet extends HttpServlet {
         } catch (Exception e) {
             Logger logger = Logger.getLogger(GroupToolsServlet.class.getName());
             logger.info(e.getMessage());
-            //TODO: показать страницу с ошибкой ErrorServlet
+            resp.sendRedirect("error_page.jsp");
         }
     }
 }
