@@ -1,16 +1,12 @@
 package ru.nsu.photo_anthropology.dao_test;
 
 import com.nsu.photo_anthropology.dao.GroupDao;
-import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GroupDaoTest {
@@ -20,34 +16,22 @@ public class GroupDaoTest {
     private static GroupDao groupDao;
 
     @BeforeClass
-    public static void setup() {
+    public static void setup() throws SQLException {
         group = new Group("Тестовая группа", "Успешное прохождение теста??");
         groupDao = new GroupDao();
+        savedGroupId = groupDao.save(group);
     }
 
     @Test
     public void saveGroupTest() throws SQLException {
-        groupDao.save(group);
-        String sql = "SELECT MAX(id) as max_id FROM groups";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                savedGroupId = resultSet.getInt("max_id");
-            }
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-        Assert.assertNotNull(savedGroupId);
+        int savedGroupId = groupDao.save(group);
+        Assert.assertNotEquals(0, savedGroupId);
     }
 
     @Test
     public void getByIdTest() {
         Group group = new Group(savedGroupId, "Тестовая группа", "Успешное прохождение теста??");
-        Assert.assertEquals(group.toString(), groupDao.getById(savedGroupId));
+        Assert.assertEquals(group.toString(), groupDao.getById(savedGroupId).toString());
     }
 
     @Test
@@ -57,31 +41,17 @@ public class GroupDaoTest {
     }
 
     @Test
-    public void updateGroupTest() {
+    public void updateGroupTest() throws SQLException {
         Group changedGroup = new Group(savedGroupId, "Тестовая группа2", "Успешное ли?");
-        Assert.assertEquals(changedGroup, groupDao.getById(group.getId()));
+        groupDao.update(changedGroup);
+        Assert.assertEquals(changedGroup.toString(), groupDao.getById(savedGroupId).toString());
     }
 
     @Test
     public void deleteGroupTest() throws SQLException {
-        groupDao.deleteById(savedGroupId);
-        int resultCnt;
-        String sql = "SELECT count(*) as cnt FROM groups WHERE id = ?";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, savedGroupId);
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                resultCnt = resultSet.getInt("cnt");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-        Assert.assertEquals(0, resultCnt);
+        Group deletedGroup = new Group("Группа под удаление", "Успешное ли?");
+        int idOfDeletedGroup = groupDao.save(deletedGroup);
+        groupDao.deleteGroupById(idOfDeletedGroup);
+        Assert.assertNull(groupDao.getById(idOfDeletedGroup));
     }
-//TODO: не хватает теста для транзакции. Т.е. часть тегов должна удалиться успешно, а один с ошибкой и в БД ничего не должно сохраниться
 }

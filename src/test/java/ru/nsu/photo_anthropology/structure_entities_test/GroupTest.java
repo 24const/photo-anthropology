@@ -15,20 +15,6 @@ public class GroupTest {
     }
 
     @Test
-    public void groupWithoutIdTest() {
-        Group newGroup = new Group("test_group", "Successful?");
-        //TODO: что тестируется?
-        Assert.assertNotNull(newGroup);
-    }
-
-    @Test
-    public void groupWithIdTest() {
-        Group newGroup = new Group(7, "test_group", "Successful?");
-        //TODO: что тестируется?
-        Assert.assertNotNull(newGroup);
-    }
-
-    @Test
     public void getGroupNameTest() {
         Assert.assertEquals("test_group", group.getGroupName());
     }

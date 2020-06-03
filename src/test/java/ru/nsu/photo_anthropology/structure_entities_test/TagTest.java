@@ -20,12 +20,6 @@ public class TagTest {
     }
 
     @Test
-    public void tagWithIdTest() {
-        Tag newTag = new Tag(7, "test_tag", "test_group");
-        Assert.assertNotNull(newTag);
-    }
-
-    @Test
     public void getTagNameTest() {
         Assert.assertEquals("test_tag", tag.getTagName());
     }

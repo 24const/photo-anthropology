@@ -5,14 +5,12 @@ import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
+import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.Tag;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,26 +29,13 @@ public class TagDaoTest {
         groupDao.save(group);
         tag = new Tag("Тестовй тег", "Тестовая группа для тега");
         tagDao = new TagDao();
+        savedTagId = tagDao.save(tag);
     }
 
     @Test
     public void saveGroupTest() throws SQLException {
-        tagDao.save(tag);
-        String sql = "SELECT id, group_id FROM tags WHERE id = (SELECT max(id) FROM tags)";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                savedTagId = resultSet.getInt("id");
-                savedGroupId = resultSet.getInt("group_id");
-            }
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-        Assert.assertNotNull(savedTagId);
+        Tag newTag = new Tag("Тестовй тег2", "Тестовая группа для тега");
+        Assert.assertNotEquals(0, tagDao.save(newTag));
     }
 
     @Test
@@ -69,24 +54,9 @@ public class TagDaoTest {
 
     @Test
     public void deleteAllTagsInGroupTest() throws SQLException {
-        tagDao.deleteAllTagsByGroupId(savedGroupId);
-        int resultCnt;
-        String sql = "SELECT count(*) as cnt FROM tags WHERE group_id = ?";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, savedGroupId);
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                resultCnt = resultSet.getInt("cnt");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-        Assert.assertEquals(0, resultCnt);
+        Tag newTag = new Tag("Тестовй тег под удаление", "Тестовая группа для тега");
+        int deletedTagID = tagDao.save(newTag);
+        tagDao.deleteTagById(deletedTagID);
     }
 
 }

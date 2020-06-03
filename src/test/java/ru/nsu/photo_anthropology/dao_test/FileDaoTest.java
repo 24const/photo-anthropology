@@ -7,18 +7,18 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 
 public class FileDaoTest {
 
-    static FileDao fileDao;
-    static UploadedFile file;
+    private static FileDao fileDao;
+    private static UploadedFile file;
+    private static JSONArray columnInfo;
 
     @BeforeClass
-    public static void setup() throws IOException {
-        JSONArray columnInfo = new JSONArray();
+    public static void setup() {
+        columnInfo = new JSONArray();
         columnInfo.add("columnOne");
         columnInfo.add("columnTwo");
         columnInfo.add("columnThree");
@@ -28,17 +28,13 @@ public class FileDaoTest {
 
     @Test
     public void saveFileTest() throws SQLException {
-        fileDao.save(file);
-        Assert.assertNotNull(fileDao.getIdOfSavedFile());
-    }
-
-    @Test
-    public void getIdOfSavedFileTest() {
-        Assert.assertNotNull(fileDao.getIdOfSavedFile());
+        Assert.assertNotNull(fileDao.save(file));
     }
 
     @Test
     public void deleteFileTest() throws SQLException {
-        fileDao.deleteById(fileDao.getIdOfSavedFile());
+        UploadedFile newFile = new UploadedFile("HelloWorld.txt", columnInfo);
+        int deletedFileID = fileDao.save(newFile);
+        fileDao.deleteFileById(deletedFileID);
     }
 }

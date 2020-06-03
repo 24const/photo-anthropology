@@ -28,9 +28,9 @@ public class FileSavingToDBWorker {
         FileReadingWorker fileReadingWorker = new FileReadingWorker(fileName, data);
         FileDao fileDao = new FileDao();
         try {
-            fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames()));
+            int savedFileId = fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames()));
             ImageDao imageDao = new ImageDao();
-            imageDao.setUploadFileId(fileDao.getIdOfSavedFile());
+            imageDao.setUploadFileId(savedFileId);
             for (Image image : fileReadingWorker.getImages()) {
                 imageDao.save(image);
             }

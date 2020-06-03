@@ -50,6 +50,7 @@ public class DbConnector {
         try {
             return DriverManager.getConnection(dbUrlAddress, user, password);
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при подключении к БД.");
         }
     }
@@ -60,7 +61,11 @@ public class DbConnector {
      * @return Возвращает соединение с БД
      */
     public Connection getConnection() {
-        return connection;
+        if (connection != null) {
+            return connection;
+        } else {
+            throw new PhotoAnthropologyRuntimeException("DbConnector.getConnection(): Ошибка при попытке получения соединения.");
+        }
     }
 }
 

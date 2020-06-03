@@ -9,15 +9,15 @@ import java.sql.*;
 public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFile> {
 
     public static final String SQL_DELETE_REQUEST = "DELETE FROM files WHERE id = ?";
-    private int idOfSavedFile;
 
     /**
      * Процедура сохранения данных о файле в таблице files БД
      *
      * @param file - файл, данные о котором сохраняем {@link UploadedFile}
+     * @return - Возвращает id сохраненного файла
      */
     @Override
-    public void save(UploadedFile file) throws SQLException {
+    public int save(UploadedFile file) throws SQLException {
         String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
@@ -27,9 +27,9 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
             stm.setString(1, file.getFileName());
             stm.setObject(2, file.getColumnNames().toJSONString());
             stm.executeUpdate();
-            setIdOfSavedFile();
             connection.commit();
             connection.setAutoCommit(true);
+            return setIdOfSavedFile();
         } catch (SQLException e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в FileDao.save(File file)");
@@ -49,7 +49,7 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
     /**
      * Процедура определения id охраненногоо файла {@link FileDao#save(UploadedFile)}
      */
-    private void setIdOfSavedFile() {
+    private int setIdOfSavedFile() {
         String sql = "SELECT MAX(id) as last_file_id FROM files";
 
         DbConnector dbConnector = DbConnector.getInstance();
@@ -58,7 +58,7 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = stm.executeQuery()) {
                 resultSet.next();
-                this.idOfSavedFile = resultSet.getInt("last_file_id");
+                return resultSet.getInt("last_file_id");
             }
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
@@ -66,11 +66,22 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
     }
 
     /**
-     * Функция получения значения поля {@link FileDao#idOfSavedFile}
+     * Процедура удаления файла по Id
      *
-     * @return возвращает id загруженного файла
+     * @param fileId - файл, данные которого удаляем {@link UploadedFile}
      */
-    public int getIdOfSavedFile() {
-        return this.idOfSavedFile;
+    public void deleteFileById(int fileId) throws SQLException {
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        connection.setAutoCommit(false);
+        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
+        try {
+            deleteById(fileId);
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (Exception e) {
+            connection.rollback(savepointOne);
+            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в FileDao.delete(File file).");
+        }
     }
 }

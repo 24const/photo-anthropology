@@ -22,20 +22,6 @@ public class FileTest {
     }
 
     @Test
-    public void fileWithoutIdTest() {
-        UploadedFile newFile = new UploadedFile("Test.txt", expectedColumns);
-        //TODO: что здесь тестируется? оператор new в java :)
-        Assert.assertNotNull(newFile);
-    }
-
-    @Test
-    public void fileWithIdTest() {
-        UploadedFile newFile = new UploadedFile(7, "Test.txt", expectedColumns);
-        //TODO: что здесь тестируется?
-        Assert.assertNotNull(newFile);
-    }
-
-    @Test
     public void getFileNameTest() {
         Assert.assertEquals("Test.txt", file.getFileName());
     }

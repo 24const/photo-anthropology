@@ -3,10 +3,9 @@ package com.nsu.photo_anthropology.dao;
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
+import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
 
@@ -17,9 +16,10 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      * Процедура сохранения данных об изображении в таблице images БД
      *
      * @param image - изображение, данные о котором сохраняем {@link Image}
+     * @return - Возвращает id сохраненного изображения
      */
     @Override
-    public void save(Image image) {
+    public int save(Image image) {
         String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES(?, ?, ?::JSON)";
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
@@ -28,6 +28,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
             stm.setString(2, image.getImagePath());
             stm.setObject(3, image.getOtherInformation().toJSONString());
             stm.execute();
+            return setIdOfSavedImage();
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image).");
         }
@@ -41,16 +42,6 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     @Override
     public String getDeleteSqlRequest() {
         return SQL_DELETE_REQUEST;
-    }
-
-    /**
-     * Процедура удаления записей из таблицы tagged_images по внешнему ключу
-     *
-     * @param id - родительский ключ
-     */
-    public void deleteRelatedEntities(int id) {
-        // На данной стадии не реализовано удаления изображений,
-        // а следовательно, и удаление связанной информации
     }
 
     /**
@@ -69,5 +60,44 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      */
     public void setUploadFileId(int uploadFileId) {
         this.uploadFileId = uploadFileId;
+    }
+
+    /**
+     * Процедура удаления изображения по Id
+     *
+     * @param imageId - изображение, данные которого удаляем {@link UploadedFile}
+     */
+    public void deleteImageById(int imageId) throws SQLException {
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        connection.setAutoCommit(false);
+        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
+        try {
+            deleteById(imageId);
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (Exception e) {
+            connection.rollback(savepointOne);
+            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
+        }
+    }
+
+    /**
+     * Процедура определения id сохраненного изображения {@link ImageDao#save(Image)}
+     */
+    private int setIdOfSavedImage() {
+        String sql = "SELECT MAX(id) as last_image_id FROM images";
+
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = stm.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt("last_image_id");
+            }
+        } catch (SQLException e) {
+            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
+        }
     }
 }

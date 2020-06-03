@@ -12,15 +12,15 @@ import java.util.List;
 public class GroupDao extends DaoFactory<Group> {
 
     public static final String SQL_DELETE_REQUEST = "DELETE FROM groups WHERE id = ?";
-    private int idOfSavedGroup;
 
     /**
      * Процедура сохранения данных о группе в таблице groups БД
      *
      * @param group - сохреняемая группа {@link Group}
+     * @return - Возвращает id сохраненной группы
      */
     @Override
-    public void save(Group group) throws SQLException {
+    public int save(Group group) throws SQLException {
         String sql = "INSERT INTO groups (group_name, group_question) VALUES(?, ?);";
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
@@ -30,12 +30,12 @@ public class GroupDao extends DaoFactory<Group> {
             stm.setString(1, group.getGroupName());
             stm.setString(2, group.getGroupQuestion());
             stm.executeUpdate();
-            this.setIdOfSavedFile();
             if (group.getTagsInGroup() != null) {
                 this.saveTagsInGroup(group);
             }
             connection.commit();
             connection.setAutoCommit(true);
+            return setIdOfSavedGroup();
         } catch (SQLException e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в GroupDao.save(Group group).");
@@ -45,29 +45,19 @@ public class GroupDao extends DaoFactory<Group> {
     /**
      * Процедура определения id охраненной группы {@link GroupDao#save(Group)}
      */
-    private void setIdOfSavedFile() {
+    private int setIdOfSavedGroup() {
         String sql = "SELECT MAX(id) as last_group_id FROM groups";
 
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
-
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = stm.executeQuery()) {
                 resultSet.next();
-                this.idOfSavedGroup = resultSet.getInt("last_group_id");
+                return resultSet.getInt("last_group_id");
             }
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
         }
-    }
-
-    /**
-     * Функция получения значения поля {@link GroupDao#idOfSavedGroup}
-     *
-     * @return возвращает id загруженной группы
-     */
-    public int getIdOfSavedGroup() {
-        return idOfSavedGroup;
     }
 
     /**
@@ -145,7 +135,9 @@ public class GroupDao extends DaoFactory<Group> {
             stm.setString(2, group.getGroupQuestion());
             stm.setInt(3, group.getId());
             stm.executeUpdate();
-            this.updateTagsInGroup(group);
+            if (group.getTagsInGroup() != null) {
+                this.saveTagsInGroup(group);
+            }
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
@@ -203,7 +195,7 @@ public class GroupDao extends DaoFactory<Group> {
             connection.setAutoCommit(true);
         } catch (Exception e) {
             connection.rollback(savepointOne);
-            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в GroupDao.update(Group group).");
+            throw new PhotoAnthropologyRuntimeException("Невозможно удалить данные из БД.");
         }
         System.out.println("Почему данная конструкция не работает?????7");
     }

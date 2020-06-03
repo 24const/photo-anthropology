@@ -1,33 +1,44 @@
 package ru.nsu.photo_anthropology.db_tools_test;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DbConnectorTest {
 
-    DbConnector dbConnector;
-
+    static DbConnector staticDbConnector;
+    @BeforeClass
+    public static void setup() {
+        staticDbConnector = DbConnector.getInstance();
+    }
     @Test
     public void firstInitDbConnectorTest() {
-        dbConnector = DbConnector.getInstance();
+        DbConnector dbConnector =  DbConnector.getInstance();
         Assert.assertNotNull(dbConnector);
     }
 
     @Test
     public void secondInitDbConnectorTest() {
         DbConnector newDbConnection = DbConnector.getInstance();
-        Assert.assertEquals(dbConnector, newDbConnection);
+        Assert.assertEquals(staticDbConnector, newDbConnection);
     }
 
     @Test
     public void getConnectionTest() {
-        Connection connection = dbConnector.getConnection();
+        Connection connection = staticDbConnector.getConnection();
         Assert.assertNotNull(connection);
     }
 
-    //TODO: не хватает теста, где соединение не было установлено, и как ведет себя DbConnector в этом случае?
-
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void getFailedConnectionTest() throws SQLException {
+        Connection connection = staticDbConnector.getConnection();
+        connection.close();
+        Connection failedConnection = staticDbConnector.getConnection();
+        System.out.println(failedConnection);
+    }
 }
