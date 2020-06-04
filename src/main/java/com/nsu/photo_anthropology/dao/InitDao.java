@@ -18,6 +18,10 @@ public class InitDao {
 
     private static final List<String> tablesInDb = Arrays.asList("images", "tags", "groups", "files", "tagged_images", "groups_in_file");
 
+    private InitDao() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void createDbSchema() {
 
         DbConnector dbConnector = DbConnector.getInstance();
@@ -43,7 +47,7 @@ public class InitDao {
 
     private static void createNewDbSchema(Connection connection) {
         try {
-            SqlFile sf = new SqlFile(new File("init.sql"));
+            SqlFile sf = new SqlFile(new File("C:\\Users\\Ksenia\\Desktop\\photo-anthropology\\src\\main\\webapp\\WEB-INF\\sql-scripts\\init.sql"));
             sf.setConnection(connection);
             sf.execute();
         } catch (SQLException | IOException | SqlToolError e) {

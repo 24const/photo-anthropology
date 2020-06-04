@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 
 public class DeleteGroupServlet extends HttpServlet {
 
+    private static final String ERROR_PAGE = "error_page.jsp";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -22,10 +24,9 @@ public class DeleteGroupServlet extends HttpServlet {
             groupDao.deleteGroupById(id);
             resp.sendRedirect(nextJSP);
         } catch (Exception e) {
-            e.printStackTrace();
             Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
             logger.info(e.getMessage());
-            resp.sendRedirect("error_page.jsp");
+            resp.sendRedirect(ERROR_PAGE);
         }
     }
 }

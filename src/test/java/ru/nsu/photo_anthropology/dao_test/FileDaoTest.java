@@ -1,6 +1,7 @@
 package ru.nsu.photo_anthropology.dao_test;
 
 import com.nsu.photo_anthropology.dao.FileDao;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 import org.json.simple.JSONArray;
 import org.junit.Assert;
@@ -36,5 +37,17 @@ public class FileDaoTest {
         UploadedFile newFile = new UploadedFile("HelloWorld.txt", columnInfo);
         int deletedFileID = fileDao.save(newFile);
         fileDao.deleteFileById(deletedFileID);
+    }
+
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void saveInvalidInColumnNamesFileTest() throws SQLException {
+        UploadedFile wrongFile = new UploadedFile("failed_file.txt", null);
+        fileDao.save(wrongFile);
+    }
+
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void saveInvalidInNameFileTest() throws SQLException {
+        UploadedFile wrongFile = new UploadedFile(null, columnInfo);
+        fileDao.save(wrongFile);
     }
 }

@@ -123,10 +123,11 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         try {
             deleteById(tagId);
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (Exception e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
 

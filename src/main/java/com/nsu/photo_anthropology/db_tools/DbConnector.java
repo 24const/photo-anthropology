@@ -6,7 +6,6 @@ import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class DbConnector {
 
@@ -49,8 +48,7 @@ public class DbConnector {
 
         try {
             return DriverManager.getConnection(dbUrlAddress, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при подключении к БД.");
         }
     }
@@ -61,11 +59,7 @@ public class DbConnector {
      * @return Возвращает соединение с БД
      */
     public Connection getConnection() {
-        if (connection != null) {
-            return connection;
-        } else {
-            throw new PhotoAnthropologyRuntimeException("DbConnector.getConnection(): Ошибка при попытке получения соединения.");
-        }
+        return connection;
     }
 }
 

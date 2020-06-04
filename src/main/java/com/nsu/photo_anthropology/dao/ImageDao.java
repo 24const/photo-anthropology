@@ -13,7 +13,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     private int uploadFileId;
 
     /**
-     * Процедура сохранения данных об изображении в таблице images БД
+     * Процедура сохранения данных об изображении при сохранении файла в таблице images БД
      *
      * @param image - изображение, данные о котором сохраняем {@link Image}
      * @return - Возвращает id сохраненного изображения
@@ -27,7 +27,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
             stm.setInt(1, this.uploadFileId);
             stm.setString(2, image.getImagePath());
             stm.setObject(3, image.getOtherInformation().toJSONString());
-            stm.execute();
+            stm.executeUpdate();
             return setIdOfSavedImage();
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image).");
@@ -75,10 +75,11 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         try {
             deleteById(imageId);
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (Exception e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
 
@@ -98,6 +99,29 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
             }
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
+        }
+    }
+
+    /**
+     * Процедура сохранения данных об изображении отдельно от файла в таблице images БД
+     *
+     * @param image - изображение, данные о котором сохраняем {@link Image}
+     * @return - Возвращает id сохраненного изображения
+     */
+    public int saveOnlyImage(Image image) throws SQLException {
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        connection.setAutoCommit(false);
+        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
+        try {
+            int savedImage = save(image);
+            connection.commit();
+            return savedImage;
+        } catch (Exception e) {
+            connection.rollback(savepointOne);
+            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image)");
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
 }

@@ -2,11 +2,14 @@ package com.nsu.photo_anthropology.structure_entities;
 
 import org.json.simple.JSONArray;
 
+import java.util.List;
+
 public class UploadedFile {
 
     private int id;
     private String fileName;
     private JSONArray columnNames;
+    private List<Image> imagesInFile;
 
     /**
      * Конструктор - создание нового объекта
@@ -32,6 +35,20 @@ public class UploadedFile {
     public UploadedFile(String fileName, JSONArray columnNames) {
         this.fileName = fileName;
         this.columnNames = columnNames;
+    }
+
+    /**
+     * Конструктор - создание нового объекта
+     *
+     * @param fileName     - имя файла
+     * @param columnNames  - поля, содержащиеся в файле
+     * @param imagesInFile - изображения, содержащиеся в файле
+     * @see UploadedFile#UploadedFile(int, String, JSONArray)
+     */
+    public UploadedFile(String fileName, JSONArray columnNames, List<Image> imagesInFile) {
+        this.fileName = fileName;
+        this.columnNames = columnNames;
+        this.imagesInFile = imagesInFile;
     }
 
     /**
@@ -61,6 +78,15 @@ public class UploadedFile {
         return id;
     }
 
+    /**
+     * Функция получения значения поля {@link UploadedFile#imagesInFile}
+     *
+     * @return Возвращает список изображений, содержащихся в файле
+     */
+    public List<Image> getImagesInFile() {
+        return this.imagesInFile;
+    }
+
     @Override
     public String toString() {
         return "File{" +
@@ -68,4 +94,5 @@ public class UploadedFile {
                 ", columnNames=" + columnNames +
                 '}';
     }
+
 }

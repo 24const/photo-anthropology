@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 
 public class FileUploadServlet extends HttpServlet {
 
+    private static final String ERROR_PAGE = "error_page.jsp";
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -29,7 +31,7 @@ public class FileUploadServlet extends HttpServlet {
         } catch (Exception e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
-            resp.sendRedirect("error_page.jsp");
+            resp.sendRedirect(ERROR_PAGE);
         }
 
         String uploadedFilesDirectory = properties.getUploadedFilesDirectory();
@@ -56,7 +58,7 @@ public class FileUploadServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
                 logger.info(e.getMessage());
-                resp.sendRedirect("error_page.jsp");
+                resp.sendRedirect(ERROR_PAGE);
             }
 
             FileSavingToDBWorker.saveFileInfo(filePath);
@@ -65,7 +67,7 @@ public class FileUploadServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
                 logger.info(e.getMessage());
-                resp.sendRedirect("error_page.jsp");
+                resp.sendRedirect(ERROR_PAGE);
             }
         }
     }

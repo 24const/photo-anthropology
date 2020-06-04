@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 
 public class ChangeGroupServlet extends HttpServlet {
 
+    private static final String ERROR_PAGE = "error_page.jsp";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -25,7 +27,7 @@ public class ChangeGroupServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
-            resp.sendRedirect("error_page.jsp");
+            resp.sendRedirect(ERROR_PAGE);
         }
 
         GroupDao groupDao = new GroupDao();
@@ -55,7 +57,7 @@ public class ChangeGroupServlet extends HttpServlet {
         } catch (IOException | ServletException e) {
             Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
             logger.info(e.getMessage());
-            resp.sendRedirect("error_page.jsp");
+            resp.sendRedirect(ERROR_PAGE);
         }
     }
 }

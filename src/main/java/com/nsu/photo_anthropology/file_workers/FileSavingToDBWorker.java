@@ -1,9 +1,7 @@
 package com.nsu.photo_anthropology.file_workers;
 
 import com.nsu.photo_anthropology.dao.FileDao;
-import com.nsu.photo_anthropology.dao.ImageDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
-import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 
 import java.sql.SQLException;
@@ -28,12 +26,7 @@ public class FileSavingToDBWorker {
         FileReadingWorker fileReadingWorker = new FileReadingWorker(fileName, data);
         FileDao fileDao = new FileDao();
         try {
-            int savedFileId = fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames()));
-            ImageDao imageDao = new ImageDao();
-            imageDao.setUploadFileId(savedFileId);
-            for (Image image : fileReadingWorker.getImages()) {
-                imageDao.save(image);
-            }
+            fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames(), fileReadingWorker.getImages()));
         } catch (SQLException e) {
             throw new PhotoAnthropologyRuntimeException("FileSavingToDBWorker: не удалось сохранитьфайл в БД.");
         }

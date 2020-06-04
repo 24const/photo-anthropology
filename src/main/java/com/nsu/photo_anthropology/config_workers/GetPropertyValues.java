@@ -9,9 +9,9 @@ import java.util.Properties;
 
 public class GetPropertyValues {
 
-    private final static String DB_USER_NAME_PROP = "user";
-    private final static String DB_USER_PASSWORD_PROP = "password";
-    private final static String DB_URL_PROP = "db_url";
+    private static final String DB_USER_NAME_PROP = "user";
+    private static final String DB_USER_PAS_PROP = "password";
+    private static final String DB_URL_PROP = "db_url";
     private String user;
     private String password;
     private String dbUrlAddress;
@@ -35,7 +35,7 @@ public class GetPropertyValues {
             }
 
             user = prop.getProperty(DB_USER_NAME_PROP);
-            password = prop.getProperty(DB_USER_PASSWORD_PROP);
+            password = prop.getProperty(DB_USER_PAS_PROP);
             dbUrlAddress = prop.getProperty(DB_URL_PROP);
             uploadedFilesDirectory = prop.getProperty("uploaded_files_directory");
 

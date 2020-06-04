@@ -1,7 +1,6 @@
 package com.nsu.photo_anthropology.servlets;
 
 import com.nsu.photo_anthropology.dao.GroupDao;
-import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.validation.InfoValidation;
@@ -16,6 +15,8 @@ import java.util.logging.Logger;
 
 public class NewGroupServlet extends HttpServlet {
 
+    private static final String ERROR_PAGE = "error_page.jsp";
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -25,9 +26,11 @@ public class NewGroupServlet extends HttpServlet {
         if (infoValidation.getExceptionCounter() == 0) {
 
             try {
-                this.saveNewGroup(req, infoValidation);
+                saveNewGroup(req, infoValidation);
             } catch (SQLException e) {
-                e.printStackTrace();
+                Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
+                logger.info(e.getMessage());
+                resp.sendRedirect(ERROR_PAGE);
             }
 
             String nextJSP = "GroupsTools";
@@ -36,7 +39,7 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
                 logger.info(e.getMessage());
-                resp.sendRedirect("error_page.jsp");
+                resp.sendRedirect(ERROR_PAGE);
             }
 
         } else {
@@ -47,7 +50,7 @@ public class NewGroupServlet extends HttpServlet {
             } catch (Exception e) {
                 Logger logger = Logger.getLogger(NewGroupServlet.class.getName());
                 logger.info(e.getMessage());
-                resp.sendRedirect("error_page.jsp");
+                resp.sendRedirect(ERROR_PAGE);
             }
         }
     }
@@ -58,7 +61,6 @@ public class NewGroupServlet extends HttpServlet {
         String groupQuestion = infoValidation.getGroupQuestion();
         String groupTags = infoValidation.getTags();
 
-        TagDao tagDao = new TagDao();
         GroupDao groupDao = new GroupDao();
         Group group;
 

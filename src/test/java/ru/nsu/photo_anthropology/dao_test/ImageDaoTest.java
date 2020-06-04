@@ -1,11 +1,10 @@
 package ru.nsu.photo_anthropology.dao_test;
 
 import com.nsu.photo_anthropology.dao.ImageDao;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import org.json.simple.JSONArray;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.SQLException;
 
@@ -13,7 +12,6 @@ public class ImageDaoTest {
 
     private static Image image;
     private static ImageDao imageDao;
-    private static int savedImageId;
     private static JSONArray columnInfo;
 
     @BeforeClass
@@ -25,13 +23,32 @@ public class ImageDaoTest {
         image = new Image("image.jpg", "https://photo", columnInfo);
         imageDao = new ImageDao();
         imageDao.setUploadFileId(13);
-        savedImageId = imageDao.save(image);
+    }
+
+    @Before
+    public void setFileID() {
+        imageDao.setUploadFileId(13);
     }
 
     @Test
-    public void saveImageTest() {
+    public void saveImageTest() throws SQLException {
         Image newImage = new Image("image4.jpg", "https://photo4", columnInfo);
-        Assert.assertNotEquals(0, imageDao.save(newImage));
+        int savedImageId = imageDao.saveOnlyImage(newImage);
+        Assert.assertNotEquals(0, savedImageId);
+        imageDao.deleteImageById(savedImageId);
+
+    }
+
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void saveInvalidImageTest() {
+        Image newImage = new Image(null, null, columnInfo);
+        imageDao.save(newImage);
+    }
+
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void saveImageWithNonExistingFileTest() {
+        imageDao.setUploadFileId(713);
+        imageDao.save(image);
     }
 
     @Test

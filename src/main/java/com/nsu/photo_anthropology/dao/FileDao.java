@@ -2,9 +2,11 @@ package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
+import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 
 import java.sql.*;
+import java.util.List;
 
 public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFile> {
 
@@ -27,14 +29,29 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
             stm.setString(1, file.getFileName());
             stm.setObject(2, file.getColumnNames().toJSONString());
             stm.executeUpdate();
+            int idOfSavedFile = setIdOfSavedFile();
+            if (file.getImagesInFile() != null) {
+                this.saveImagesFromFile(file, idOfSavedFile);
+            }
             connection.commit();
-            connection.setAutoCommit(true);
-            return setIdOfSavedFile();
-        } catch (SQLException e) {
+            return idOfSavedFile;
+        } catch (Exception e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в FileDao.save(File file)");
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
+
+    private void saveImagesFromFile(UploadedFile file, int idOfSavedFile) {
+        ImageDao imageDao = new ImageDao();
+        imageDao.setUploadFileId(idOfSavedFile);
+        List<Image> imagesInFile = file.getImagesInFile();
+        for (Image image : imagesInFile) {
+            imageDao.save(image);
+        }
+    }
+
 
     /**
      * Функция получения значения поля {@link FileDao#SQL_DELETE_REQUEST}
@@ -78,10 +95,11 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
         try {
             deleteById(fileId);
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (Exception e) {
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в FileDao.delete(File file).");
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
 }
