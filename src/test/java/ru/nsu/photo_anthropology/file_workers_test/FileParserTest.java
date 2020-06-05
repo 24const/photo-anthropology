@@ -1,5 +1,6 @@
 package ru.nsu.photo_anthropology.file_workers_test;
 
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.file_workers.FileParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class FileParserTest {
             expectedData.put(k, info);
         }
 
-        Map<Integer, List<String>> data = FileParser.readXLSXFile(sourcePath);
+        Map<Integer, List<String>> data = FileParser.readXLSXFile("C:/Users/Ksenia/Desktop/photo-anthropology/src/test/java/ru/nsu/photo_anthropology/file_workers_test/ Ksu_test_file.xlsx");
         Assert.assertEquals(expectedData, data);
     }
 
@@ -42,5 +43,11 @@ public class FileParserTest {
     public void getFileNameTest() {
         Assert.assertEquals("Ksu_test_file.xlsx", FileParser.getFileName(sourcePath));
     }
+
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void UploadInvalidFileTest() {
+        Map<Integer, List<String>> data = FileParser.readXLSXFile("ksu.txt");
+    }
+
 
 }

@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class FileTest {
+public class UploadedFileTest {
 
     static JSONArray expectedColumns;
     static UploadedFile file;
