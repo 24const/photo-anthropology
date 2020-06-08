@@ -6,7 +6,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ import java.util.List;
 public class FileUploadServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
-    private static Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(FileUploadServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

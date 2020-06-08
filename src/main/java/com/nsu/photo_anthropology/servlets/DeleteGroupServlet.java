@@ -1,7 +1,8 @@
 package com.nsu.photo_anthropology.servlets;
 
 import com.nsu.photo_anthropology.dao.GroupDao;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class DeleteGroupServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
-    private static Logger logger = Logger.getLogger(DeleteGroupServlet.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(DeleteGroupServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

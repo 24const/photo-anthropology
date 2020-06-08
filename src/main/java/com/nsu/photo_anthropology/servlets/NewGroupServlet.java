@@ -4,7 +4,8 @@ import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.validation.InfoValidation;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 public class NewGroupServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
-    private static Logger logger = Logger.getLogger(GroupToolsServlet.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(GroupToolsServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -32,16 +32,14 @@ public abstract class DbTransaction {
             rs.close();
             return savedId;
         } catch (Exception e) {
-            e.printStackTrace();
             connection.rollback();
-            endTransaction(connection);
             throw new PhotoAnthropologyRuntimeException("Ошибка транзакции");
         }
     }
 
     protected abstract PreparedStatement executeUpdate() throws SQLException;
 
-    public void endTransaction(Connection connection) throws SQLException {
+    public static void endTransaction(Connection connection) throws SQLException {
         connection.setAutoCommit(true);
         transactionStatus = true;
     }

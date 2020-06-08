@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class FileReadingWorkerTest {
 
-    static String sourcePath = "Ksu_test_file.xlsx";
+    static String sourcePath = "src/test/resources/Ksu_test_file.xlsx";
     static FileReadingWorker fileReadingWorker;
     static Map<Integer, List<String>> data = FileParser.readXLSXFile(sourcePath);
     static String fileName = FileParser.getFileName(sourcePath);

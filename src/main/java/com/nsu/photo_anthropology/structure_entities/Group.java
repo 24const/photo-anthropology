@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Group {
 
-    private int id;
+    private int id = -1;
     private String groupName;
     private String groupQuestion;
     private String tagsInGroup;

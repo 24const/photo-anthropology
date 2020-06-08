@@ -27,14 +27,19 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         return new DbTransaction() {
             @Override
             protected PreparedStatement executeUpdate() throws SQLException {
-                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                stm.setInt(1, uploadFileId);
-                stm.setString(2, image.getImagePath());
-                stm.setObject(3, image.getOtherInformation().toJSONString());
-                return stm;
+                try {
+                    PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    stm.setInt(1, uploadFileId);
+                    stm.setString(2, image.getImagePath());
+                    stm.setObject(3, image.getOtherInformation().toJSONString());
+                    return stm;
+                } catch (Exception e) {
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации об изображении в " + ImageDao.this.getClass().getName());
+                }
             }
         }.runTransactions(connection);
     }
+
     /**
      * Функция получения значения поля {@link ImageDao#SQL_DELETE_REQUEST}
      *
@@ -91,18 +96,9 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      * @return - Возвращает id сохраненного изображения
      */
     public int saveOnlyImage(Image image) throws SQLException {
+        int savedId = save(image);
         DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
-        try {
-            return save(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-            connection.rollback(savepointOne);
-            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image)");
-        } finally {
-            connection.setAutoCommit(true);
-        }
+        DbTransaction.endTransaction(dbConnector.getConnection());
+        return savedId;
     }
 }

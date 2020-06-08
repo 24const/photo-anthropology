@@ -35,7 +35,7 @@ public class FileParserTest {
             expectedData.put(k, info);
         }
 
-        Map<Integer, List<String>> data = FileParser.readXLSXFile("C:/Users/Ksenia/Desktop/photo-anthropology/src/test/java/ru/nsu/photo_anthropology/file_workers_test/Ksu_test_file.xlsx");
+        Map<Integer, List<String>> data = FileParser.readXLSXFile("src/test/resources/Ksu_test_file.xlsx");
         Assert.assertEquals(expectedData, data);
     }
 

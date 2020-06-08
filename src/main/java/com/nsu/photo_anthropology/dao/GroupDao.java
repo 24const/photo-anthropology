@@ -23,21 +23,41 @@ public class GroupDao extends DaoFactory<Group> {
     @Override
     public int save(final Group group) throws SQLException {
         final String sql = "INSERT INTO groups (group_name, group_question) VALUES(?, ?);";
+        return writingGroupToDb(group, sql);
+    }
+
+    /**
+     * Процедура сохранения данных о группе в таблице groups БД
+     *
+     * @param group - группа, над которой проводим действие{@link Group}
+     * @param sql   - действие, которое проводим над группой(сохранение/изменение)
+     * @return - Возвращает id сохраненной группы
+     */
+    private int writingGroupToDb(final Group group, final String sql) throws SQLException {
         DbConnector dbConnector = DbConnector.getInstance();
         final Connection connection = dbConnector.getConnection();
-        return new DbTransaction() {
+        int savedId = new DbTransaction() {
             @Override
             protected PreparedStatement executeUpdate() throws SQLException {
-                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                stm.setString(1, group.getGroupName());
-                stm.setString(2, group.getGroupQuestion());
-                if (group.getTagsInGroup() != null) {
-                    saveTagsInGroup(group);
+                try {
+                    PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    stm.setString(1, group.getGroupName());
+                    stm.setString(2, group.getGroupQuestion());
+                    if (group.getId() != -1) {
+                        stm.setInt(3, group.getId());
+                    }
+                    stm.executeUpdate();
+                    if (group.getTagsInGroup() != null) {
+                        saveTagsInGroup(group);
+                    }
+                    return stm;
+                } catch (Exception e) {
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о группе в " + GroupDao.this.getClass().getName());
                 }
-                return stm;
-
             }
         }.runTransactions(connection);
+        DbTransaction.endTransaction(connection);
+        return savedId;
     }
 
     /**
@@ -106,25 +126,7 @@ public class GroupDao extends DaoFactory<Group> {
      */
     public void update(Group group) throws SQLException {
         String sql = "UPDATE groups SET group_name = ?, group_question = ? where id = ?";
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointTwo");
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, group.getGroupName());
-            stm.setString(2, group.getGroupQuestion());
-            stm.setInt(3, group.getId());
-            stm.executeUpdate();
-            if (group.getTagsInGroup() != null) {
-                this.saveTagsInGroup(group);
-            }
-            connection.commit();
-        } catch (Exception e) {
-            connection.rollback(savepointOne);
-            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в GroupDao.update(Group group).");
-        } finally {
-            connection.setAutoCommit(true);
-        }
+        writingGroupToDb(group, sql);
     }
 
     /**

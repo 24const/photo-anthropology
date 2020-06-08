@@ -5,7 +5,6 @@ import com.nsu.photo_anthropology.db_tools.DbTransaction;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
-import org.json.simple.JSONArray;
 
 import java.sql.*;
 import java.util.List;
@@ -25,18 +24,24 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
         final String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
         DbConnector dbConnector = DbConnector.getInstance();
         final Connection connection = dbConnector.getConnection();
-        return new DbTransaction() {
+        int savedId = new DbTransaction() {
             @Override
             protected PreparedStatement executeUpdate() throws SQLException {
-                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                stm.setString(1, file.getFileName());
-                stm.setObject(2, file.getColumnNames().toJSONString());
-                if (file.getImagesInFile() != null) {
-                    saveImagesFromFile(file, -1);
+                try {
+                    PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    stm.setString(1, file.getFileName());
+                    stm.setObject(2, file.getColumnNames().toJSONString());
+                    if (file.getImagesInFile() != null) {
+                        saveImagesFromFile(file, -1);
+                    }
+                    return stm;
+                } catch (Exception e) {
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о файле в " + FileDao.this.getClass().getName());
                 }
-                return stm;
             }
         }.runTransactions(connection);
+        DbTransaction.endTransaction(connection);
+        return savedId;
     }
 
 

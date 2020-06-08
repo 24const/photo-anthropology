@@ -4,7 +4,6 @@ import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.db_tools.DbTransaction;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
-import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.Tag;
 
 import java.sql.*;
@@ -28,15 +27,19 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         final Connection connection = dbConnector.getConnection();
         return new DbTransaction() {
             @Override
-            protected PreparedStatement executeUpdate() throws SQLException {
-                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                stm.setString(1, tag.getGroupName());
-                stm.setString(2, tag.getTagName());
-                stm.executeUpdate();
-                return stm;
+            protected PreparedStatement executeUpdate(){
+                try {
+                    PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    stm.setString(1, tag.getGroupName());
+                    stm.setString(2, tag.getTagName());
+                    return stm;
+                } catch (Exception e) {
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о теге в " + TagDao.this.getClass().getName());
+                }
             }
         }.runTransactions(connection);
     }
+
     /**
      * Функция получения значения поля {@link TagDao#SQL_DELETE_REQUEST}
      *
@@ -94,25 +97,6 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
     }
 
     /**
-     * Процедура определения id сохраненного тега {@link TagDao#save(Tag)}
-     */
-    private int setIdOfSavedTag() {
-        String sql = "SELECT MAX(id) as last_tag_id FROM tags";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                return resultSet.getInt("last_tag_id");
-            }
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-    }
-
-    /**
      * Процедура удаления тега по Id
      *
      * @param tagId - тег, данные которого удаляем {@link Tag}
@@ -133,5 +117,14 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
             connection.setAutoCommit(true);
         }
     }
+
+    public int saveOnlyTag(Tag tag) throws SQLException {
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        int savedId = save(tag);
+        DbTransaction.endTransaction(connection);
+        return savedId;
+    }
+
 
 }

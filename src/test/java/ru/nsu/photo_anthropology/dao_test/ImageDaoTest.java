@@ -44,13 +44,13 @@ public class ImageDaoTest {
     @Test(expected = PhotoAnthropologyRuntimeException.class)
     public void saveInvalidImageTest() throws SQLException {
         Image newImage = new Image(null, null, columnInfo);
-        imageDao.save(newImage);
+        imageDao.saveOnlyImage(newImage);
     }
 
     @Test(expected = PhotoAnthropologyRuntimeException.class)
     public void saveImageWithNonExistingFileTest() throws SQLException {
         imageDao.setUploadFileId(713);
-        imageDao.save(image);
+        imageDao.saveOnlyImage(image);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ImageDaoTest {
     @Test
     public void deleteImageTest() throws SQLException {
         Image newImage = new Image("image4.jpg", "https://photo4", columnInfo);
-        int deletedImageID = imageDao.save(newImage);
+        int deletedImageID = imageDao.saveOnlyImage(newImage);
         imageDao.deleteImageById(deletedImageID);
     }
 }
