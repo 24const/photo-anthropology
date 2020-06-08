@@ -1,6 +1,7 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.db_tools.DbTransaction;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Tag;
@@ -20,45 +21,23 @@ public class GroupDao extends DaoFactory<Group> {
      * @return - Возвращает id сохраненной группы
      */
     @Override
-    public int save(Group group) throws SQLException {
-        String sql = "INSERT INTO groups (group_name, group_question) VALUES(?, ?);";
+    public int save(final Group group) throws SQLException {
+        final String sql = "INSERT INTO groups (group_name, group_question) VALUES(?, ?);";
         DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, group.getGroupName());
-            stm.setString(2, group.getGroupQuestion());
-            stm.executeUpdate();
-            if (group.getTagsInGroup() != null) {
-                this.saveTagsInGroup(group);
-            }
-            connection.commit();
-            return setIdOfSavedGroup();
-        } catch (Exception e) {
-            connection.rollback(savepointOne);
-            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в GroupDao.save(Group group).");
-        } finally {
-            connection.setAutoCommit(true);
-        }
-    }
+        final Connection connection = dbConnector.getConnection();
+        return new DbTransaction() {
+            @Override
+            protected PreparedStatement executeUpdate() throws SQLException {
+                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setString(1, group.getGroupName());
+                stm.setString(2, group.getGroupQuestion());
+                if (group.getTagsInGroup() != null) {
+                    saveTagsInGroup(group);
+                }
+                return stm;
 
-    /**
-     * Процедура определения id охраненной группы {@link GroupDao#save(Group)}
-     */
-    private int setIdOfSavedGroup() {
-        String sql = "SELECT MAX(id) as last_group_id FROM groups";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                return resultSet.getInt("last_group_id");
             }
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
+        }.runTransactions(connection);
     }
 
     /**

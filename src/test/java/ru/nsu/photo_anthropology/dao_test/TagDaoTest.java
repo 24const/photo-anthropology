@@ -36,12 +36,6 @@ public class TagDaoTest {
     }
 
     @Test
-    public void getDeleteSqlRequestTest() {
-        String deleteRequest = tagDao.getDeleteSqlRequest();
-        Assert.assertEquals("DELETE FROM tags WHERE id = ?", deleteRequest);
-    }
-
-    @Test
     public void getAllTagsInGroupTest() {
         List<Tag> expectedListOfTags = new ArrayList<>();
         expectedListOfTags.add(tag);

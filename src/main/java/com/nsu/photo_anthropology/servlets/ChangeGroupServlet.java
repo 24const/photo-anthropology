@@ -4,6 +4,7 @@ import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Tag;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,11 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class ChangeGroupServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
+    private static Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -25,8 +27,7 @@ public class ChangeGroupServlet extends HttpServlet {
         try {
             id = Integer.parseInt(req.getParameter("groupId"));
         } catch (NumberFormatException e) {
-            Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
             resp.sendRedirect(ERROR_PAGE);
         }
 
@@ -55,8 +56,7 @@ public class ChangeGroupServlet extends HttpServlet {
         try {
             dispatcher.forward(req, resp);
         } catch (IOException | ServletException e) {
-            Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
             resp.sendRedirect(ERROR_PAGE);
         }
     }

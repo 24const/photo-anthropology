@@ -1,5 +1,7 @@
 package com.nsu.photo_anthropology.structure_entities;
 
+import java.util.Objects;
+
 public class Group {
 
     private int id;
@@ -107,4 +109,19 @@ public class Group {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Group group = (Group) object;
+        return id == group.id &&
+                Objects.equals(groupName, group.groupName) &&
+                Objects.equals(groupQuestion, group.groupQuestion) &&
+                Objects.equals(tagsInGroup, group.tagsInGroup);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, groupName, groupQuestion, tagsInGroup);
+    }
 }

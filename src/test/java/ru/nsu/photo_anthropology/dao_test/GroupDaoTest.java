@@ -23,10 +23,16 @@ public class GroupDaoTest {
         savedGroupId = groupDao.save(group);
     }
 
+    @AfterClass
+    public static void deleteSavedGroups() throws SQLException {
+        groupDao.deleteGroupById(savedGroupId);
+    }
+
     @Test
     public void saveGroupTest() throws SQLException {
         int savedGroupId = groupDao.save(group);
-        Assert.assertNotEquals(0, savedGroupId);
+        groupDao.deleteGroupById(savedGroupId);
+        Assert.assertNotEquals(-1, savedGroupId);
     }
 
     @Test(expected = PhotoAnthropologyRuntimeException.class)
@@ -38,7 +44,7 @@ public class GroupDaoTest {
     @Test
     public void getByIdTest() {
         Group group = new Group(savedGroupId, "Тестовая группа", "Успешное прохождение теста??");
-        Assert.assertEquals(group.toString(), groupDao.getById(savedGroupId).toString());
+        Assert.assertEquals(group, groupDao.getById(savedGroupId));
     }
 
     @Test
@@ -47,16 +53,10 @@ public class GroupDaoTest {
     }
 
     @Test
-    public void getDeleteSqlRequestTest() {
-        String deleteRequest = groupDao.getDeleteSqlRequest();
-        Assert.assertEquals("DELETE FROM groups WHERE id = ?", deleteRequest);
-    }
-
-    @Test
     public void updateGroupTest() throws SQLException {
         Group changedGroup = new Group(savedGroupId, "Тестовая группа2", "Успешное ли?");
         groupDao.update(changedGroup);
-        Assert.assertEquals(changedGroup.toString(), groupDao.getById(savedGroupId).toString());
+        Assert.assertEquals(changedGroup, groupDao.getById(savedGroupId));
     }
 
     @Test(expected = PhotoAnthropologyRuntimeException.class)
@@ -83,10 +83,5 @@ public class GroupDaoTest {
         int idOfDeletedGroup = groupDao.save(deletedGroup);
         groupDao.deleteGroupById(idOfDeletedGroup);
         Assert.assertNull(groupDao.getById(idOfDeletedGroup));
-    }
-
-    @AfterClass
-    public static void deleteSavedGroups() throws SQLException {
-        groupDao.deleteGroupById(savedGroupId);
     }
 }

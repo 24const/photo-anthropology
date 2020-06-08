@@ -39,8 +39,8 @@ public class GetPropertyValues {
             dbUrlAddress = prop.getProperty(DB_URL_PROP);
             uploadedFilesDirectory = prop.getProperty("uploaded_files_directory");
 
-
         } catch (Exception e) {
+            e.printStackTrace();
             throw new PhotoAnthropologyRuntimeException("Невозможно считать данные конфигурации для получения доступа к БД.");
         }
     }

@@ -1,6 +1,7 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.db_tools.DbTransaction;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
@@ -19,21 +20,21 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      * @return - Возвращает id сохраненного изображения
      */
     @Override
-    public int save(Image image) {
-        String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES(?, ?, ?::JSON)";
+    public int save(final Image image) throws SQLException {
+        final String sql = "INSERT INTO images(file_id, image_path, other_information) VALUES(?, ?, ?::JSON)";
         DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, this.uploadFileId);
-            stm.setString(2, image.getImagePath());
-            stm.setObject(3, image.getOtherInformation().toJSONString());
-            stm.executeUpdate();
-            return setIdOfSavedImage();
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image).");
-        }
+        final Connection connection = dbConnector.getConnection();
+        return new DbTransaction() {
+            @Override
+            protected PreparedStatement executeUpdate() throws SQLException {
+                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setInt(1, uploadFileId);
+                stm.setString(2, image.getImagePath());
+                stm.setObject(3, image.getOtherInformation().toJSONString());
+                return stm;
+            }
+        }.runTransactions(connection);
     }
-
     /**
      * Функция получения значения поля {@link ImageDao#SQL_DELETE_REQUEST}
      *
@@ -84,25 +85,6 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     }
 
     /**
-     * Процедура определения id сохраненного изображения {@link ImageDao#save(Image)}
-     */
-    private int setIdOfSavedImage() {
-        String sql = "SELECT MAX(id) as last_image_id FROM images";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                return resultSet.getInt("last_image_id");
-            }
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-    }
-
-    /**
      * Процедура сохранения данных об изображении отдельно от файла в таблице images БД
      *
      * @param image - изображение, данные о котором сохраняем {@link Image}
@@ -114,10 +96,9 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         connection.setAutoCommit(false);
         Savepoint savepointOne = connection.setSavepoint("SavepointOne");
         try {
-            int savedImage = save(image);
-            connection.commit();
-            return savedImage;
+            return save(image);
         } catch (Exception e) {
+            e.printStackTrace();
             connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в ImageDao.save(Image image)");
         } finally {

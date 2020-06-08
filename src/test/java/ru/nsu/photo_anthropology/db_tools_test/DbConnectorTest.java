@@ -1,7 +1,6 @@
 package ru.nsu.photo_anthropology.db_tools_test;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
-import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,10 +32,5 @@ public class DbConnectorTest {
     public void getConnectionTest() {
         Connection connection = staticDbConnector.getConnection();
         Assert.assertNotNull(connection);
-    }
-
-    @Test(expected = PhotoAnthropologyRuntimeException.class)
-    public void getFailedConnectionTest() {
-        Connection connection = staticDbConnector.getConnection();
     }
 }

@@ -1,8 +1,10 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.db_tools.DbTransaction;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
+import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.Tag;
 
 import java.sql.*;
@@ -20,20 +22,21 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
      * @return - Возвращает id сохраненного тега
      */
     @Override
-    public int save(Tag tag) {
-        String sql = "INSERT INTO tags(group_id, tag_name) VALUES((SELECT id from groups where group_name = ?), ?);";
+    public int save(final Tag tag) throws SQLException {
+        final String sql = "INSERT INTO tags(group_id, tag_name) VALUES((SELECT id from groups where group_name = ?), ?);";
         DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, tag.getGroupName());
-            stm.setString(2, tag.getTagName());
-            stm.executeUpdate();
-            return setIdOfSavedTag();
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в TagDao.save(Tag tag)");
-        }
+        final Connection connection = dbConnector.getConnection();
+        return new DbTransaction() {
+            @Override
+            protected PreparedStatement executeUpdate() throws SQLException {
+                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setString(1, tag.getGroupName());
+                stm.setString(2, tag.getTagName());
+                stm.executeUpdate();
+                return stm;
+            }
+        }.runTransactions(connection);
     }
-
     /**
      * Функция получения значения поля {@link TagDao#SQL_DELETE_REQUEST}
      *

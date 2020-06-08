@@ -4,7 +4,10 @@ import com.nsu.photo_anthropology.dao.ImageDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import org.json.simple.JSONArray;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.sql.SQLException;
 
@@ -22,45 +25,37 @@ public class ImageDaoTest {
         columnInfo.add("columnThree");
         image = new Image("image.jpg", "https://photo", columnInfo);
         imageDao = new ImageDao();
-        imageDao.setUploadFileId(13);
     }
 
     @Before
     public void setFileID() {
-        imageDao.setUploadFileId(13);
+        imageDao.setUploadFileId(1);
     }
 
     @Test
     public void saveImageTest() throws SQLException {
         Image newImage = new Image("image4.jpg", "https://photo4", columnInfo);
         int savedImageId = imageDao.saveOnlyImage(newImage);
-        Assert.assertNotEquals(0, savedImageId);
+        System.out.println(savedImageId);
         imageDao.deleteImageById(savedImageId);
-
+        Assert.assertNotEquals(-1, savedImageId);
     }
 
     @Test(expected = PhotoAnthropologyRuntimeException.class)
-    public void saveInvalidImageTest() {
+    public void saveInvalidImageTest() throws SQLException {
         Image newImage = new Image(null, null, columnInfo);
         imageDao.save(newImage);
     }
 
     @Test(expected = PhotoAnthropologyRuntimeException.class)
-    public void saveImageWithNonExistingFileTest() {
+    public void saveImageWithNonExistingFileTest() throws SQLException {
         imageDao.setUploadFileId(713);
         imageDao.save(image);
     }
 
     @Test
-    public void getDeleteSqlRequestTest() {
-        String deleteRequest = imageDao.getDeleteSqlRequest();
-        Assert.assertEquals("DELETE FROM images WHERE id = ?", deleteRequest);
-    }
-
-    @Test
     public void setAndGetUploadFileIdTest() {
-        imageDao.setUploadFileId(13);
-        Assert.assertEquals(13, imageDao.getUploadFileId());
+        Assert.assertEquals(1, imageDao.getUploadFileId());
     }
 
     @Test

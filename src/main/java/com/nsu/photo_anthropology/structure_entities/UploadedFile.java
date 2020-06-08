@@ -3,6 +3,7 @@ package com.nsu.photo_anthropology.structure_entities;
 import org.json.simple.JSONArray;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UploadedFile {
 
@@ -95,4 +96,18 @@ public class UploadedFile {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        UploadedFile file = (UploadedFile) object;
+        return id == file.id &&
+                Objects.equals(fileName, file.fileName) &&
+                Objects.equals(columnNames, file.columnNames);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fileName, columnNames);
+    }
 }

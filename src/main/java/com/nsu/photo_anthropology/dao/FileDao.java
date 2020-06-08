@@ -1,9 +1,11 @@
 package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
+import com.nsu.photo_anthropology.db_tools.DbTransaction;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
+import org.json.simple.JSONArray;
 
 import java.sql.*;
 import java.util.List;
@@ -19,31 +21,26 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
      * @return - Возвращает id сохраненного файла
      */
     @Override
-    public int save(UploadedFile file) throws SQLException {
-        String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
+    public int save(final UploadedFile file) throws SQLException {
+        final String sql = "INSERT INTO files(file_name, column_names, date_created) VALUES(?, ?::JSON, (SELECT NOW()))";
         DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, file.getFileName());
-            stm.setObject(2, file.getColumnNames().toJSONString());
-            stm.executeUpdate();
-            int idOfSavedFile = setIdOfSavedFile();
-            if (file.getImagesInFile() != null) {
-                this.saveImagesFromFile(file, idOfSavedFile);
+        final Connection connection = dbConnector.getConnection();
+        return new DbTransaction() {
+            @Override
+            protected PreparedStatement executeUpdate() throws SQLException {
+                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setString(1, file.getFileName());
+                stm.setObject(2, file.getColumnNames().toJSONString());
+                if (file.getImagesInFile() != null) {
+                    saveImagesFromFile(file, -1);
+                }
+                return stm;
             }
-            connection.commit();
-            return idOfSavedFile;
-        } catch (Exception e) {
-            connection.rollback(savepointOne);
-            throw new PhotoAnthropologyRuntimeException("Ошибка сохранения данных в БД в FileDao.save(File file)");
-        } finally {
-            connection.setAutoCommit(true);
-        }
+        }.runTransactions(connection);
     }
 
-    private void saveImagesFromFile(UploadedFile file, int idOfSavedFile) {
+
+    private void saveImagesFromFile(UploadedFile file, int idOfSavedFile) throws SQLException {
         ImageDao imageDao = new ImageDao();
         imageDao.setUploadFileId(idOfSavedFile);
         List<Image> imagesInFile = file.getImagesInFile();
@@ -64,25 +61,6 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
     }
 
     /**
-     * Процедура определения id охраненногоо файла {@link FileDao#save(UploadedFile)}
-     */
-    private int setIdOfSavedFile() {
-        String sql = "SELECT MAX(id) as last_file_id FROM files";
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = stm.executeQuery()) {
-                resultSet.next();
-                return resultSet.getInt("last_file_id");
-            }
-        } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно получить информацию из БД.");
-        }
-    }
-
-    /**
      * Процедура удаления файла по Id
      *
      * @param fileId - файл, данные которого удаляем {@link UploadedFile}
@@ -100,6 +78,27 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
             throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в FileDao.delete(File file).");
         } finally {
             connection.setAutoCommit(true);
+        }
+    }
+
+    public UploadedFile getFileById(int fileId) {
+
+        String sql = "SELECT * FROM files WHERE id = ?;";
+
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, fileId);
+            try (ResultSet resultSet = stm.executeQuery()) {
+                resultSet.next();
+                int id = resultSet.getInt("id");
+                String fileName = resultSet.getString("file_name");
+                String columnNames = resultSet.getString("column_names");
+                return new UploadedFile(id, fileName, null);
+            }
+        } catch (SQLException e) {
+            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе FileDao.getFileByID");
         }
     }
 }

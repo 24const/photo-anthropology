@@ -2,6 +2,7 @@ package com.nsu.photo_anthropology.servlets;
 
 import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.structure_entities.Group;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServlet;
@@ -9,11 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class GroupToolsServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
+    private static Logger logger = Logger.getLogger(GroupToolsServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -27,8 +28,7 @@ public class GroupToolsServlet extends HttpServlet {
         try {
             dispatcher.forward(req, resp);
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(GroupToolsServlet.class.getName());
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
             resp.sendRedirect(ERROR_PAGE);
         }
     }

@@ -6,6 +6,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class FileUploadServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
+    private static Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -29,8 +30,7 @@ public class FileUploadServlet extends HttpServlet {
         try {
             properties.getPropValues();
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(ChangeGroupServlet.class.getName());
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
             resp.sendRedirect(ERROR_PAGE);
         }
 
@@ -56,8 +56,7 @@ public class FileUploadServlet extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
-                Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
-                logger.info(e.getMessage());
+                logger.error(e.getMessage());
                 resp.sendRedirect(ERROR_PAGE);
             }
 
@@ -65,8 +64,7 @@ public class FileUploadServlet extends HttpServlet {
             try {
                 resp.sendRedirect("index.jsp");
             } catch (Exception e) {
-                Logger logger = Logger.getLogger(FileUploadServlet.class.getName());
-                logger.info(e.getMessage());
+                logger.error(e.getMessage());
                 resp.sendRedirect(ERROR_PAGE);
             }
         }
