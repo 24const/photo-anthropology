@@ -47,7 +47,7 @@ public class InitDao {
 
     private static void createNewDbSchema(Connection connection) {
         try {
-            SqlFile sf = new SqlFile(new File("C:\\Users\\Ksenia\\Desktop\\photo-anthropology\\src\\main\\webapp\\WEB-INF\\sql-scripts\\init.sql"));
+            SqlFile sf = new SqlFile(new File("src/main/webapp/WEB-INF/sql-scripts/init.sql"));
             sf.setConnection(connection);
             sf.execute();
         } catch (SQLException | IOException | SqlToolError e) {
