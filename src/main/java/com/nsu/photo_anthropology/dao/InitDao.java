@@ -41,7 +41,7 @@ public class InitDao {
                 }
             }
         } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("StartServlet: невозможно установить соединение с БД.");
+            throw new PhotoAnthropologyRuntimeException("StartServlet: невозможно установить соединение с БД.", e);
         }
     }
 
@@ -51,7 +51,7 @@ public class InitDao {
             sf.setConnection(connection);
             sf.execute();
         } catch (SQLException | IOException | SqlToolError e) {
-            throw new PhotoAnthropologyRuntimeException("StartServlet: ошибка при запуске скрипта создания таблиц БД.");
+            throw new PhotoAnthropologyRuntimeException("StartServlet: ошибка при запуске скрипта создания таблиц БД.", e);
         }
     }
 }
