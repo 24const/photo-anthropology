@@ -36,7 +36,7 @@ public class GroupDao extends DaoFactory<Group> {
     private int writingGroupToDb(final Group group, final String sql) throws SQLException {
         DbConnector dbConnector = DbConnector.getInstance();
         final Connection connection = dbConnector.getConnection();
-        int savedId = new DbTransaction() {
+        int savedGroupId = new DbTransaction() {
             @Override
             protected PreparedStatement executeUpdate() throws SQLException {
                 try {
@@ -46,18 +46,17 @@ public class GroupDao extends DaoFactory<Group> {
                     if (group.getId() != -1) {
                         stm.setInt(3, group.getId());
                     }
-                    stm.executeUpdate();
-                    if (group.getTagsInGroup() != null) {
-                        saveTagsInGroup(group);
-                    }
                     return stm;
                 } catch (Exception e) {
                     throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о группе в " + GroupDao.this.getClass().getName());
                 }
             }
         }.runTransactions(connection);
+        if (group.getTagsInGroup() != null) {
+            saveTagsInGroup(group, savedGroupId);
+        }
         DbTransaction.endTransaction(connection);
-        return savedId;
+        return savedGroupId;
     }
 
     /**
@@ -134,7 +133,7 @@ public class GroupDao extends DaoFactory<Group> {
      *
      * @param group - группа, данные которой сохраняем {@link Group}
      */
-    private void saveTagsInGroup(Group group) throws SQLException {
+    private void saveTagsInGroup(Group group, int groupId) throws SQLException {
         TagDao tagDao = new TagDao();
         tagDao.deleteAllTagsByGroupId(group.getId());
         if (!group.getTagsInGroup().equalsIgnoreCase("")) {
@@ -143,7 +142,7 @@ public class GroupDao extends DaoFactory<Group> {
                 if (tag.indexOf(' ') == 0) {
                     tag = tag.replaceFirst(" ", "");
                 }
-                tagDao.save(new Tag(tag, group.getGroupName()));
+                tagDao.save(new Tag(tag, groupId));
             }
         }
     }
@@ -154,22 +153,14 @@ public class GroupDao extends DaoFactory<Group> {
      * @param groupId - группа, данные которой изменяем {@link Group}
      */
     public void deleteGroupById(int groupId) throws SQLException {
-
         TagDao tagDao = new TagDao();
-
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointThree");
         try {
             tagDao.deleteAllTagsByGroupId(groupId);
             deleteById(groupId);
-            connection.commit();
-        } catch (Exception e) {
-            connection.rollback(savepointOne);
-            throw new PhotoAnthropologyRuntimeException("Невозможно удалить данные из БД.");
         } finally {
-            connection.setAutoCommit(true);
+            DbTransaction.endTransaction(connection);
         }
     }
 }

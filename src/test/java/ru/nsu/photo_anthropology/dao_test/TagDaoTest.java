@@ -23,20 +23,20 @@ public class TagDaoTest {
         group = new Group("Тестовая группа для тега", "Успешное прохождение теста??");
         GroupDao groupDao = new GroupDao();
         savedGroupId = groupDao.save(group);
-        tag = new Tag("Тестовй тег", "Тестовая группа для тега");
+        tag = new Tag("Тестовй тег", savedGroupId);
         tagDao = new TagDao();
         savedTagId = tagDao.saveOnlyTag(tag);
     }
 
     @Test
     public void saveGroupTest() throws SQLException {
-        Tag newTag = new Tag("Тестовй тег2", "Тестовая группа для тега");
+        Tag newTag = new Tag("Тестовй тег2", savedGroupId);
         Assert.assertNotEquals(-1, tagDao.saveOnlyTag(newTag));
     }
 
     @Test
     public void deleteAllTagsInGroupTest() throws SQLException {
-        Tag newTag = new Tag("Тестовй тег под удаление", "Тестовая группа для тега");
+        Tag newTag = new Tag("Тестовй тег под удаление", savedGroupId);
         int deletedTagID = tagDao.saveOnlyTag(newTag);
         tagDao.deleteTagById(deletedTagID);
     }

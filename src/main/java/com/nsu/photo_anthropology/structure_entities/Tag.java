@@ -4,6 +4,7 @@ public class Tag {
     private int id;
     private String tagName;
     private String groupName;
+    private int groupId;
 
     /**
      * Конструктор - создание нового объекта
@@ -11,7 +12,7 @@ public class Tag {
      * @param id        - id файла в таблице tags БД
      * @param tagName   - имя тега
      * @param groupName - имя группы, к которой принадлежит тег
-     * @see Tag#Tag(String, String)
+     * @see Tag#Tag(String, int)
      */
     public Tag(int id, String tagName, String groupName) {
         this.id = id;
@@ -23,12 +24,12 @@ public class Tag {
      * Конструктор - создание нового объекта
      *
      * @param tagName   - имя тега
-     * @param groupName - имя группы, к которой принадлежит тег
+     * @param groupId - id группы, к которой принадлежит тег
      * @see Tag#Tag(int, String, String)
      */
-    public Tag(String tagName, String groupName) {
+    public Tag(String tagName, int groupId) {
         this.tagName = tagName;
-        this.groupName = groupName;
+        this.groupId = groupId;
     }
 
     /**
@@ -56,6 +57,10 @@ public class Tag {
      */
     public String getGroupName() {
         return groupName;
+    }
+
+    public int getGroupId() {
+        return groupId;
     }
 
     @Override

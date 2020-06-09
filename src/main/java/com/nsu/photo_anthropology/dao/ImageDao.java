@@ -26,7 +26,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         final Connection connection = dbConnector.getConnection();
         return new DbTransaction() {
             @Override
-            protected PreparedStatement executeUpdate() throws SQLException {
+            protected PreparedStatement executeUpdate() {
                 try {
                     PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                     stm.setInt(1, uploadFileId);
@@ -74,18 +74,10 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      * @param imageId - изображение, данные которого удаляем {@link UploadedFile}
      */
     public void deleteImageById(int imageId) throws SQLException {
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
         try {
             deleteById(imageId);
-            connection.commit();
         } catch (Exception e) {
-            connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 
@@ -96,9 +88,10 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
      * @return - Возвращает id сохраненного изображения
      */
     public int saveOnlyImage(Image image) throws SQLException {
-        int savedId = save(image);
         DbConnector dbConnector = DbConnector.getInstance();
-        DbTransaction.endTransaction(dbConnector.getConnection());
+        Connection connection = dbConnector.getConnection();
+        int savedId = save(image);
+        DbTransaction.endTransaction(connection);
         return savedId;
     }
 }

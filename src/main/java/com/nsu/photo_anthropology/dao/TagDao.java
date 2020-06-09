@@ -22,7 +22,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
      */
     @Override
     public int save(final Tag tag) throws SQLException {
-        final String sql = "INSERT INTO tags(group_id, tag_name) VALUES((SELECT id from groups where group_name = ?), ?);";
+        final String sql = "INSERT INTO tags(group_id, tag_name) VALUES(?, ?);";
         DbConnector dbConnector = DbConnector.getInstance();
         final Connection connection = dbConnector.getConnection();
         return new DbTransaction() {
@@ -30,7 +30,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
             protected PreparedStatement executeUpdate(){
                 try {
                     PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                    stm.setString(1, tag.getGroupName());
+                    stm.setInt(1, tag.getGroupId());
                     stm.setString(2, tag.getTagName());
                     return stm;
                 } catch (Exception e) {
@@ -102,19 +102,10 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
      * @param tagId - тег, данные которого удаляем {@link Tag}
      */
     public void deleteTagById(int tagId) throws SQLException {
-
-        DbConnector dbConnector = DbConnector.getInstance();
-        Connection connection = dbConnector.getConnection();
-        connection.setAutoCommit(false);
-        Savepoint savepointOne = connection.setSavepoint("SavepointOne");
         try {
             deleteById(tagId);
-            connection.commit();
         } catch (Exception e) {
-            connection.rollback(savepointOne);
             throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 

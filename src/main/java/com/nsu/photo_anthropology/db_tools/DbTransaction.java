@@ -23,9 +23,9 @@ public abstract class DbTransaction {
         getTransactionStatus(connection);
 
         try (PreparedStatement stm = executeUpdate()) {
-            int savedId = 0;
             stm.executeUpdate();
             ResultSet rs = stm.getGeneratedKeys();
+            int savedId = 0;
             if (rs.next()) {
                 savedId = rs.getInt(1);
             }
