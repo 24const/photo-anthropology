@@ -33,7 +33,7 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
                     stm.setObject(2, file.getColumnNames().toJSONString());
                     return stm;
                 } catch (Exception e) {
-                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о файле в " + FileDao.this.getClass().getName());
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о файле в " + FileDao.this.getClass().getName(), e);
                 }
             }
         }.runTransactions(connection);
@@ -102,7 +102,7 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
                 return new UploadedFile(id, fileName, null);
             }
         } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе FileDao.getFileByID");
+            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе FileDao.getFileByID", e);
         }
     }
 }

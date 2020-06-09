@@ -12,9 +12,9 @@ public class GetPropertyValues {
     private static final String DB_USER_NAME_PROP = "user";
     private static final String DB_USER_PAS_PROP = "password";
     private static final String DB_URL_PROP = "db_url";
-    private String user;
-    private String password;
-    private String dbUrlAddress;
+    private String user = null;
+    private String password = null;
+    private String dbUrlAddress = null;
     private String uploadedFilesDirectory;
 
     /**

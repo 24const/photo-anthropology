@@ -34,7 +34,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
                     stm.setObject(3, image.getOtherInformation().toJSONString());
                     return stm;
                 } catch (Exception e) {
-                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации об изображении в " + ImageDao.this.getClass().getName());
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации об изображении в " + ImageDao.this.getClass().getName(), e);
                 }
             }
         }.runTransactions(connection);
@@ -77,7 +77,7 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         try {
             deleteById(imageId);
         } catch (Exception e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
+            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).", e);
         }
     }
 

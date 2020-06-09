@@ -48,7 +48,7 @@ public class GroupDao extends DaoFactory<Group> {
                     }
                     return stm;
                 } catch (Exception e) {
-                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о группе в " + GroupDao.this.getClass().getName());
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о группе в " + GroupDao.this.getClass().getName(), e);
                 }
             }
         }.runTransactions(connection);
@@ -94,7 +94,7 @@ public class GroupDao extends DaoFactory<Group> {
             }
 
         } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе GroupDao.getAll()");
+            throw new PhotoAnthropologyRuntimeException("Невозможно считать данные из БД в методе GroupDao.getAll()", e);
         }
         return listOfGroups;
     }

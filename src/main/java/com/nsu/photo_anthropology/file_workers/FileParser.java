@@ -56,7 +56,7 @@ public class FileParser {
                 }
             }
         } catch (Exception e) {
-            throw new PhotoAnthropologyRuntimeException("FileParser: ошибка при считывании файла.");
+            throw new PhotoAnthropologyRuntimeException("FileParser: ошибка при считывании файла.", e);
         }
         return data;
     }

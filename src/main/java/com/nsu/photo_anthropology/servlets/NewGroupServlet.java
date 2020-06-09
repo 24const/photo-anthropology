@@ -71,7 +71,7 @@ public class NewGroupServlet extends HttpServlet {
             try {
                 groupId = Integer.parseInt(req.getParameter("groupId"));
             } catch (Exception e) {
-                throw new PhotoAnthropologyRuntimeException("NewGroupServlet: Ошибка приполучении данных о создаваемой группе.");
+                throw new PhotoAnthropologyRuntimeException("NewGroupServlet: Ошибка приполучении данных о создаваемой группе.", e);
             }
             group = new Group(groupId, groupName, groupQuestion, groupTags);
             groupDao.update(group);

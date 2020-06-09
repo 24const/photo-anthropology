@@ -39,7 +39,7 @@ public class DbConnector {
         try {
             properties.getPropValues();
         } catch (IOException e) {
-            throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при считывании данных для подключения к БД.");
+            throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при считывании данных для подключения к БД.", e);
         }
 
         String dbUrlAddress = properties.getDbUrlAddress();
@@ -49,7 +49,7 @@ public class DbConnector {
         try {
             return DriverManager.getConnection(dbUrlAddress, user, password);
         } catch (Exception e) {
-            throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при подключении к БД.");
+            throw new PhotoAnthropologyRuntimeException("DbConnector.setConnection(): Ошибка при подключении к БД.", e);
         }
     }
 

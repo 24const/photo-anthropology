@@ -28,7 +28,7 @@ public class FileSavingToDBWorker {
         try {
             fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames(), fileReadingWorker.getImages()));
         } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("FileSavingToDBWorker: не удалось сохранитьфайл в БД.");
+            throw new PhotoAnthropologyRuntimeException("FileSavingToDBWorker: не удалось сохранитьфайл в БД.", e);
         }
     }
 }

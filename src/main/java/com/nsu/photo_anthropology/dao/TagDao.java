@@ -34,7 +34,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
                     stm.setString(2, tag.getTagName());
                     return stm;
                 } catch (Exception e) {
-                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о теге в " + TagDao.this.getClass().getName());
+                    throw new PhotoAnthropologyRuntimeException("Ошибка при сохранении информации о теге в " + TagDao.this.getClass().getName(), e);
                 }
             }
         }.runTransactions(connection);
@@ -79,7 +79,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
             }
 
         } catch (SQLException e) {
-            throw new PhotoAnthropologyRuntimeException("Ошибка при получении информации о тегах из БД в TagDao.getAllTagsInGroup(Group group).");
+            throw new PhotoAnthropologyRuntimeException("Ошибка при получении информации о тегах из БД в TagDao.getAllTagsInGroup(Group group).", e);
         }
         return listOfTags;
     }
@@ -105,7 +105,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         try {
             deleteById(tagId);
         } catch (Exception e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).");
+            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).", e);
         }
     }
 

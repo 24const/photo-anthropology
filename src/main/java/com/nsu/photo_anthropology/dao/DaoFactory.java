@@ -32,7 +32,7 @@ public abstract class DaoFactory<E> implements Dao<E> {
                     stm.executeUpdate();
                     return stm;
                 } catch (SQLException e) {
-                    throw new PhotoAnthropologyRuntimeException("Ошивка в ходе выполнения транзакции.");
+                    throw new PhotoAnthropologyRuntimeException("Ошивка в ходе выполнения транзакции.", e);
                 }
             }
         }.runTransactions(connection);

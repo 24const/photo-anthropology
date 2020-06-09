@@ -16,7 +16,6 @@
     String action;
     if (request.getAttribute("groupId") == null) {
         action = "AddGroup";
-        System.out.println(action);
     } else {
         int groupId = (int) request.getAttribute("groupId");
         action = "AddGroup?groupId=" + groupId;
