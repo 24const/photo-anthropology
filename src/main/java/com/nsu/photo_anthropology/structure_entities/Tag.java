@@ -23,7 +23,7 @@ public class Tag {
     /**
      * Конструктор - создание нового объекта
      *
-     * @param tagName   - имя тега
+     * @param tagName - имя тега
      * @param groupId - id группы, к которой принадлежит тег
      * @see Tag#Tag(int, String, String)
      */
@@ -63,11 +63,4 @@ public class Tag {
         return groupId;
     }
 
-    @Override
-    public String toString() {
-        return "Tag{" +
-                "tag_name='" + tagName + '\'' +
-                ", groupName=" + groupName +
-                '}';
-    }
 }

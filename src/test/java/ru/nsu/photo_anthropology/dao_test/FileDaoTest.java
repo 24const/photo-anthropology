@@ -3,6 +3,7 @@ package ru.nsu.photo_anthropology.dao_test;
 import com.nsu.photo_anthropology.dao.FileDao;
 import com.nsu.photo_anthropology.dao.InitDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
+import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 import org.json.simple.JSONArray;
 import org.junit.AfterClass;
@@ -11,6 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileDaoTest {
@@ -39,7 +42,18 @@ public class FileDaoTest {
 
     @Test
     public void saveFileTest() throws SQLException {
-        UploadedFile file = new UploadedFile("HelloWorld2.txt", columnInfo);
+        UploadedFile file = new UploadedFile("HelloWorld2.txt", columnInfo, null);
+        int idOfSavedFile = fileDao.save(file);
+        fileDao.deleteFileById(idOfSavedFile);
+        Assert.assertNotEquals(-1, idOfSavedFile);
+    }
+
+    @Test
+    public void saveFileWithImagesTest() throws SQLException {
+        Image newImage = new Image("Ksu_test_file.xlsx", "https://photo4", columnInfo);
+        List<Image> imagesInFile = new ArrayList<>();
+        imagesInFile.add(newImage);
+        UploadedFile file = new UploadedFile("src/test/resources/Ksu_test_file.xlsx", columnInfo, imagesInFile);
         int idOfSavedFile = fileDao.save(file);
         fileDao.deleteFileById(idOfSavedFile);
         Assert.assertNotEquals(-1, idOfSavedFile);
@@ -64,8 +78,9 @@ public class FileDaoTest {
         UploadedFile wrongFile = new UploadedFile(null, columnInfo);
         fileDao.save(wrongFile);
     }
+
     @Test
-    public void getFileById(){
+    public void getFileById() {
         UploadedFile file = fileDao.getFileById(savedFileId);
         UploadedFile file2 = new UploadedFile(savedFileId, "HelloWorld.txt", null);
         Assert.assertEquals(file, file2);

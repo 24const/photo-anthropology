@@ -102,14 +102,6 @@ public class Group {
     }
 
     @Override
-    public String toString() {
-        return "Group{" +
-                "groupName='" + this.groupName + '\'' +
-                ", groupQuestion='" + this.groupQuestion + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;

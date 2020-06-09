@@ -2,6 +2,8 @@ package com.nsu.photo_anthropology.structure_entities;
 
 import org.json.simple.JSONArray;
 
+import java.util.Objects;
+
 public class Image {
 
     private int id;
@@ -66,12 +68,19 @@ public class Image {
         return otherInformation;
     }
 
-    /**
-     * Функция получения значения поля {@link Image#fileName}
-     *
-     * @return Возвращает имя файла, в котором содержится изображение
-     */
-    public String getFileName() {
-        return fileName;
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Image image = (Image) object;
+        return id == image.id &&
+                Objects.equals(imagePath, image.imagePath) &&
+                Objects.equals(fileName, image.fileName) &&
+                Objects.equals(otherInformation, image.otherInformation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, imagePath, fileName, otherInformation);
     }
 }

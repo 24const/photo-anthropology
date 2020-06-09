@@ -22,6 +22,9 @@ public class InitDao {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     * Функция создания схемы таблиц в БД, при ее отсутствии
+     */
     public static void createDbSchema() {
 
         DbConnector dbConnector = DbConnector.getInstance();
@@ -45,6 +48,9 @@ public class InitDao {
         }
     }
 
+    /**
+     * Функция создания схемы таблиц в БД
+     */
     private static void createNewDbSchema(Connection connection) {
         try {
             SqlFile sf = new SqlFile(new File("src/main/webapp/WEB-INF/sql-scripts/init.sql"));

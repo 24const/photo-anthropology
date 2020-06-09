@@ -47,8 +47,7 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
     /**
      * Процедура сохранения файлов, содержащихся в файле
      *
-     * @param file - файл, в котором содержаться данные
-     *
+     * @param file          - файл, в котором содержаться данные
      * @param idOfSavedFile - id, под которым файл сохранен в базе данных
      */
     private void saveImagesFromFile(UploadedFile file, int idOfSavedFile) throws SQLException {
@@ -76,29 +75,33 @@ public class FileDao extends DaoFactory<UploadedFile> implements Dao<UploadedFil
      * @param fileId - файл, данные которого удаляем {@link UploadedFile}
      */
     public void deleteFileById(int fileId) throws SQLException {
+        ImageDao imageDao = new ImageDao();
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
         try {
+            imageDao.deleteAllImagesByFileId(fileId);
             deleteById(fileId);
         } finally {
             DbTransaction.endTransaction(connection);
         }
     }
 
+    /**
+     * Функция получения файла из таблицы files БД
+     *
+     * @return возвращает файл, содержащийся под указанным id в базе данных
+     */
     public UploadedFile getFileById(int fileId) {
 
         String sql = "SELECT * FROM files WHERE id = ?;";
-
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();
-
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, fileId);
             try (ResultSet resultSet = stm.executeQuery()) {
                 resultSet.next();
                 int id = resultSet.getInt("id");
                 String fileName = resultSet.getString("file_name");
-                String columnNames = resultSet.getString("column_names");
                 return new UploadedFile(id, fileName, null);
             }
         } catch (SQLException e) {

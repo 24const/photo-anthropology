@@ -33,6 +33,11 @@ public class ImageDaoTest {
         savedFileId = fileDao.save(file);
     }
 
+    @AfterClass
+    public static void afterAll() throws SQLException {
+        fileDao.deleteFileById(savedFileId);
+    }
+
     @Before
     public void setFileID() {
         imageDao.setUploadFileId(savedFileId);
@@ -42,8 +47,7 @@ public class ImageDaoTest {
     public void saveImageTest() throws SQLException {
         Image newImage = new Image("image4.jpg", "https://photo4", columnInfo);
         int savedImageId = imageDao.saveOnlyImage(newImage);
-        System.out.println(savedImageId);
-        imageDao.deleteImageById(savedImageId);
+        imageDao.deleteOnlyImageById(savedImageId);
         Assert.assertNotEquals(-1, savedImageId);
     }
 
@@ -54,6 +58,21 @@ public class ImageDaoTest {
     }
 
     @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void saveImageWithoutColumnInfoTest() throws SQLException {
+        Image newImage = new Image("image4.jpg", "https://photo4", null);
+        imageDao.saveOnlyImage(newImage);
+    }
+
+    @Test
+    public void getByIdTest() throws SQLException {
+        int savedId = imageDao.saveOnlyImage(image);
+        Image newImage = new Image(savedId, "HelloWorld.txt", "https://photo", null);
+        Image savedImageFromDb = imageDao.getImageById(savedId);
+        imageDao.deleteOnlyImageById(savedId);
+        Assert.assertTrue(newImage.equals(savedImageFromDb));
+    }
+
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
     public void saveImageWithNonExistingFileTest() throws SQLException {
         imageDao.setUploadFileId(713);
         imageDao.saveOnlyImage(image);
@@ -61,12 +80,9 @@ public class ImageDaoTest {
 
     @Test
     public void deleteImageTest() throws SQLException {
-        Image newImage = new Image("image4.jpg", "https://photo4", columnInfo);
+        Image newImage = new Image("HelloWorld.txt", "https://photo4", columnInfo);
         int deletedImageID = imageDao.saveOnlyImage(newImage);
-        imageDao.deleteImageById(deletedImageID);
-    }
-    @AfterClass
-    public static void afterAll() throws SQLException {
-        fileDao.deleteFileById(savedFileId);
+        imageDao.deleteOnlyImageById(deletedImageID);
+        Assert.assertNull(imageDao.getImageById(deletedImageID));
     }
 }

@@ -18,29 +18,29 @@ public abstract class DbTransaction {
         }
     }
 
+    public static void endTransaction(Connection connection) throws SQLException {
+        connection.setAutoCommit(true);
+        transactionStatus = true;
+    }
+
     public int runTransactions(Connection connection) throws SQLException {
 
         getTransactionStatus(connection);
 
         try (PreparedStatement stm = executeUpdate()) {
             stm.executeUpdate();
-            ResultSet rs = stm.getGeneratedKeys();
             int savedId = 0;
-            if (rs.next()) {
-                savedId = rs.getInt(1);
+            try (ResultSet rs = stm.getGeneratedKeys()) {
+                if (rs.next()) {
+                    savedId = rs.getInt(1);
+                }
             }
-            rs.close();
             return savedId;
         } catch (Exception e) {
             connection.rollback();
-            throw new PhotoAnthropologyRuntimeException("Ошибка транзакции");
+            throw new PhotoAnthropologyRuntimeException("Ошибка транзакции", e);
         }
     }
 
     protected abstract PreparedStatement executeUpdate() throws SQLException;
-
-    public static void endTransaction(Connection connection) throws SQLException {
-        connection.setAutoCommit(true);
-        transactionStatus = true;
-    }
 }

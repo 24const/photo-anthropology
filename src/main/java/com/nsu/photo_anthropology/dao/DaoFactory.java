@@ -2,7 +2,6 @@ package com.nsu.photo_anthropology.dao;
 
 import com.nsu.photo_anthropology.db_tools.DbConnector;
 import com.nsu.photo_anthropology.db_tools.DbTransaction;
-import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,15 +24,11 @@ public abstract class DaoFactory<E> implements Dao<E> {
         new DbTransaction() {
             @Override
             protected PreparedStatement executeUpdate() throws SQLException {
+                PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setInt(1, id);
+                stm.executeUpdate();
+                return stm;
 
-                try {
-                    PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                    stm.setInt(1, id);
-                    stm.executeUpdate();
-                    return stm;
-                } catch (SQLException e) {
-                    throw new PhotoAnthropologyRuntimeException("Ошивка в ходе выполнения транзакции.", e);
-                }
             }
         }.runTransactions(connection);
     }

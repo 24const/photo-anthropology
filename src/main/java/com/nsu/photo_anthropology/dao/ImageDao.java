@@ -7,6 +7,8 @@ import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
 
@@ -51,15 +53,6 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     }
 
     /**
-     * Функция получения значения поля {@link ImageDao#uploadFileId}
-     *
-     * @return возвращает id файла, в котором содержится данное изображение
-     */
-    public int getUploadFileId() {
-        return this.uploadFileId;
-    }
-
-    /**
      * Процедура определения  {@link ImageDao#uploadFileId}
      *
      * @param uploadFileId - id файла, в котором содержится данное изображение
@@ -69,16 +62,12 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
     }
 
     /**
-     * Процедура удаления изображения по Id
+     * Процедура удаления изображения по Id в транзакци
      *
      * @param imageId - изображение, данные которого удаляем {@link UploadedFile}
      */
     public void deleteImageById(int imageId) throws SQLException {
-        try {
-            deleteById(imageId);
-        } catch (Exception e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).", e);
-        }
+        deleteById(imageId);
     }
 
     /**
@@ -94,4 +83,86 @@ public class ImageDao extends DaoFactory<Image> implements Dao<Image> {
         DbTransaction.endTransaction(connection);
         return savedId;
     }
+
+    /**
+     * Функция получения файла из таблицы images БД
+     *
+     * @return возвращает информацию об изображении, содержащуюся под указанным id в базе данных
+     */
+    public Image getImageById(int imageId) {
+        String sql = "SELECT images.id as id, files.file_name as file_name, image_path, other_information FROM images JOIN files ON images.file_id = files.id WHERE images.id = ?;";
+
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        Image image = null;
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, imageId);
+            try (ResultSet resultSet = stm.executeQuery()) {
+                resultSet.next();
+                int id = resultSet.getInt("id");
+                String fileName = resultSet.getString("file_name");
+                String imagePath = resultSet.getString("image_path");
+                image = new Image(id, fileName, imagePath, null);
+            }
+            return image;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Процедура отдельного удаления изображения по Id
+     *
+     * @param id - изображение, данные которого удаляем {@link UploadedFile}
+     */
+    public void deleteOnlyImageById(int id) throws SQLException {
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+        deleteImageById(id);
+        DbTransaction.endTransaction(connection);
+    }
+
+    /**
+     * Функция получения данных из БД обо всех изображениях в файле
+     *
+     * @param fileId - id файла, изображения которого получаем
+     * @return список всех изображений, содержащихся в файле
+     */
+    public List<Image> getAllImagesInFileByFileId(int fileId) {
+
+        List<Image> listOfImages = new ArrayList<>();
+        String sql = "SELECT images.id as id, files.file_name as file_name, image_path, other_information FROM images JOIN files ON images.file_id = files.id WHERE files.id = ?;";
+
+        DbConnector dbConnector = DbConnector.getInstance();
+        Connection connection = dbConnector.getConnection();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, fileId);
+
+            try (ResultSet resultSet = stm.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String fileName = resultSet.getString("file_name");
+                    String imagePath = resultSet.getString("image_path");
+                    listOfImages.add(new Image(id, fileName, imagePath, null));
+                }
+            }
+        } catch (SQLException e) {
+            throw new PhotoAnthropologyRuntimeException("Ошибка при получении информации о тегах из БД в TagDao.getAllTagsInGroup(Group group).", e);
+        }
+        return listOfImages;
+    }
+
+    /**
+     * Процедура удаления из БД записей об изображениях по id файла, в котором они содержатся
+     *
+     * @param fileId - id файла, изображения которого удаляем
+     */
+    public void deleteAllImagesByFileId(int fileId) throws SQLException {
+        List<Image> deletedImages = getAllImagesInFileByFileId(fileId);
+        for (Image image : deletedImages) {
+            deleteById(image.getId());
+        }
+    }
+
 }

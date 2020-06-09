@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class NewGroupServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error_page.jsp";
-    private static Logger logger = LoggerFactory.getLogger(GroupToolsServlet.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(NewGroupServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

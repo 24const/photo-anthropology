@@ -3,6 +3,7 @@ package ru.nsu.photo_anthropology.dao_test;
 import com.nsu.photo_anthropology.dao.GroupDao;
 import com.nsu.photo_anthropology.dao.InitDao;
 import com.nsu.photo_anthropology.dao.TagDao;
+import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Tag;
 import org.junit.AfterClass;
@@ -30,8 +31,14 @@ public class TagDaoTest {
         savedTagId = tagDao.saveOnlyTag(tag);
     }
 
+    @AfterClass
+    public static void deleteAllAfterTest() throws SQLException {
+        GroupDao groupDao = new GroupDao();
+        groupDao.deleteGroupById(savedGroupId);
+    }
+
     @Test
-    public void saveGroupTest() throws SQLException {
+    public void saveTagTest() throws SQLException {
         Tag newTag = new Tag("Тестовй тег2", savedGroupId);
         Assert.assertNotEquals(-1, tagDao.saveOnlyTag(newTag));
     }
@@ -43,9 +50,9 @@ public class TagDaoTest {
         tagDao.deleteTagById(deletedTagID);
     }
 
-    @AfterClass
-    public static void deleteAllAfterTest() throws SQLException {
-        GroupDao groupDao = new GroupDao();
-        groupDao.deleteGroupById(savedGroupId);
+    @Test(expected = PhotoAnthropologyRuntimeException.class)
+    public void saveInvalidTagTest() throws SQLException {
+        Tag newTag = new Tag(1, "Тестовй тег2", "Тест");
+        Assert.assertNotEquals(-1, tagDao.saveOnlyTag(newTag));
     }
 }

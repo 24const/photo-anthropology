@@ -15,7 +15,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
     public static final String SQL_DELETE_REQUEST = "DELETE FROM tags WHERE id = ?";
 
     /**
-     * Процедура сохранения данных об теге в таблице tags БД
+     * Процедура сохранения данных об теге в таблице tags БД в транзакции
      *
      * @param tag - тег, данные о котором сохраняем {@link Tag}
      * @return - Возвращает id сохраненного тега
@@ -27,7 +27,7 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
         final Connection connection = dbConnector.getConnection();
         return new DbTransaction() {
             @Override
-            protected PreparedStatement executeUpdate(){
+            protected PreparedStatement executeUpdate() {
                 try {
                     PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                     stm.setInt(1, tag.getGroupId());
@@ -102,13 +102,14 @@ public class TagDao extends DaoFactory<Tag> implements Dao<Tag> {
      * @param tagId - тег, данные которого удаляем {@link Tag}
      */
     public void deleteTagById(int tagId) throws SQLException {
-        try {
-            deleteById(tagId);
-        } catch (Exception e) {
-            throw new PhotoAnthropologyRuntimeException("Невозможно изменить данные в БД в ImageDao.delete(Image image).", e);
-        }
+        deleteById(tagId);
     }
 
+    /**
+     * Процедура сохранения отдельного тега
+     *
+     * @param tag - тег, данные которого сохраняем {@link Tag}
+     */
     public int saveOnlyTag(Tag tag) throws SQLException {
         DbConnector dbConnector = DbConnector.getInstance();
         Connection connection = dbConnector.getConnection();

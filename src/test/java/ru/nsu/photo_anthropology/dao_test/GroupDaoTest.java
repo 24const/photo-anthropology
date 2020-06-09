@@ -37,6 +37,14 @@ public class GroupDaoTest {
         Assert.assertNotEquals(-1, savedGroupId);
     }
 
+    @Test
+    public void saveGroupWithTagsTest() throws SQLException {
+        Group newGroup = new Group("Тестовая группа", "Успешное прохождение теста??", "тест1, тест2, тест3");
+        int savedGroupId = groupDao.save(newGroup);
+        groupDao.deleteGroupById(savedGroupId);
+        Assert.assertNotEquals(-1, savedGroupId);
+    }
+
     @Test(expected = PhotoAnthropologyRuntimeException.class)
     public void saveInvalidGroupTest() throws SQLException {
         Group invalidGroup = new Group(null, null);
