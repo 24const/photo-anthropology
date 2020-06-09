@@ -2,6 +2,7 @@ package ru.nsu.photo_anthropology.dao_test;
 
 import com.nsu.photo_anthropology.dao.FileDao;
 import com.nsu.photo_anthropology.dao.ImageDao;
+import com.nsu.photo_anthropology.dao.InitDao;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 import com.nsu.photo_anthropology.structure_entities.Image;
 import com.nsu.photo_anthropology.structure_entities.UploadedFile;
@@ -20,6 +21,7 @@ public class ImageDaoTest {
 
     @BeforeClass
     public static void setup() throws SQLException {
+        InitDao.createDbSchema();
         columnInfo = new JSONArray();
         columnInfo.add("columnOne");
         columnInfo.add("columnTwo");

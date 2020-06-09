@@ -1,6 +1,7 @@
 package ru.nsu.photo_anthropology.dao_test;
 
 import com.nsu.photo_anthropology.dao.GroupDao;
+import com.nsu.photo_anthropology.dao.InitDao;
 import com.nsu.photo_anthropology.dao.TagDao;
 import com.nsu.photo_anthropology.structure_entities.Group;
 import com.nsu.photo_anthropology.structure_entities.Tag;
@@ -20,6 +21,7 @@ public class TagDaoTest {
 
     @BeforeClass
     public static void setup() throws SQLException {
+        InitDao.createDbSchema();
         group = new Group("Тестовая группа для тега", "Успешное прохождение теста??");
         GroupDao groupDao = new GroupDao();
         savedGroupId = groupDao.save(group);

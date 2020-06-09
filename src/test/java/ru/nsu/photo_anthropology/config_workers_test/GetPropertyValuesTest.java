@@ -38,6 +38,6 @@ public class GetPropertyValuesTest {
     @Test
     public void getUploadedFilesDirectoryTest() {
         String uploadedFilesDirectory = getPropertyValues.getUploadedFilesDirectory();
-        Assert.assertEquals("C://Users//Ksenia//Desktop//photo-anthropology//target//photo-anthropology//uploads//", uploadedFilesDirectory);
+        Assert.assertEquals("target//photo-anthropology//uploads//", uploadedFilesDirectory);
     }
 }
