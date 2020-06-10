@@ -12,4 +12,20 @@ Select a file to upload: <br/>
     <br/>
     <input type="submit" value="Upload File"/>
 </form>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Question</th>
+        <th>Tags</th>
+    </tr>
+    <c:forEach items="${listGroup}" var="group">
+        <tr>
+            <td>${group.id}</td>
+            <td>${group.name}</td>
+            <td>${group.email}</td>
+            <td>${group.address}</td>
+        </tr>
+    </c:forEach>
+</table>
 </body>
