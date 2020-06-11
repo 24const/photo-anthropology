@@ -1,5 +1,7 @@
-package com.nsu.photo_anthropology.dao;
+package com.nsu.photo_anthropology.services;
 
+import com.nsu.photo_anthropology.entities.Groups;
+import com.nsu.photo_anthropology.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +11,8 @@ import java.util.List;
 @Service
 @Transactional
 public class GroupService {
-    @Autowired GroupRepository repo;
+    @Autowired
+    GroupRepository repo;
 
     public void save(Groups group) {
         repo.save(group);

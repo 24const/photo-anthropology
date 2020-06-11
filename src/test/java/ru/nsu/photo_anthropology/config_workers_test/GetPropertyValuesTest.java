@@ -1,6 +1,6 @@
 package ru.nsu.photo_anthropology.config_workers_test;
 
-import com.nsu.photo_anthropology.config_workers.GetPropertyValues;
+import com.nsu.photo_anthropology.config.GetPropertyValues;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

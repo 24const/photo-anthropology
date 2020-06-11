@@ -1,6 +1,6 @@
 package com.nsu.photo_anthropology.db_tools;
 
-import com.nsu.photo_anthropology.config_workers.GetPropertyValues;
+import com.nsu.photo_anthropology.config.GetPropertyValues;
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 
 import java.io.IOException;

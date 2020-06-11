@@ -1,6 +1,6 @@
 package com.nsu.photo_anthropology.servlets;
 
-import com.nsu.photo_anthropology.config_workers.GetPropertyValues;
+import com.nsu.photo_anthropology.config.GetPropertyValues;
 import com.nsu.photo_anthropology.file_workers.FileSavingToDBWorker;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;

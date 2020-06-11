@@ -1,4 +1,4 @@
-package com.nsu.photo_anthropology.dao;
+package com.nsu.photo_anthropology.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +15,10 @@ public class Groups {
     private String group_name;
     private String group_question;
 
-    protected Groups() {
+    public Groups() {
     }
 
-    protected Groups(String group_name, String group_question) {
+    public Groups(String group_name, String group_question) {
         this.group_name = group_name;
         this.group_question = group_question;
     }
@@ -45,5 +45,14 @@ public class Groups {
 
     public void setGroup_question(String groupQuestion) {
         this.group_question = groupQuestion;
+    }
+
+    @Override
+    public String toString() {
+        return "Groups{" +
+                "id=" + id +
+                ", group_name='" + group_name + '\'' +
+                ", group_question='" + group_question + '\'' +
+                '}';
     }
 }

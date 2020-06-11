@@ -1,4 +1,4 @@
-package com.nsu.photo_anthropology.config_workers;
+package com.nsu.photo_anthropology.config;
 
 import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
 
