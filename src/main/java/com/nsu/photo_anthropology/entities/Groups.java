@@ -1,9 +1,7 @@
 package com.nsu.photo_anthropology.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Groups {
@@ -11,11 +9,24 @@ public class Groups {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String group_name;
     private String group_question;
 
+    @OneToMany(fetch = FetchType.EAGER,
+            mappedBy = "groups",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Tags> tags;
+
     public Groups() {
+    }
+
+    public List<Tags> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tags> tags) {
+        this.tags = tags;
     }
 
     public Groups(String group_name, String group_question) {

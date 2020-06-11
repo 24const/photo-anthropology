@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class JpaConfig {
 
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em
@@ -38,9 +37,9 @@ public class JpaConfig {
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://192.168.1.24:5432/photo_anthropology");
-        dataSource.setUsername( "postgres" );
-        dataSource.setPassword( "postgres" );
+        dataSource.setUrl("jdbc:postgresql://192.168.8.104:5432/photo_anthropology");
+        dataSource.setUsername("ksu");
+        dataSource.setPassword( "ksu" );
         return dataSource;
     }
 

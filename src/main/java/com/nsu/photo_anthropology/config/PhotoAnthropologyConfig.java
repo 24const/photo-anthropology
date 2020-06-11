@@ -5,5 +5,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 //@ComponentScan("com.nsu.photo_anthropology")
-public class PhotoAnthoropologyConfig {
+public class PhotoAnthropologyConfig {
 }

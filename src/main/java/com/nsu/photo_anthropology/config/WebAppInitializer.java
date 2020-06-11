@@ -14,7 +14,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext context
                 = new AnnotationConfigWebApplicationContext();
 
-        context.register(PhotoAnthoropologyConfig.class);
+        context.register(PhotoAnthropologyConfig.class);
 
         context.setConfigLocation("com.nsu.photo_anthropology.config");
 
