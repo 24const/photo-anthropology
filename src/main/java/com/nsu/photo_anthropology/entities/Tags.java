@@ -1,5 +1,7 @@
 package com.nsu.photo_anthropology.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +13,7 @@ public class Tags {
     private String tag_name;
 
     @ManyToOne
-    @JoinColumn (name="group_id")
+    @JoinColumn(name = "group_id")
     private Groups groups;
 
     public Tags() {
@@ -38,6 +40,7 @@ public class Tags {
         this.tag_name = tag_name;
     }
 
+    @JsonIgnore
     public Groups getGroups() {
         return groups;
     }

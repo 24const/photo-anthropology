@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS groups (
 CREATE TABLE IF NOT EXISTS files (
 	id SERIAL PRIMARY KEY,
 	file_name VARCHAR(255) NOT NULL,
-    column_names json,
+    column_names TEXT,
     date_created TIMESTAMP
 );
 
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS images (
 	id SERIAL PRIMARY KEY,
 	file_id integer,
 	image_path text NOT NULL,
-	other_information json,
+	other_information TEXT,
     FOREIGN KEY (file_id) REFERENCES files
 );
 

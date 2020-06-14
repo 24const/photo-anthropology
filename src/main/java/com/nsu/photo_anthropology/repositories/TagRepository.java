@@ -1,6 +1,5 @@
 package com.nsu.photo_anthropology.repositories;
 
-import com.nsu.photo_anthropology.entities.Groups;
 import com.nsu.photo_anthropology.entities.Tags;
 import org.springframework.data.repository.CrudRepository;
 

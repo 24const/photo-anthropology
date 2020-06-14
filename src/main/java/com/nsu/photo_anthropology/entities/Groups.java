@@ -21,17 +21,17 @@ public class Groups {
     public Groups() {
     }
 
+    public Groups(String group_name, String group_question) {
+        this.group_name = group_name;
+        this.group_question = group_question;
+    }
+
     public List<Tags> getTags() {
         return tags;
     }
 
     public void setTags(List<Tags> tags) {
         this.tags = tags;
-    }
-
-    public Groups(String group_name, String group_question) {
-        this.group_name = group_name;
-        this.group_question = group_question;
     }
 
     public Long getId() {

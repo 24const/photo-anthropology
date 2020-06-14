@@ -1,7 +1,7 @@
 package com.nsu.photo_anthropology.services;
 
-import com.nsu.photo_anthropology.entities.Tags;
-import com.nsu.photo_anthropology.repositories.TagRepository;
+import com.nsu.photo_anthropology.entities.Images;
+import com.nsu.photo_anthropology.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,19 +10,19 @@ import java.util.List;
 
 @Service
 @Transactional
-public class TagService {
+public class ImageService {
     @Autowired
-    TagRepository repo;
+    ImageRepository repo;
 
-    public void save(Tags tag) {
-        repo.save(tag);
+    public void save(Images images) {
+        repo.save(images);
     }
 
-    public List<Tags> listAll() {
-        return (List<Tags>) repo.findAll();
+    public List<Images> listAll() {
+        return (List<Images>) repo.findAll();
     }
 
-    public Tags get(Long id) {
+    public Images get(Long id) {
         return repo.findById(id).get();
     }
 
