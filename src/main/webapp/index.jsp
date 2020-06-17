@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <head><title>Hello World!</title></head>
@@ -12,6 +13,7 @@ Select a file to upload: <br/>
     <br/>
     <input type="submit" value="Upload File"/>
 </form>
+<a href="C:\Users\Ksenia\Desktop\photo-anthropology\src\main\webapp\files.html">index</a>
 <table border="1" cellpadding="5">
     <tr>
         <th>ID</th>

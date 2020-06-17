@@ -11,8 +11,9 @@ import java.util.List;
 @Service
 @Transactional
 public class TagService {
+
     @Autowired
-    TagRepository repo;
+    private TagRepository repo;
 
     public void save(Tags tag) {
         repo.save(tag);

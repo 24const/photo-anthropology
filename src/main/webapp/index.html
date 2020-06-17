@@ -5,11 +5,12 @@
     <title>PhotoAnthropology</title>
 </head>
 <body>
-<button><a href="files.html"><p>Настройки файлов</p></a></button>
+<button><a href="WEB-INF/view/file_index.html"><p>Настройки файлов</p></a></button>
 <button><a href="groups.html"><p>Настройки групп</p></a></button>
 <p id = "files"></p>
 </body>
 </html>
+
 <script>
     $.getJSON( "/files/getAllFiles", function(data) {
         console.log(data.id);
