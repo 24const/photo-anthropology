@@ -1,6 +1,7 @@
 package com.nsu.photo_anthropology.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nsu.photo_anthropology.converters.JpaConverterJson;
 import org.json.simple.JSONArray;
 
 import javax.persistence.*;

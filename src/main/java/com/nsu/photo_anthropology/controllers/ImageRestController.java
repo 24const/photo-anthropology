@@ -49,7 +49,7 @@ public class ImageRestController {
         }
     }
 
-    @GetMapping("/delete/id/{id}")
+    @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteImage(@PathVariable("id") long id) {
         try {
             imageRepository.deleteById(id);

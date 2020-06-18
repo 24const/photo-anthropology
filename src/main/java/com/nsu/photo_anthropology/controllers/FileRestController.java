@@ -39,7 +39,7 @@ public class FileRestController {
         return ResponseEntity.ok(fileRepository.findById(id));
     }
 
-    @GetMapping("/delete/id/{id}")
+    @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") long id) {
         try{
             fileRepository.deleteById(id);
@@ -75,5 +75,21 @@ public class FileRestController {
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping("testFileSave")
+    @Transactional
+    public String test() {
+        JSONArray columnInfo = new JSONArray();
+        columnInfo.add("column1");
+        columnInfo.add("column2");
+        columnInfo.add("column3");
+        Files file = new Files("TestFile.csv", columnInfo);
+        file.setDate_created(LocalDateTime.now());
+        Images images1 = new Images(file, "https://image1.jpg", columnInfo);
+        Images images2 = new Images(file, "https://image2.jpg", columnInfo);
+        fileRepository.save(file);
+        imageRepository.save(images1);
+        imageRepository.save(images2);
+        return "File was saved successfully";
     }
 }
