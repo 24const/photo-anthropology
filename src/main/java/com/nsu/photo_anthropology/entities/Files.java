@@ -21,7 +21,7 @@ public class Files {
 
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "files",
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.REMOVE, CascadeType.REFRESH},
             orphanRemoval = true)
     private List<Images> images;
 

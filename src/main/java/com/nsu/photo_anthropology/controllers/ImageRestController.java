@@ -14,15 +14,18 @@ import java.util.Optional;
 @RestController
 public class ImageRestController {
 
+    private final ImageRepository imageRepository;
     @Autowired
-    private ImageRepository imageRepository;
+    public ImageRestController(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
+    }
 
-    @RequestMapping(value = "/getImage/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/getImage/id/{id}")
     public ResponseEntity<Optional<Images>> getImageById(@PathVariable("id") long id) {
         return ResponseEntity.ok(imageRepository.findById(id));
     }
 
-    @RequestMapping(value = "/save", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("/save")
     public ResponseEntity<?> saveNewImage(@RequestBody Files files, @RequestBody Images images) {
         try {
             images.setFiles(files);
@@ -33,7 +36,7 @@ public class ImageRestController {
         }
     }
 
-    @RequestMapping(value = "/update/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @PutMapping("/update/id/{id}")
     public ResponseEntity<?> updateById(@PathVariable("id") long id, @RequestBody Files files, @RequestBody Images images) {
         try {
             imageRepository.deleteById(id);
@@ -46,7 +49,7 @@ public class ImageRestController {
         }
     }
 
-    @RequestMapping(value = "/delete/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteImage(@PathVariable("id") long id) {
         try {
             imageRepository.deleteById(id);

@@ -16,15 +16,19 @@ import java.util.Optional;
 @RestController
 public class TagRestController {
 
-    @Autowired
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
-    @RequestMapping(value = "/getTag/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @Autowired
+    public TagRestController(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
+
+    @GetMapping("/getTag/id/{id}")
     public ResponseEntity<Optional<Tags>> getTagById(@PathVariable("id") long id) {
         return ResponseEntity.ok(tagRepository.findById(id));
     }
 
-    @RequestMapping(value = "/save", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("/save")
     public ResponseEntity<?> saveNewTag(@RequestBody Groups groups, @RequestBody Tags tags) {
         try {
             tags.setGroups(groups);
@@ -35,7 +39,7 @@ public class TagRestController {
         }
     }
 
-    @RequestMapping(value = "/update/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @PutMapping("/update/id/{id}")
     public ResponseEntity<?> updateById(@PathVariable("id") long id, @RequestBody Groups groups, @RequestBody Tags tags) {
         try {
             tagRepository.deleteById(id);
@@ -48,7 +52,7 @@ public class TagRestController {
         }
     }
 
-    @RequestMapping(value = "/delete/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteTag(@PathVariable("id") long id) {
         try {
             tagRepository.deleteById(id);

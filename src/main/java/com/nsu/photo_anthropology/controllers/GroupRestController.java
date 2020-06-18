@@ -19,23 +19,26 @@ import java.util.Optional;
 @RestController
 public class GroupRestController {
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
+    private final TagRepository tagRepository;
     @Autowired
-    private TagRepository tagRepository;
+    public GroupRestController(GroupRepository groupRepository, TagRepository tagRepository) {
+        this.groupRepository = groupRepository;
+        this.tagRepository = tagRepository;
+    }
 
-    @RequestMapping(value = "/all", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/all")
     public ResponseEntity<Iterable<Groups>> getAllGroups() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(groupRepository.findAll());
     }
 
-    @RequestMapping(value = "/getGroup/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/getGroup/id/{id}")
     public ResponseEntity<?> getGroupById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(groupRepository.findById(id));
     }
 
-    @RequestMapping(value = "/delete/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") long id) {
         try{
             groupRepository.deleteById(id);
@@ -45,7 +48,7 @@ public class GroupRestController {
         }
     }
 
-    @RequestMapping(value = "/update/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @PutMapping("/update/id/{id}")
     public ResponseEntity<?> updateById(@PathVariable("id") long id, @RequestBody Groups groups) {
         try{
             groupRepository.deleteById(id);
@@ -57,7 +60,7 @@ public class GroupRestController {
         }
     }
 
-    @RequestMapping(value = "/save", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("/save")
     @Transactional
     public ResponseEntity<?> saveNewGroup(@RequestBody Groups groups, @RequestBody List<Tags> tags) {
         try {

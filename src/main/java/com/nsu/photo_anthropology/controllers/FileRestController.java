@@ -19,23 +19,27 @@ import java.util.Optional;
 @RestController
 public class FileRestController {
 
-    @Autowired
-    private FileRepository fileRepository;
+    private final FileRepository fileRepository;
+
+    private final ImageRepository imageRepository;
 
     @Autowired
-    private ImageRepository imageRepository;
+    public FileRestController(FileRepository fileRepository, ImageRepository imageRepository) {
+        this.fileRepository = fileRepository;
+        this.imageRepository = imageRepository;
+    }
 
-    @RequestMapping(value = "/all", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/all")
     public ResponseEntity<Iterable<Files>> getAll() {
         return ResponseEntity.ok(fileRepository.findAll());
     }
 
-    @RequestMapping(value = "/getFile/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/getFile/id/{id}")
     public ResponseEntity<Optional<Files>> getFileById(@PathVariable("id") long id) {
         return ResponseEntity.ok(fileRepository.findById(id));
     }
 
-    @RequestMapping(value = "/delete/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") long id) {
         try{
             fileRepository.deleteById(id);
@@ -45,7 +49,7 @@ public class FileRestController {
         }
     }
 
-    @RequestMapping(value = "/update/id/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @PutMapping("/update/id/{id}")
     public ResponseEntity<?> updateById(@PathVariable("id") long id, @RequestBody Files files) {
         try {
             fileRepository.deleteById(id);
@@ -57,7 +61,7 @@ public class FileRestController {
         }
     }
 
-    @RequestMapping(value = "/save", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("/save")
     @Transactional
     public ResponseEntity<?> saveNewFile(@RequestBody Files files, @RequestBody List<Images> images) {
         try {
@@ -72,21 +76,4 @@ public class FileRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-//    @RequestMapping(value = "/testFileSave", method = {RequestMethod.GET, RequestMethod.POST})
-//    @Transactional
-//    public String test() {
-//        JSONArray columnInfo = new JSONArray();
-//        columnInfo.add("column1");
-//        columnInfo.add("column2");
-//        columnInfo.add("column3");
-//        Files file = new Files("TestFile.csv", columnInfo);
-//        file.setDate_created(LocalDateTime.now());
-//        Images images1 = new Images(file, "https://image1.jpg", columnInfo);
-//        Images images2 = new Images(file, "https://image2.jpg", columnInfo);
-//        fileRepository.save(file);
-//        imageRepository.save(images1);
-//        imageRepository.save(images2);
-//        return "File was saved successfully";
-//    }
 }
