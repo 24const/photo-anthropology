@@ -9,20 +9,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer implements WebApplicationInitializer {
+
     @Override
     public void onStartup(ServletContext container) {
         AnnotationConfigWebApplicationContext context
                 = new AnnotationConfigWebApplicationContext();
 
-        context.register(PhotoAnthropologyConfig.class);
-
+        context.register(WebConfig.class);
         context.setConfigLocation("com.nsu.photo_anthropology.config");
 
         container.addListener(new ContextLoaderListener(context));
 
         ServletRegistration.Dynamic dispatcher = container
                 .addServlet("dispatcher", new DispatcherServlet(context));
-
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

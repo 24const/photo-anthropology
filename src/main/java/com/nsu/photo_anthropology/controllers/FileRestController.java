@@ -76,7 +76,7 @@ public class FileRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("testFileSave")
+    @GetMapping("/testFileSave")
     @Transactional
     public String test() {
         JSONArray columnInfo = new JSONArray();
