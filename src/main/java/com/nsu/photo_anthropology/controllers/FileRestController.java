@@ -35,8 +35,8 @@ public class FileRestController {
     }
 
     @GetMapping("/getFile/id/{id}")
-    public ResponseEntity<Optional<Files>> getFileById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(fileRepository.findById(id));
+    public Files getFileById(@PathVariable("id") long id) {
+        return fileRepository.findById(id).get();
     }
 
     @DeleteMapping("/delete/id/{id}")

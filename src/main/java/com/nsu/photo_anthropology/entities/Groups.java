@@ -14,7 +14,7 @@ public class Groups {
 
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "groups",
-            cascade = {CascadeType.REMOVE, CascadeType.REFRESH},
+            cascade = {CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.PERSIST},
             orphanRemoval = true)
     private List<Tags> tags;
 

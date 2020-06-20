@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/groups")
 @RestController
@@ -29,13 +28,13 @@ public class GroupRestController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Groups>> getAllGroups() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(groupRepository.findAll());
+    public Iterable<Groups> getAllGroups() {
+        return groupRepository.findAll();
     }
 
     @GetMapping("/getGroup/id/{id}")
-    public ResponseEntity<?> getGroupById(@PathVariable("id") long id) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(groupRepository.findById(id));
+    public Groups getGroupById(@PathVariable("id") long id) {
+        return groupRepository.findById(id).get();
     }
 
     @DeleteMapping("/delete/id/{id}")
