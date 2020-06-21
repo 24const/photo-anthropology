@@ -1,86 +1,66 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $("#get_all_files").click(function(){
-        $.ajax({
-            type : "GET",
-            url : "http://localhost:8080/photo-anthropology/files/all",
-            success: function(data){
-                for(let k in data) {
-                    $("#content").empty().append("<tr><th>id</th><th>File name</th><th>Date created</th></tr>" +
-                        "<tr><td>" + data[k].id + "</td>" +
-                        "<td>" + data[k].file_name + "</td>" +
-                        "<td>" + data[k].date_created["dayOfMonth"]+"."+data[k].date_created["month"]+"."+data[k].date_created["year"] + "</td>" +
-                        "<td><button>Удалить</button></td></tr>");
-                }
+    $("#get_all_files").click(function () {
+        paApi.getAllFiles(function (fileList) {
+            for (let file in fileList) {
+                $("#content").empty().append("" +
+                    "<table><tr><th>id</th><th>File name</th><th>Date created</th></tr>" +
+                    "<tr><td id='file_id'>" + fileList[file].id + "</td>" +
+                    "<td>" + fileList[file].file_name + "</td>" +
+                    "<td>" + fileList[file].date_created["dayOfMonth"] + "." + fileList[file].date_created["month"] + "." + fileList[file].date_created["year"] + "</td>" +
+                    "<td><button onclick='get_file_by_id("+fileList[file].id+")'>Удалить</button></td>" +
+                    "<td><button onclick='get_file_by_id("+fileList[file].id+")'>Инфо</button></td>" +
+                    "</tr></table>");
             }
         });
     });
 
-    $("#get_all_groups").click(function(){
-        $.ajax({
-            type : "GET",
-            url : "http://localhost:8080/photo-anthropology/groups/all",
-            success: function(data){
-                for(let k in data) {
-                    $("#content").empty().append("" +
-                        "<tr><th>id</th><th>Group name</th><th>Group question</th></tr>" +
-                        "<tr><td>" + data[k].id + "</td>" +
-                        "<td>" + data[k].group_name + "</td>" +
-                        "<td>" + data[k].group_question+"</td>" +
-                        "<td><button>Удалить</button></td></tr>");
-                }
+    $("#get_all_groups").click(function () {
+        paApi.getAllGroups(function (groupList) {
+            for (let group in groupList) {
+                $("#content").empty().append("" +
+                    "<table><tr><th>id</th><th>Group name</th><th>Group question</th></tr>" +
+                    "<tr><td id='group_id'>" + groupList[group].id + "</td>" +
+                    "<td>" + groupList[group].group_name + "</td>" +
+                    "<td>" + groupList[group].group_question + "</td>" +
+                    "<td><button onclick='delete_group_by_id("+groupList[group].id+")'>Удалить</button></td>" +
+                    "<td><button onclick='get_group_by_id("+groupList[group].id+")'>Инфо</button></td>" +
+                    "</tr></table>");
             }
-        });
-    });
-
-    $("#get_group_by_id").click(function(){
-        $.ajax({
-            type : "GET",
-            url : "http://localhost:8080/photo-anthropology/groups/getGroup/id/",
-            data: $(id),
-            success: function(data){
-                $("#content").empty().append("<tr><th>id</th><th>Group name</th><th>Group question</th></tr><tr><td>" + data[k].id + "</td>" +
-                    "<td>" + data[k].group_name + "</td>" +
-                    "<td>" + data[k].group_question+"</td>" +
-                    "<td><button>Удалить</button></td></tr>");
-
-            }
-        });
-    });
-
-    $("#get_file_by_id").click(function(){
-        $.ajax({
-            type : "GET",
-            url : "http://localhost:8080/photo-anthropology/files/getFile/id/9",
-            success: function(data){
-                $("#content").empty().append("<tr><th>id</th><th>File name</th><th>Date created</th></tr>" +
-                    "<tr><td>" + data.id + "</td>" +
-                    "<td>" + data.file_name + "</td>" +
-                    "<td>" + data.date_created["dayOfMonth"]+"."+data.date_created["month"]+"."+data.date_created["year"] + "</td>" +
-                    "<td><button>Удалить</button></td></tr>");
-            }
-        });
-    });
-
-    $(function() {
-        $('button[type=submit]').click(function(e) {
-            e.preventDefault();
-            $('input').next().remove();
-            $.ajax({
-                type: "POST",
-                url : 'groups/save',
-                data : $('form[name=groupForm]').serialize(),
-                success : function(res) {
-                    if(res.validated){
-                        $('#resultContainer pre code').text(JSON.stringify(res.groups));
-                        $('#resultContainer').show();
-                    }else{
-                        $.each(res.errorMessages,function(key,value){
-                            $('input[name='+key+']').after('<span class="error">'+value+'</span>');
-                        });
-                    }
-                }
-            })
         });
     });
 });
+
+function get_file_by_id(id){
+    paApi.getFileById(id, function (file) {
+        $("#content").empty().append("" +
+            "<table><tr><th>id</th><th>File name</th><th>Date created</th></tr>" +
+            "<tr><td>" + file.id + "</td>" +
+            "<td>" + file.file_name + "</td>" +
+            "<td>" + file.date_created["dayOfMonth"]+"."+file.date_created["month"]+"."+file.date_created["year"] + "</td>" +
+            "<td><button onclick='delete_file_by_id("+file.id+")'>Удалить</button></td>" +
+            "</tr></table>");
+    })
+}
+
+function get_group_by_id(id){
+    paApi.getGroupById(id, function (group) {
+        $("#content").empty().append(""+
+            "<table><tr><th>id</th><th>Group name</th><th>Group question</th></tr>" +
+            "<tr><td>" + group.id + "</td>" +
+            "<td>" + group.group_name + "</td>" +
+            "<td>" + group.group_question + "</td>" +
+            "<td><button onclick='delete_group_by_id("+group.id+")'>Удалить</button></td></tr></table>");
+    })
+}
+function delete_file_by_id(id){
+    paApi.deleteFileById(id, function (file) {
+        $("#content").empty().append("Файл удален");
+    })
+}
+
+function delete_group_by_id(id){
+    paApi.deleteGroupById(id, function (group) {
+        $("#content").empty().append("Группа удалена");
+    })
+}
