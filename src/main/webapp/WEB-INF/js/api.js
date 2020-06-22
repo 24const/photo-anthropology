@@ -8,8 +8,9 @@ $(document).ready(function() {
             type: "GET",
             url: "http://localhost:8080/photo-anthropology/files/all",
             success: function (data){onFetchFunc(data)},
-            //TODO: надо также обработать случай, когда с сервера пришла ошибка.
-            // Например выбросить сообщени через alert
+            error: function (){
+                alert("Ошибка при попытке получения файлов.")
+            }
         });
     };
 
@@ -18,8 +19,9 @@ $(document).ready(function() {
             type: "GET",
             url: "http://localhost:8080/photo-anthropology/groups/all",
             success: function (data){onFetchFunc(data)},
-            //TODO: надо также обработать случай, когда с сервера пришла ошибка.
-            // Например выбросить сообщени через alert
+            error: function (){
+                alert("Ошибка при попытке получения групп.")
+            }
         });
     };
 
@@ -27,7 +29,10 @@ $(document).ready(function() {
         $.ajax({
             type : "GET",
             url : "http://localhost:8080/photo-anthropology/files/getFile/id/"+ id,
-            success: function (data){onFetchFunc(data)}
+            success: function (data){onFetchFunc(data)},
+            error: function () {
+                alert("Невозможно получить информацию о файле с таким id.")
+            }
         });
     };
 
@@ -35,7 +40,10 @@ $(document).ready(function() {
         $.ajax({
             type : "GET",
             url : "http://localhost:8080/photo-anthropology/groups/getGroup/id/" + id,
-            success: function (data){onFetchFunc(data)}
+            success: function (data){onFetchFunc(data)},
+            error: function () {
+                alert("Невозможно получить информацию о группе с таким id.")
+            }
         });
     };
 
@@ -43,7 +51,8 @@ $(document).ready(function() {
         $.ajax({
             type : "DELETE",
             url : "http://localhost:8080/photo-anthropology/files/delete/id/"+ id,
-            success: function (data){onFetchFunc(data)}
+            success: function (){onFetchFunc("Файл успешно удален.")},
+            error: function (){onFetchFunc("Невозможно удалить файл.")}
         });
     };
 
@@ -51,7 +60,26 @@ $(document).ready(function() {
         $.ajax({
             type : "DELETE",
             url : "http://localhost:8080/photo-anthropology/groups/delete/id/" + id,
-            success: function (data){onFetchFunc(data)}
+            success: function (){onFetchFunc("Группа успешно удалена.")},
+            error: function (){onFetchFunc("Невозможно удалить группу.")}
+        });
+    };
+
+    paApi.deleteTagById = function(id, onFetchFunc){
+        $.ajax({
+            type : "DELETE",
+            url : "http://localhost:8080/photo-anthropology/tags/delete/id/" + id,
+            success: function (){onFetchFunc("Тэг успешно удален.")},
+            error: function (){onFetchFunc("Невозможно удалить тэг.")}
+        });
+    };
+
+    paApi.deleteImageById = function(id, onFetchFunc){
+        $.ajax({
+            type : "DELETE",
+            url : "http://localhost:8080/photo-anthropology/images/delete/id/" + id,
+            success: function (){onFetchFunc("Изображение успешно удалено.")},
+            error: function (){onFetchFunc("Невозможно удалить изображение.")}
         });
     };
 
