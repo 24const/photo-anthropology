@@ -31,9 +31,6 @@ public class JpaConfig {
         em.setPackagesToScan("com.nsu.photo_anthropology.entities");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-
-//        em.setJpaProperties(additionalProperties());
-
         return em;
     }
 

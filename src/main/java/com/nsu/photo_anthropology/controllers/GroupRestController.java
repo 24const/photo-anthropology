@@ -61,10 +61,11 @@ public class GroupRestController {
 
     @PostMapping("/save")
     @Transactional
-    public ResponseEntity<?> saveNewGroup(@RequestBody Groups groups, @RequestBody List<Tags> tags) {
+    public ResponseEntity<?> saveNewGroup(@RequestBody Groups groups) {
         try {
             groupRepository.save(groups);
-            for(Tags tag:tags){
+            System.out.println(groups.getTags());
+            for(Tags tag:groups.getTags()){
                 tag.setGroups(groups);
                 tagRepository.save(tag);
             }

@@ -3,7 +3,7 @@ $(document).ready(function () {
         paApi.getAllFiles(function (fileList) {
             console.log(fileList);
             if (fileList.length !== 0) {
-                $("#content").empty().append("<table><tr><th>id</th><th>File name</th><th>Date created</th></tr>");
+                $("#content").empty().append("<table><tr><th>id</th><th>File name</th><th>Date created</th><th>Actions</th><th></th></tr>");
                 for (let file in fileList) {
                     $("#content").append("" +
                         "<tr><td id='file_id'>" + fileList[file].id + "</td>" +
@@ -24,7 +24,7 @@ $(document).ready(function () {
         paApi.getAllGroups(function (groupList) {
             console.log(groupList);
             if (groupList.length !== 0) {
-                $("#content").empty().append("<table><tr><th>id</th><th>Group name</th><th>Group question</th></tr>");
+                $("#content").empty().append("<table><tr><th>id</th><th>Group name</th><th>Group question</th><th>Actions</th><th></th></tr>");
                 for (let group in groupList) {
                     $("#content").append("" +
                         "<tr><td id='group_id'>" + groupList[group].id + "</td>" +
@@ -40,6 +40,23 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("#btn_save_new_group").click(function () {
+        let new_group = {};
+        new_group["group_name"] = $("[name='group_name']").val();
+        new_group["group_question"] = $("[name='group_question']").val();
+        let tags_in_string = $("[name='tags']").val().split(', ');
+        let tags = [];
+        let i = 0;
+        for (let tag in tags_in_string){
+            tags[i] = ({tag_name: tags_in_string[tag]});
+            i++;
+        }
+        new_group["tags"] = tags;
+        $("#content").append(tags.toString());
+        paApi.saveNewGroup(new_group, function (groupList) {});
+    });
+
 });
 
 function get_file_by_id(id) {
@@ -84,13 +101,13 @@ function get_group_by_id(id) {
 
 function delete_file_by_id(id) {
     paApi.deleteFileById(id, function (file_answ) {
-        $("#content").empty().append("<p>" + file_answ + "</p>");
+        $("#content").append("<p>" + file_answ + "</p>");
     })
 }
 
 function delete_group_by_id(id) {
     paApi.deleteGroupById(id, function (group_answ) {
-        $("#content").empty().append("<p>" + group_answ + "</p>");
+        $("#content").append("<p>" + group_answ + "</p>");
     })
 }
 
