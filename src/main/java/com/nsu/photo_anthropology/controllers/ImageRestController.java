@@ -21,8 +21,8 @@ public class ImageRestController {
     }
 
     @GetMapping("/getImage/id/{id}")
-    public ResponseEntity<Optional<Images>> getImageById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(imageRepository.findById(id));
+    public Images getImageById(@PathVariable("id") long id) {
+        return imageRepository.findById(id).get();
     }
 
     @PostMapping("/save")

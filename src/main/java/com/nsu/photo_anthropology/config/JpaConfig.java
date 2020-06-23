@@ -38,7 +38,7 @@ public class JpaConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://192.168.1.38:5432/photo_anthropology");
+        dataSource.setUrl("jdbc:postgresql://192.168.43.249:5432/photo_anthropology");
         dataSource.setUsername("ksu");
         dataSource.setPassword("ksu");
 

@@ -24,8 +24,8 @@ public class TagRestController {
     }
 
     @GetMapping("/getTag/id/{id}")
-    public ResponseEntity<Optional<Tags>> getTagById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(tagRepository.findById(id));
+    public Tags getTagById(@PathVariable("id") long id) {
+        return tagRepository.findById(id).get();
     }
 
     @PostMapping("/save")

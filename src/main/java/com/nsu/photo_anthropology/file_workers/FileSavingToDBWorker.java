@@ -1,8 +1,7 @@
 //package com.nsu.photo_anthropology.file_workers;
 //
-//import com.nsu.photo_anthropology.dao.FileDao;
+//import com.nsu.photo_anthropology.entities.Files;
 //import com.nsu.photo_anthropology.exceptions.PhotoAnthropologyRuntimeException;
-//import com.nsu.photo_anthropology.structure_entities.UploadedFile;
 //
 //import java.sql.SQLException;
 //import java.util.List;
@@ -23,12 +22,9 @@
 //
 //        Map<Integer, List<String>> data = FileParser.readXLSXFile(sourcePath);
 //        String fileName = FileParser.getFileName(sourcePath);
+//        Files files = new
+//
 //        FileReadingWorker fileReadingWorker = new FileReadingWorker(fileName, data);
-//        FileDao fileDao = new FileDao();
-//        try {
-//            fileDao.save(new UploadedFile(fileReadingWorker.getPath(), fileReadingWorker.getColumnNames(), fileReadingWorker.getImages()));
-//        } catch (SQLException e) {
-//            throw new PhotoAnthropologyRuntimeException("FileSavingToDBWorker: не удалось сохранитьфайл в БД.", e);
-//        }
+//
 //    }
 //}

@@ -2,22 +2,36 @@ package com.nsu.photo_anthropology.controllers;
 
 import com.nsu.photo_anthropology.entities.Files;
 import com.nsu.photo_anthropology.entities.Images;
+import com.nsu.photo_anthropology.file_workers.FileParser;
+import com.nsu.photo_anthropology.file_workers.FileReadingWorker;
 import com.nsu.photo_anthropology.repositories.FileRepository;
 import com.nsu.photo_anthropology.repositories.ImageRepository;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/files")
 @RestController
 public class FileRestController {
+
+    private String absoluteFolderPath = "C:\\Users\\Ksenia\\Desktop\\photo-anthropology\\target\\";
 
     private final FileRepository fileRepository;
 
@@ -62,20 +76,40 @@ public class FileRestController {
     }
 
     @PostMapping("/save")
-    @Transactional
-    public ResponseEntity<?> saveNewFile(@RequestBody Files files, @RequestBody List<Images> images) {
-        try {
-            files.setDate_created(LocalDateTime.now());
-            fileRepository.save(files);
-            for(Images image:images){
-                image.setFiles(files);
-                imageRepository.save(image);
+    public void saveNewFile(@RequestParam("uploadedFile") MultipartFile uploadFile) throws IOException {
+        if (!uploadFile.isEmpty()) {
+            List<String> uploadedFilesPath = saveUploadedFiles(Arrays.asList(uploadFile));
+            for(String filePath:uploadedFilesPath){
+
+                String absoluteFilePath = absoluteFolderPath + filePath;
+                Map<Integer, List<String>> data = FileParser.readXLSXFile(absoluteFilePath);
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.addAll(data.remove(0));
+
+                Files files = new Files(filePath, jsonArray);
+                FileReadingWorker fileReadingWorker = new FileReadingWorker(files, data);
+                files.setDate_created(LocalDateTime.now());
+                fileRepository.save(files);
+
+                for(Images image:fileReadingWorker.getImages()){
+                    image.setFiles(files);
+                    imageRepository.save(image);
+                }
             }
-            return ResponseEntity.status(HttpStatus.OK).body("File was successfully saved.");
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+//        try {
+//            files.setDate_created(LocalDateTime.now());
+//            fileRepository.save(files);
+//            for(Images image:images){
+//                image.setFiles(files);
+//                imageRepository.save(image);
+//            }
+//            return ResponseEntity.status(HttpStatus.OK).body("File was successfully saved.");
+//        } catch (Exception e){
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+
     @GetMapping("/testFileSave")
     @Transactional
     public String test() {
@@ -91,5 +125,21 @@ public class FileRestController {
         imageRepository.save(images1);
         imageRepository.save(images2);
         return "File was saved successfully";
+    }
+
+    private List<String> saveUploadedFiles(List<MultipartFile> files) throws IOException {
+        List<String> filesPath = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                continue;
+            }
+            byte[]bytes = file.getBytes();
+            Path path = Paths.get(absoluteFolderPath + file.getOriginalFilename());
+            String uploadedFilePath = absoluteFolderPath + file.getOriginalFilename();
+            new File(uploadedFilePath);
+            filesPath.add(file.getOriginalFilename());
+            java.nio.file.Files.write(path, bytes);
+        }
+        return filesPath;
     }
 }

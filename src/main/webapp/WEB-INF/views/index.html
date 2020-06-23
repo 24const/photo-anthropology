@@ -26,7 +26,7 @@
                 </label></td>
             </tr>
             <tr>
-                <td>Email</td>
+                <td>Теги</td>
                 <td><label>
                     <input name="tags" type="text" />
                 </label></td>
@@ -40,6 +40,10 @@
 </div>
 <button id="get_all_files">Показать все файлы</button><br><br>
 <button id="get_all_groups">Показать все группы</button><br><br>
+<form enctype="multipart/form-data" name="file">
+    File to upload: <input type="file" name="uploadedFile"><br />
+    <button id="btn_save_new_file" type = "submit">Submit</button>
+</form>
 <div id = "content"></div>
 </body>
 </html>

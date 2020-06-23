@@ -54,6 +54,19 @@ $(document).ready(function () {
         });
     };
 
+    paApi.getImageById = function (id, onFetchFunc) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/photo-anthropology/images/getImage/id/" + id,
+            success: function (data) {
+                onFetchFunc(data)
+            },
+            error: function () {
+                alert("Невозможно получить информацию об изображении с таким id.")
+            }
+        });
+    };
+
     paApi.deleteFileById = function (id, onFetchFunc) {
         $.ajax({
             type: "DELETE",
@@ -118,16 +131,16 @@ $(document).ready(function () {
         })
     };
 
-    // paApi.saveNewFile = function (data, onFetchFunc) {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: 'http://localhost:8080/photo-anthropology/files/save',
-    //         contentType: "application/json",
-    //         data: JSON.stringify(data),
-    //         dataType: 'json',
-    //         success: function (){onFetchFunc("Файл успешно сохранена.")},
-    //         error: function () {onFetchFunc("Не удалось сохранить файл.")}
-    //     })
-    // };
-
+    paApi.saveNewFile = function (data, onFetchFunc) {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:8080/photo-anthropology/files/save',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (){onFetchFunc("Файл успешно сохранен.")},
+            error: function () {onFetchFunc("Не удалось сохранить файл.")}
+        })
+    };
 });
