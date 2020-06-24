@@ -8,13 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RequestMapping("/images")
 @RestController
 public class ImageRestController {
 
     private final ImageRepository imageRepository;
+
     @Autowired
     public ImageRestController(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
@@ -31,7 +30,7 @@ public class ImageRestController {
             images.setFiles(files);
             imageRepository.save(images);
             return ResponseEntity.status(HttpStatus.OK).body("Image was successfully saved.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -44,7 +43,7 @@ public class ImageRestController {
             images.setFiles(files);
             imageRepository.save(images);
             return ResponseEntity.status(HttpStatus.OK).body("Image was successfully updated.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -54,7 +53,7 @@ public class ImageRestController {
         try {
             imageRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body("Image was successfully deleted.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -40,39 +40,6 @@ $(document).ready(function () {
         let data = new FormData($("[name='file']")[0]);
         paApi.saveNewFile(data, function (savedFile) {});
     });
-
-    /* Попытка вынести форму в отдельную функцию, чтобы появлялась
-       при нажатии на кнопку, но так не отправляются данные
-     */
-    // $("#new_group").click(function(){
-    //     let content = $("[id = 'group_form']");
-    //     content.empty().append("    <form method=\"post\" id=\"save_new_group\">\n" +
-    //         "        <table>\n" +
-    //         "            <tr>\n" +
-    //         "                <td>Group name</td>\n" +
-    //         "                <td><label>\n" +
-    //         "                    <input name=\"group_name\" type=\"text\" />\n" +
-    //         "                </label></td>\n" +
-    //         "            </tr>\n" +
-    //         "            <tr>\n" +
-    //         "                <td>Group question</td>\n" +
-    //         "                <td><label>\n" +
-    //         "                    <input name=\"group_question\" type=\"text\" />\n" +
-    //         "                </label></td>\n" +
-    //         "            </tr>\n" +
-    //         "            <tr>\n" +
-    //         "                <td>Email</td>\n" +
-    //         "                <td><label>\n" +
-    //         "                    <input name=\"tags\" type=\"text\" />\n" +
-    //         "                </label></td>\n" +
-    //         "            </tr>\n" +
-    //         "            <tr>\n" +
-    //         "                <td></td>\n" +
-    //         "                <td><button id=\"btn_save_new_group\" type = \"submit\">Submit</button></td>\n" +
-    //         "            </tr>\n" +
-    //         "        </table>\n" +
-    //         "    </form>")
-    // })
 });
 
 function groups_table(groupList){
@@ -190,6 +157,21 @@ function delete_tag_by_id(tag_id, group_id) {
 function delete_image_by_id(image_id, file_id) {
     paApi.deleteImageById(image_id, function (image_answ) {
         get_file_by_id(file_id)
+    })
+}
+
+function update_group_by_id(id) {
+    paApi.getGroupById(id, function (group) {
+        document.getElementsByName("group_name").value = group.group_name;
+        // $("[name='group_name']").value = group.group_name;
+        $("[name='group_question']").value = group.group_question;
+        let group_tags = "";
+        if (group.tags.length !== 0){
+            for(let tag in group.tags){
+               group_tags += group.tags[tag].id + ", ";
+            }
+        }
+        $("[name='tags']").value = group_tags;
     })
 }
 

@@ -1,7 +1,10 @@
 package com.nsu.photo_anthropology.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -18,10 +21,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+@PropertySources({
+        @PropertySource("classpath:application.properties")})
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.nsu.photo_anthropology.repositories"})
 @EnableTransactionManagement
 public class JpaConfig {
+
+    @Value("${db_url}")
+    private String db_url;
+
+    @Value("${user}")
+    private String user;
+
+    @Value("${password}")
+    private String password;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -38,9 +52,9 @@ public class JpaConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://192.168.43.249:5432/photo_anthropology");
-        dataSource.setUsername("ksu");
-        dataSource.setPassword("ksu");
+        dataSource.setUrl(db_url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
 
         Resource initSchema = new ClassPathResource("init.sql");
         DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema);

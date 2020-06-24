@@ -9,9 +9,7 @@ $(document).ready(function () {
             success: function (data) {
                 onFetchFunc(data)
             },
-            error: function () {
-                alert("Ошибка при попытке получения файлов.")
-            }
+            error: function () {paApi.alert_error("Ошибка при попытке получения файлов.")}
         });
     };
 
@@ -22,9 +20,7 @@ $(document).ready(function () {
             success: function (data) {
                 onFetchFunc(data)
             },
-            error: function () {
-                alert("Ошибка при попытке получения групп.")
-            }
+            error: function () {paApi.alert_error("Ошибка при попытке получения групп.")}
         });
     };
 
@@ -35,9 +31,7 @@ $(document).ready(function () {
             success: function (data) {
                 onFetchFunc(data)
             },
-            error: function () {
-                alert("Невозможно получить информацию о файле с таким id.")
-            }
+            error: function () {paApi.alert_error("Невозможно получить информацию о файле с таким id.")}
         });
     };
 
@@ -48,9 +42,7 @@ $(document).ready(function () {
             success: function (data) {
                 onFetchFunc(data)
             },
-            error: function () {
-                alert("Невозможно получить информацию о группе с таким id.")
-            }
+            error: function () {paApi.alert_error("Невозможно получить информацию о группе с таким id.")}
         });
     };
 
@@ -61,9 +53,7 @@ $(document).ready(function () {
             success: function (data) {
                 onFetchFunc(data)
             },
-            error: function () {
-                alert("Невозможно получить информацию об изображении с таким id.")
-            }
+            error: function () {paApi.alert_error("Невозможно получить информацию об изображении с таким id.")}
         });
     };
 
@@ -72,11 +62,9 @@ $(document).ready(function () {
             type: "DELETE",
             url: "http://localhost:8080/photo-anthropology/files/delete/id/" + id,
             success: function () {
-                onFetchFunc("Файл успешно удален.")
+                onFetchFunc()
             },
-            error: function () {
-                onFetchFunc("Невозможно удалить файл.")
-            }
+            error: function () {paApi.alert_error("Невозможно удалить файл.")}
         });
     };
 
@@ -85,11 +73,9 @@ $(document).ready(function () {
             type: "DELETE",
             url: "http://localhost:8080/photo-anthropology/groups/delete/id/" + id,
             success: function () {
-                onFetchFunc("Группа успешно удалена.")
+                onFetchFunc()
             },
-            error: function () {
-                onFetchFunc("Невозможно удалить группу.")
-            }
+            error: function () {paApi.alert_error("Невозможно удалить группу.")}
         });
     };
 
@@ -98,11 +84,9 @@ $(document).ready(function () {
             type: "DELETE",
             url: "http://localhost:8080/photo-anthropology/tags/delete/id/" + id,
             success: function () {
-                onFetchFunc("Тэг успешно удален.")
+                onFetchFunc()
             },
-            error: function () {
-                onFetchFunc("Невозможно удалить тэг.")
-            }
+            error: function () {paApi.alert_error("Невозможно удалить тэг.")}
         });
     };
 
@@ -111,11 +95,9 @@ $(document).ready(function () {
             type: "DELETE",
             url: "http://localhost:8080/photo-anthropology/images/delete/id/" + id,
             success: function () {
-                onFetchFunc("Изображение успешно удалено.")
+                onFetchFunc()
             },
-            error: function () {
-                onFetchFunc("Невозможно удалить изображение.")
-            }
+            error: function () {paApi.alert_error("Невозможно удалить изображение.")}
         });
     };
 
@@ -126,8 +108,8 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(data),
             dataType: 'json',
-            success: function (){onFetchFunc("Группа успешно сохранена.")},
-            error: function () {onFetchFunc("Не удалось сохранить группу.")}
+            success: function (){onFetchFunc()},
+            error: function () {paApi.alert_error("Не удалось сохранить группу.")}
         })
     };
 
@@ -139,8 +121,11 @@ $(document).ready(function () {
             data: data,
             processData: false,
             contentType: false,
-            success: function (){onFetchFunc("Файл успешно сохранен.")},
-            error: function () {onFetchFunc("Не удалось сохранить файл.")}
+            success: function (){onFetchFunc()},
+            error: function () {paApi.alert_error("Не удалось сохранить файл.")}
         })
     };
+    paApi.alert_error = function(message){
+        alert(message)
+    }
 });

@@ -1,8 +1,6 @@
 package com.nsu.photo_anthropology.controllers;
 
-import com.nsu.photo_anthropology.entities.Files;
 import com.nsu.photo_anthropology.entities.Groups;
-import com.nsu.photo_anthropology.entities.Images;
 import com.nsu.photo_anthropology.entities.Tags;
 import com.nsu.photo_anthropology.repositories.GroupRepository;
 import com.nsu.photo_anthropology.repositories.TagRepository;
@@ -12,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequestMapping("/groups")
 @RestController
 public class GroupRestController {
@@ -21,6 +17,7 @@ public class GroupRestController {
     private final GroupRepository groupRepository;
 
     private final TagRepository tagRepository;
+
     @Autowired
     public GroupRestController(GroupRepository groupRepository, TagRepository tagRepository) {
         this.groupRepository = groupRepository;
@@ -39,22 +36,22 @@ public class GroupRestController {
 
     @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") long id) {
-        try{
+        try {
             groupRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body("Group was successfully deleted.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no group with id = " + id + ".");
         }
     }
 
     @PutMapping("/update/id/{id}")
     public ResponseEntity<?> updateById(@PathVariable("id") long id, @RequestBody Groups groups) {
-        try{
+        try {
             groupRepository.deleteById(id);
             groups.setId(id);
             groupRepository.save(groups);
             return ResponseEntity.status(HttpStatus.OK).body("Group was successfully updated.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no group with id = " + id + ".");
         }
     }
@@ -65,12 +62,12 @@ public class GroupRestController {
         try {
             groupRepository.save(groups);
             System.out.println(groups.getTags());
-            for(Tags tag:groups.getTags()){
+            for (Tags tag : groups.getTags()) {
                 tag.setGroups(groups);
                 tagRepository.save(tag);
             }
             return ResponseEntity.status(HttpStatus.OK).body("Group was successfully saved.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

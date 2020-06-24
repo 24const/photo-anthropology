@@ -10,6 +10,9 @@ import org.springframework.web.servlet.DispatcherServlet;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class WebAppInitializer implements WebApplicationInitializer {
 
@@ -28,12 +31,17 @@ public class WebAppInitializer implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 
-        String TMP_FOLDER = "/target";
+        Path path = null;
+        try {
+            path = Files.createTempDirectory("target");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int MAX_UPLOAD_SIZE = 1024 * 1024 * 1024;
 
      // ToDo: Тут магия, нужно разобраться с установкой размеров
-        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(TMP_FOLDER,
-                MAX_UPLOAD_SIZE, MAX_UPLOAD_SIZE * 1024, MAX_UPLOAD_SIZE);
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(path.toString(),
+                MAX_UPLOAD_SIZE*1024*1024, MAX_UPLOAD_SIZE * 1024*1024, MAX_UPLOAD_SIZE*1024*1024);
 
         dispatcher.setMultipartConfig(multipartConfigElement);
     }
