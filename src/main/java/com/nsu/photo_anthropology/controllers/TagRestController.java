@@ -1,16 +1,12 @@
 package com.nsu.photo_anthropology.controllers;
 
 import com.nsu.photo_anthropology.entities.Groups;
-import com.nsu.photo_anthropology.entities.Images;
 import com.nsu.photo_anthropology.entities.Tags;
-import com.nsu.photo_anthropology.repositories.GroupRepository;
 import com.nsu.photo_anthropology.repositories.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RequestMapping("/tags")
 @RestController
@@ -24,8 +20,8 @@ public class TagRestController {
     }
 
     @GetMapping("/getTag/id/{id}")
-    public ResponseEntity<Optional<Tags>> getTagById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(tagRepository.findById(id));
+    public Tags getTagById(@PathVariable("id") long id) {
+        return tagRepository.findById(id).get();
     }
 
     @PostMapping("/save")
@@ -34,7 +30,7 @@ public class TagRestController {
             tags.setGroups(groups);
             tagRepository.save(tags);
             return ResponseEntity.status(HttpStatus.OK).body("Tag was successfully saved.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -47,7 +43,7 @@ public class TagRestController {
             tags.setGroups(groups);
             tagRepository.save(tags);
             return ResponseEntity.status(HttpStatus.OK).body("Tag was successfully updated.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -57,7 +53,7 @@ public class TagRestController {
         try {
             tagRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body("Tag was successfully deleted.");
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
