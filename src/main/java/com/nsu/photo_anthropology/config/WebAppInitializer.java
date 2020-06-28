@@ -39,9 +39,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
         }
         int MAX_UPLOAD_SIZE = 1024 * 1024 * 1024;
 
-     // ToDo: Тут магия, нужно разобраться с установкой размеров
         MultipartConfigElement multipartConfigElement = new MultipartConfigElement(path.toString(),
-                MAX_UPLOAD_SIZE*1024*1024, MAX_UPLOAD_SIZE * 1024*1024, MAX_UPLOAD_SIZE*1024*1024);
+                MAX_UPLOAD_SIZE*1024*1024*1024, MAX_UPLOAD_SIZE * 1024*1024*1024, MAX_UPLOAD_SIZE*1024*1024*1024);
 
         dispatcher.setMultipartConfig(multipartConfigElement);
     }

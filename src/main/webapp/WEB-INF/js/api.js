@@ -8,8 +8,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/files/all",
             success: function (data) {
                 onFetchFunc(data)
-            },
-            error: function () {paApi.alert_error("Ошибка при попытке получения файлов.")}
+            }
         });
     };
 
@@ -19,8 +18,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/groups/all",
             success: function (data) {
                 onFetchFunc(data)
-            },
-            error: function () {paApi.alert_error("Ошибка при попытке получения групп.")}
+            }
         });
     };
 
@@ -30,8 +28,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/files/getFile/id/" + id,
             success: function (data) {
                 onFetchFunc(data)
-            },
-            error: function () {paApi.alert_error("Невозможно получить информацию о файле с таким id.")}
+            }
         });
     };
 
@@ -41,8 +38,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/groups/getGroup/id/" + id,
             success: function (data) {
                 onFetchFunc(data)
-            },
-            error: function () {paApi.alert_error("Невозможно получить информацию о группе с таким id.")}
+            }
         });
     };
 
@@ -52,8 +48,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/images/getImage/id/" + id,
             success: function (data) {
                 onFetchFunc(data)
-            },
-            error: function () {paApi.alert_error("Невозможно получить информацию об изображении с таким id.")}
+            }
         });
     };
 
@@ -63,8 +58,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/files/delete/id/" + id,
             success: function () {
                 onFetchFunc()
-            },
-            error: function () {paApi.alert_error("Невозможно удалить файл.")}
+            }
         });
     };
 
@@ -74,8 +68,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/groups/delete/id/" + id,
             success: function () {
                 onFetchFunc()
-            },
-            error: function () {paApi.alert_error("Невозможно удалить группу.")}
+            }
         });
     };
 
@@ -85,8 +78,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/tags/delete/id/" + id,
             success: function () {
                 onFetchFunc()
-            },
-            error: function () {paApi.alert_error("Невозможно удалить тэг.")}
+            }
         });
     };
 
@@ -96,8 +88,7 @@ $(document).ready(function () {
             url: "http://localhost:8080/photo-anthropology/images/delete/id/" + id,
             success: function () {
                 onFetchFunc()
-            },
-            error: function () {paApi.alert_error("Невозможно удалить изображение.")}
+            }
         });
     };
 
@@ -108,8 +99,7 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(data),
             dataType: 'json',
-            success: function (){onFetchFunc()},
-            error: function () {paApi.alert_error("Не удалось сохранить группу.")}
+            success: function (){onFetchFunc()}
         })
     };
 
@@ -121,11 +111,7 @@ $(document).ready(function () {
             data: data,
             processData: false,
             contentType: false,
-            success: function (){onFetchFunc()},
-            error: function () {paApi.alert_error("Не удалось сохранить файл.")}
+            success: function (){onFetchFunc()}
         })
     };
-    paApi.alert_error = function(message){
-        alert(message)
-    }
 });

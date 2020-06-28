@@ -42,6 +42,9 @@ public class FileReadingWorker {
                 if (String.valueOf(cell).contains(".jpg")) {
                     imagePath = String.valueOf(cell);
                 }
+                if(String.valueOf(cell).contains("https://www.instagram.com/p/")){
+                    System.out.println(String.valueOf(cell).length());
+                }
                 columnInfo.add(cell);
             }
             newImages.add(new Images(files, imagePath, columnInfo));
