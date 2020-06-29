@@ -41,7 +41,7 @@ public class Main {
                         switch (cell.getCellType()) {
                             case STRING:
                                 cellData = cell.getRichStringCellValue().getString();
-                                if(String.valueOf(cellData).contains("https://www.instagram.com/p/")){
+                                if(String.valueOf(cellData).contains("https://www.instagram.com/p/") && String.valueOf(cellData).length() <= 40 ){
                                     cellData = HtmlParsing.getImagePath(cellData);
                                 }
                                 new_sheet.getRow(i).getCell(j).setCellValue(cellData);
@@ -74,7 +74,7 @@ public class Main {
         JSONArray jsonArray = new JSONArray();
         jsonArray.addAll(data.remove(0));
 
-        Files files = new Files("C:/Users/Ksenia/Desktop/photo-anthropology/src/test/Instagram_Марьино.xlsx", jsonArray);
+        Files files = new Files("C:/Users/Ksenia/Desktop/photo-anthropology/src/test/Instagram_Марьино1.xlsx", jsonArray);
         FileReadingWorker fileReadingWorker = new FileReadingWorker(files, data);
     }
     private static void evaluateSTRING(Map<Integer, List<String>> data, Cell cell, int i) {
